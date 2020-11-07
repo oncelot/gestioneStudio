@@ -7,6 +7,7 @@
       <q-tab name="progetto"  icon="account_box" label="Progetto" />
       <q-tab name="anagraficaIntervento"  icon="alarm" label="Anagrafica intervento" /> 
       <q-tab name="screening"  icon="movie" label="Screening" />
+      <q-tab name="datiStrutturali"  icon="build" label="Dati Strutturali" />
     </q-tabs> 
 
     <div  v-if="tab == 'progetto'">
@@ -822,10 +823,104 @@ Specificare le modalità e i tempi di sanatoria.
 
   </div>
 
- </div><!-- DIV TAB CHECK -->
+
+
+ </div><!-- DIV TAB Screening -->
 
  
+<div v-if="tab == 'datiStrutturali' ">
+<div class="row"><div class="col-12"><span class="text-h6">Dati strutturali</span></div></div>
 
+  <div class="row">
+    <div class="col-12">
+    <strong>Tipologia struttura edificio:</strong>
+    </div>
+  
+    <div class="col-3"><q-checkbox right-label v-model="datistrutturalichk" val="EdificioinMuraturaPortante" label="Edificio in Muratura Portante" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="datistrutturalichk" val="EdificioTelaioCAinopera" label="Edificio con telaio in C.A. in opera" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="datistrutturalichk" val="EdificioElementiPrefabbricati" label="Edificio con elementi prefabbricati" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="datistrutturalichk" val="altro" label="Altro" /></div>
+
+
+  </div>
+  <div class="row" v-if="datistrutturalichk.includes('altro')"><div class="col"><q-input v-model="altroDatiStrutturali" type="text" :dense="true" outlined label="Altro" /></div></div>
+ 
+  <div class="row">
+    <div class="col-12">
+    <strong>Tipologia parete:</strong>
+    </div>
+   
+    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="Laterizio" label="Laterizio" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="MuraturaCassaVuota" label="Muratura a cassa vuota" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="MuraturaCassaIsolanteIntercapedine" label="Muratura a cassa con isolante in intercapedine" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="Tufo" label="Tufo" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="Gasbeton" label="Gasbeton" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="altro" label="Altro" /></div>
+
+
+  </div>
+  <div class="row" v-if="tipologiaParetechk.includes('altro')"><div class="col"><q-input v-model="altroTipologiaParetechk" type="text" :dense="true" outlined label="Altro" /></div></div>
+
+ <div class="row">
+    <div class="col-12">
+    <strong>Tipologia FOTO COSA FARE:</strong>
+    </div>
+   
+    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="Laterizio" label="Presenza intercapedine/camera d’aria" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="MuraturaCassaVuota" label="Isolante in camera d’aria (sughero, EPS, ecc…)" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="MuraturaCassaIsolanteIntercapedine" label=" Idoneo a insufflaggio" /></div>
+    <div class="row">
+    <div class="col-4 paddingInput">
+    <label for="">Spessori muri esterni (cm)</label>
+    <q-input v-model="SpessoreMuriEsterni" type="text" outlined :dense="true"/>
+    </div>
+    <div class="col-4 paddingInput">
+    <label for="">Spessoricamera d'aria (cm)</label>
+    <q-input v-model="SpessoreCameraDaria" type="text" outlined :dense="true"/>
+    </div>
+    <div class="col-4 paddingInput">
+    <label for="">Spessori Isolamento (cm)</label>
+    <q-input v-model="SpessoreIsolamento" type="text" outlined :dense="true"/>
+    </div>
+    <div class="col-4 paddingInput">
+    <label for="">Tipo isolante in camera d’aria</label>
+    <q-input v-model="TipologiaIsolamentoIncameraDaria" type="text" outlined :dense="true"/>
+    </div>
+   </div>
+
+  </div>
+
+ <div class="row">
+    <div class="col-12">
+    <strong>Eventuale Isolante esistente(cappotto):</strong>
+    </div>
+   
+    <div class="col-3"><q-checkbox right-label v-model="isolamentoEsistentechk" val="eps" label="EPS" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="isolamentoEsistentechk" val="sughero" label="Sughero" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="isolamentoEsistentechk" val="lanaDiroccaVetro" label="Lana di roccia/vetro " /></div>
+    <div class="col-3"><q-checkbox right-label v-model="isolamentoEsistentechk" val="altro" label="Altro" /></div>
+    
+
+
+  </div>
+  <div class="row" v-if="isolamentoEsistentechk.includes('altro')"><div class="col"><q-input v-model="altroisolamentoEsistentechk" type="text" :dense="true" outlined label="Altro" /></div></div>
+
+<div class="row"><div class="col"><span class="text-h6">Dati Centrale Termina</span></div></div>
+<div class="row"><div class="col"><span class="text-bold">Stato di fatto</span></div></div>
+<div class="row"><div class="col-12">
+  <label class="text-bold">Tipologia Impianto esistente</label></div>
+  <div class="col-12">
+    <q-radio v-model="tipologiaImpiantoEsistente" val="centralizzato" label="Centralizzato" />
+    <q-radio v-model="tipologiaImpiantoEsistente" val="autonomo" label="autonomo" />
+    <q-radio v-model="tipologiaImpiantoEsistente" val="assente" label="assente" />
+    
+    </div>
+  </div>
+
+  <div class="row" v-if="tipologiaImpiantoEsistente == 'centralizzato'"></div>
+  <div class="row" v-if="tipologiaImpiantoEsistente == 'autonomo'"></div>
+
+</div>
 
 
 
@@ -906,13 +1001,14 @@ Specificare le modalità e i tempi di sanatoria.
 
 <!-- FINE  MODAL -->
 
-  </div> <!-- quello iniziale -->
+  </div> <!-- quello iniziale con TAB -->
 
 </template>
 <style scoped>
 .bgmargintop{
   background-color: white; margin-top:10px;
 }
+.paddingInput{padding:10px;}
 </style>
 <script>
 
@@ -972,7 +1068,7 @@ export default {
     return {
 text:'',data:'',date:'',
 
-         tab: "progetto",
+         tab: "datiStrutturali",
          modalNuovaAnagraficaClienti: false,
          modalNuovoNome:'',modalNuovoCognome:'',modalNuovoCodiceFiscale:'',
          
@@ -1012,6 +1108,13 @@ text:'',data:'',date:'',
           files: null,
           abusiEdilizi:false,TipologiaAbusiEdilizi:'',comuneStatoDiFatto:false,NCEUStatoDiFatto:false,difformitaUrbanistiche:false,difformitaCatastali:false,irregolaritaSanabili:false,
           noteDifformitaUrbanistiche:'',noteDifformitaCatastali:'',noteIrregolaritaSanabili:'',
+
+          datistrutturalichk:[],altroDatiStrutturali:'',
+          tipologiaParetechk:[],altroTipologiaParetechk:'',
+          SegnapostotipologiaParetechk:[],SpessoreMuriEsterni:'',SpessoreCameraDaria:'',SpessoreIsolamento:'',TipologiaIsolamentoIncameraDaria:'',
+          isolamentoEsistentechk:[],altroisolamentoEsistentechk:'',
+
+          tipologiaImpiantoEsistente:'',
 
        
       columns: [
