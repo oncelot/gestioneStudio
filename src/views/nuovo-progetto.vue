@@ -3,13 +3,18 @@
 <template>
 
 <div class="q-pa-md" style="color:grey; background-color: ghostwhite;">
+  
   <q-tabs  v-model="tab"  class="text-teal">
       <q-tab name="progetto"  icon="account_box" label="Progetto" />
       <q-tab name="anagraficaIntervento"  icon="alarm" label="Anagrafica intervento" /> 
       <q-tab name="screening"  icon="movie" label="Screening" />
       <q-tab name="datiStrutturali"  icon="build" label="Dati Strutturali" />
+      <q-tab name="allegati"  icon="attach_file" label="Allegati" />
+      <q-tab name="quote"  icon="euro_symbol" label="Quote" />
+     
     </q-tabs> 
 
+<!-- #region progetto -->
     <div  v-if="tab == 'progetto'">
           <div class="row">
               <div class="col text-h4 text-center">Dati del progetto</div>
@@ -21,7 +26,7 @@
     </div>
 
 
-    <!-- ANAGRAFICA CLIENTI -->
+    <!-- #region ANAGRAFICA CLIENTI -->
     <div class="q-gutter-xs"  style="color:grey; ">
       <div class="col"><hr><br><b>Anagrafica Clienti</b></div>
         
@@ -55,7 +60,7 @@
     <div class="col"> {{ item.cognome }}</div>
     <div class="col"> {{ item.codiceFiscale }}</div>
   </div>
-   <!-- FINE ANAGRAFICA CLIENTI -->
+   <!-- #endregion -->
 
     <!-- collaboratori interni -->
     
@@ -131,9 +136,9 @@
    <!-- FINE collaboratori esterni -->
 
   </div>
+<!-- #endregion -->
 
-
-<!-- SCHEDA 2 -->
+<!-- #region Anagrafica intervento -->
     <div v-if="tab =='anagraficaIntervento'"  style="color:grey; ">
 
         <div class="row" style="background-color: white;">
@@ -455,13 +460,10 @@
 
 
     </div><!--Anagrafica intervento -->
+<!-- #endregion -->
 
 
-
-
-
-
-      <!-- ******SCREENING********-->
+<!-- #region  ******SCREENING********-->
 <div v-if="tab=='screening'" style="color:grey">
   <div v-if="tipologiaEdificio == 'edificioFamiliare'">
   <div class="row">
@@ -826,8 +828,10 @@ Specificare le modalità e i tempi di sanatoria.
 
 
  </div><!-- DIV TAB Screening -->
-
+<!-- #endregion -->
  
+
+ <!-- #region Dati Strutturati-->
 <div v-if="tab == 'datiStrutturali' ">
 <div class="row"><div class="col-12"><span class="text-h6">Dati strutturali</span></div></div>
 
@@ -905,8 +909,8 @@ Specificare le modalità e i tempi di sanatoria.
   </div>
   <div class="row" v-if="isolamentoEsistentechk.includes('altro')"><div class="col"><q-input v-model="altroisolamentoEsistentechk" type="text" :dense="true" outlined label="Altro" /></div></div>
 
-<div class="row"><div class="col"><span class="text-h6">Dati Centrale Termina</span></div></div>
-<div class="row"><div class="col"><span class="text-bold">Stato di fatto</span></div></div>
+<div class="row" style="padding-top:20px"><div class="col"><span class="text-h6">Dati Centrale Termina</span></div></div>
+
 <div class="row"><div class="col-12">
   <label class="text-bold">Tipologia Impianto esistente</label></div>
   <div class="col-12">
@@ -917,13 +921,237 @@ Specificare le modalità e i tempi di sanatoria.
     </div>
   </div>
 
-  <div class="row" v-if="tipologiaImpiantoEsistente == 'centralizzato'"></div>
-  <div class="row" v-if="tipologiaImpiantoEsistente == 'autonomo'"></div>
+<!-- #region CENTRALIZZATO -->
+  <div  v-if="tipologiaImpiantoEsistente == 'centralizzato'">
+<div class="row"><div class="col"><span class="text-bold">Stato di fatto</span></div></div>
+<div class="row">
+<div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold" >Tecnologia impianto esistente</label>
+ 
+  <q-select v-model="cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente" :dense='true' outlined :options="tecnologieCentraliTermiche"  />
+
+  <q-input v-show="cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente.value == 'altro' " v-model="cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro" outlined :dense="true" type="text" label="Specificare"  />
+  
+  </div>
+<div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold">Numero unità di generazione</label>
+  <q-input v-model="cetraleTermicaCentralizzatoNumeroUnita" outlined :dense="true" type="text"  />
+  
+  </div>
+<div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold">Anno di installazionee</label>
+  <q-input v-model="cetraleTermicaCentralizzatoAnnoInstallazione" outlined :dense="true" type="text"  />
+  
+  </div>
+<div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold">Potenza termica utile impianto esistente [kWt]</label>
+  <q-input v-model="cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente" outlined :dense="true" type="text"  />
+  
+  </div>
+<div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold">Tipologia di distribuzione esistente</label>
+  <q-input v-model="cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste" outlined :dense="true" type="text"  />
+  
+  </div>
+<div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold">Tipologia sistema di termoregolazione evoluta</label>
+  <q-input v-model="cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente" outlined :dense="true" type="text"  />
+  
+  </div>
+  <div class="col-md-12 col-12">
+    <label for="" class="text-bold">Disponibilità libretto di impianto aggiornato</label><br>
+    <q-radio v-model="cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato" val="SI" label="SI" />
+    <q-radio v-model="cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato" val="NO" label="NO" />
+    <q-radio v-model="cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato" val="Assente" label="Assente" />
+    <div v-if="cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato == 'SI'">
+      <q-file
+      v-model="cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato"
+      label="allegare copia libretto "
+      outlined
+      :dense="true"
+      style="max-width: 300px" />
+
+      </div>
+  </div>
+  <div class="col-md-12 col-12">
+    <label for="" class="text-bold">Disponibilità prove fumi aggiornate</label><br>
+    <q-radio v-model="cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate" val="SI" label="SI" />
+    <q-radio v-model="cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate" val="NO" label="NO" />
+    <q-radio v-model="cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate" val="Assente" label="Assente" />
+    <div v-if="cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate == 'SI'">
+       <q-file
+      v-model="cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato"
+      label="allegare copia libretto "
+      outlined
+      :dense="true"
+      style="max-width: 300px" />
+      QUI PURE ALLEGATI?</div>
+  </div>
+  <div class="col-md-12 col-12">
+    <label for="" class="text-bold">Disponibilità prove fumi aggiornate</label><br>
+    <q-radio v-model="cetraleTermicaCentralizzatoCertificatoCPI" val="SI" label="SI" />
+    <q-radio v-model="cetraleTermicaCentralizzatoCertificatoCPI" val="NO" label="NO" />
+    <q-radio v-model="cetraleTermicaCentralizzatoCertificatoCPI" val="Assente" label="Assente" />
+    <div v-if="cetraleTermicaCentralizzatoCertificatoCPI == 'SI'">
+       <q-file
+      v-model="cetraleTermicaCentralizzatoCertificatoCPIAllegato"
+      label="allegare copia libretto "
+      outlined
+      :dense="true"
+      style="max-width: 300px" />
+      
+      
+      QUI PURE ALLEGATI?</div>
+  </div>
+</div>
+<div class="row"><div class="col text-bold text-h5 primary" >Stato di Progetto</div></div>
+<div class="row">
+<div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold" >Tecnologia impianto esistente</label>
+
+  <q-select v-model="cetraleTermicaCentralizzatoTecnologiaImpiantoProposto" :dense='true' outlined :options="tecnologieCentraliTermiche"  />
+
+  <q-input v-show="cetraleTermicaCentralizzatoTecnologiaImpiantoProposto.value == 'altro' " v-model="cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro" outlined :dense="true" type="text" label="Specificare"  />
+  
+  </div>
+<div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold">Numero unità di generazione</label>
+  <q-input v-model="cetraleTermicaCentralizzatoNumeroUnitaProposte" outlined :dense="true" type="text"  />
+  
+  </div>
+
+  <div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold">Potenza termica utile impianto esistente [kWt]</label>
+  <q-input v-model="cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto" outlined :dense="true" type="text"  />
+  
+  </div>
+
+<div class="col-md-3 col-12 paddingInput">
+  <label class="text-bold">Vettore energetico impianto</label>
+  <q-input v-model="centraleTermivaCentralizzatoVettoreImpianto" outlined :dense="true" type="text"  />
+  
+  </div>
+
+  </div>
+
+  </div>
+
+  <!-- #endregion  -->
+
+  <div  v-if="tipologiaImpiantoEsistente == 'autonomo'">
+    <div class="row"><div class="col"><span class="text-bold text-h5">Stato di fatto</span></div></div>
+    <div class="row"><div class="col">
+      <q-btn  class="white" icon="add" label="Aggiungi" @click="modalAggiungiImpiantoEsistenteAutonomo=true" /><!--TODO CAMBIARE CLICK BOTTONE MODAL -->
+      
+      </div></div>
+<div class="row" style="border-bottom:1px solid black">
+  <div class="col">Sub</div>
+  <div class="col">Tecnologia impianto1</div>
+  <div class="col">N. unità di generazione</div>
+  <div class="col">Tipologia sistema di termoregolazione</div>
+  <div class="col">Potenza termica utile [kW]</div>
+  <div class="col">Anno installazione</div>
+  <div class="col">Generatore oggetto di sostituzione?</div>
+  </div>
+
+ <div  class="row" v-for="item in elencoImpiantoAutonomoEsistente" :key="item.message" style="border-bottom:1px solid black">
+     <div class="col"> {{ item.sub }}</div>
+     <div class="col"> {{ item.tecnologiaImpianto }}</div>
+     <div class="col"> {{ item.numeronUnitaGenerazione }}</div>
+     <div class="col"> {{ item.tipologiaSistemaTermoregolazione }}</div>
+     <div class="col"> {{ item.potenzaTermicaUtile }}</div>
+     <div class="col"> {{ item.annoInstallazione }}</div>
+     <div class="col"> {{ item.GeneratoreOggettoDiSostituzione }}</div>
+   
+  </div>
+    <div class="row"><div class="col"><span class="text-bold text-h5">Stato di Progetto</span></div></div>
+    <div class="row"><div class="col">
+      <q-btn  class="white" icon="add" label="Aggiungi" @click="modalAggiungiImpiantoEsistenteAutonomo=true" /><!--TODO CAMBIARE CLICK BOTTONE MODAL -->
+      
+      </div></div>
+<div class="row" style="border-bottom:1px solid black">
+  <div class="col">Sub</div>
+  <div class="col">Tecnologia impianto1</div>
+  <div class="col">N. unità di generazione</div>
+  <div class="col">Tipologia sistema di termoregolazione</div>
+  <div class="col">Potenza termica utile [kW]</div>
+  <div class="col">Anno installazione</div>
+  <div class="col">Generatore oggetto di sostituzione?</div>
+  </div>
+
+ <div  class="row" v-for="item in elencoImpiantoAutonomoEsistente" :key="item.message" style="border-bottom:1px solid black">
+     <div class="col"> {{ item.sub }}</div>
+     <div class="col"> {{ item.tecnologiaImpianto }}</div>
+     <div class="col"> {{ item.numeronUnitaGenerazione }}</div>
+     <div class="col"> {{ item.tipologiaSistemaTermoregolazione }}</div>
+     <div class="col"> {{ item.potenzaTermicaUtile }}</div>
+     <div class="col"> {{ item.annoInstallazione }}</div>
+     <div class="col"> {{ item.GeneratoreOggettoDiSostituzione }}</div>
+   
+  </div>
+
+  </div>
+
+</div>
+<!-- #endregion -->
+
+<div v-if="tab == 'allegati'">
+
+<span class="text-h5">Allegati</span>
+
+  
+<div class="row">
+  <div class="col-3">
+     <label class="text-bold"> Tipo Allegato</label>
+  <q-file v-model="allegatoDiAllegati"   label="Carica file"   filled   style="max-width: 300px" /> 
+  </div>
+  <div class="col-6">  
+    <label class="text-bold"> Tipo Allegato</label>
+    <q-select v-model="tipoAllegatodiAllegati" :options="tipiDiAllegati" :dense="true" outlined label="Standard" filled />
+  </div>
+   <div class="col-12"> 
+    <label for="" class="text-bold"> Note</label>
+    <q-input v-model="noteallegatoDiallegati" outlined :dense="true" type="text" label="Label" />  
+  </div>
+  <div class="col-12" style="margin-top:10px;"><q-btn class="white" icon="check" label="Aggiungi" @click="addrowAllegati()" /></div>
+   
+     </div>
+<div class="row" style="margin-top:20px"> 
+  <div class="col">File</div>
+  <div class="col">Note</div>
+  <div class="col">Tipo Documento</div>
+  
+</div>
+<div class="row" v-for="allegato in elencoAllegati" :key="allegato.nomeFile">
+  <div class="col"> {{allegato.nomeFile}}</div>
+  <div class="col">{{allegato.noteFile}}</div>
+  <div class="col">{{allegato.tipoAllegato}}</div>
+</div>
 
 </div>
 
 
+<div v-if="tab == 'quote'">
 
+<div class="row"><div class="col"></div></div>
+
+<div class="row">
+  <div class="col">Quota</div>
+  <div class="col">Tipo</div>
+  <div class="col">Data Pagamento</div>
+  <div class="col">Metodo di pagamento</div>
+  </div>
+<div class="row" v-for="quota in elencoQuote" :key="quota.quota">
+  <div class="col"> {{quota.quota}}</div>
+  <div class="col">{{quota.tipo}}</div>
+  <div class="col">{{quota.dataPagamento}}</div>
+  <div class="col">{{quota.metodoPagamento}}</div>
+
+</div>
+
+</div>
+
+<!-- #region MODAL-->
 <!-- MODAL -->
  <q-dialog v-model="modalNuovaAnagraficaClienti" persistent
       :maximized="maximizedToggle=true"
@@ -932,7 +1160,7 @@ Specificare le modalità e i tempi di sanatoria.
       <q-card>
          <q-bar>
           <q-space />
-          <q-btn dense flat icon="close" v-close-popup>
+          <q-btn dense="true" flat icon="close" v-close-popup>
             <q-tooltip content-class="bg-white text-primary">Close</q-tooltip>
           </q-btn>
            </q-bar>
@@ -998,9 +1226,39 @@ Specificare le modalità e i tempi di sanatoria.
     </q-card-actions>
   </q-card>
 </q-dialog>
+<q-dialog v-model="modalAggiungiImpiantoEsistenteAutonomo" persistent>
+  <q-card>
+    <q-card-section class="row items-center">
+     
+      <span class="q-ml-md">Aggiungi</span>
+    </q-card-section>
+    <q-card-section class="row items-center">
+    
+      <span class="q-ml-md">
+          
+        <q-input v-model="NuovoImpiantoEsistenteAutonomosub" type="text" label="sub" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomotecnologiaImpianto" type="text" label="Tecnologia impianto" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione" type="text" label="N. unità di generazione" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione" type="text" label="Tipologia sistema di termoregolazione" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile" type="text" label="Potenza termica utile [kW]" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomoannoInstallazione" type="text" label="Anno installazione" />
+        <label class="text-bold">Generatore oggetto di sostituzione?</label>
+        <q-radio v-model="NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione" val="SI" label="SI" />
+        <q-radio v-model="NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione" val="NO" label="NO" />
+        
+       
+       
+        </span>
+    </q-card-section>
+    <q-card-actions align="right">
+      <q-btn flat label="Annulla" color="primary" v-close-popup />
+      <q-btn flat label="Conferma" color="primary" @click="addrowImpiantoAutonomoEsistente();"/>
+    </q-card-actions>
+  </q-card>
+</q-dialog>
 
 <!-- FINE  MODAL -->
-
+<!-- #endregion -->
   </div> <!-- quello iniziale con TAB -->
 
 </template>
@@ -1059,6 +1317,45 @@ export default {
 
       this.modalDatiCatastaliTitoliAutorizzativi= false;
     },
+    addrowImpiantoAutonomoEsistente(){
+      this.elencoImpiantoAutonomoEsistente.push(
+        {
+            sub:this.NuovoImpiantoEsistenteAutonomosub,
+            tecnologiaImpianto:this.NuovoImpiantoEsistenteAutonomotecnologiaImpianto,
+            numeronUnitaGenerazione:this.NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione,
+            tipologiaSistemaTermoregolazione:this.NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione,
+            potenzaTermicaUtile:this.NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile,
+            annoInstallazione:this.NuovoImpiantoEsistenteAutonomoannoInstallazione,
+            GeneratoreOggettoDiSostituzione:this.NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione
+            }
+         
+         );
+
+      this.modalAggiungiImpiantoEsistenteAutonomo= false;
+    },
+    addrowImpiantoAutonomoProposto(){
+      this.elencoImpiantoAutonomoProposto.push(
+        {
+            sub:this.NuovoImpiantoEsistenteAutonomosub,
+            tecnologiaImpianto:this.NuovoImpiantoEsistenteAutonomotecnologiaImpianto,
+            numeronUnitaGenerazione:this.NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione,
+            tipologiaSistemaTermoregolazione:this.NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione,
+            potenzaTermicaUtile:this.NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile,
+            annoInstallazione:this.NuovoImpiantoEsistenteAutonomoannoInstallazione,
+            GeneratoreOggettoDiSostituzione:this.NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione
+            }
+         
+         );
+
+      this.modalAggiungiImpiantoEsistenteAutonomo= false;
+    },
+    addrowAllegati(){
+//TODO prevedere caricaemnto sul database diretto
+this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile:this.noteallegatoDiallegati, tipoAllegato:this.tipoAllegatodiAllegati.label });
+
+    },
+
+    
     removeRow(index){
    this.elencoAnagraficaClienti.splice(index, 1)
     }
@@ -1066,7 +1363,7 @@ export default {
      
   data () {
     return {
-text:'',data:'',date:'',
+        text:'',data:'',date:'',
 
          tab: "datiStrutturali",
          modalNuovaAnagraficaClienti: false,
@@ -1116,7 +1413,18 @@ text:'',data:'',date:'',
 
           tipologiaImpiantoEsistente:'',
 
-       
+          cetraleTermicaCentralizzatoNumeroUnita:'', cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente:'', cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro:'', cetraleTermicaCentralizzatoAnnoInstallazione:'',cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato:null,
+          cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente:'', cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste:'', cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente:'',
+          cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato:'', cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate:'', cetraleTermicaCentralizzatoCertificatoCPI:'',
+          cetraleTermicaCentralizzatoCertificatoCPIAllegato:null,cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato:null,
+          
+          cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:'',cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro:'', cetraleTermicaCentralizzatoNumeroUnitaProposte:'', centraleTermivaCentralizzatoVettoreImpianto:'',cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:'',
+
+
+          modalAggiungiImpiantoEsistenteAutonomo:false,
+          NuovoImpiantoEsistenteAutonomosub:'', NuovoImpiantoEsistenteAutonomotecnologiaImpianto:'',NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione:'',NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione:'',
+          NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile:'',NuovoImpiantoEsistenteAutonomoannoInstallazione:'',NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione:'',
+       allegatoDiAllegati:null,tipoAllegatodiAllegati:'',noteallegatoDiallegati:'',
       columns: [
         { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
         { name: 'nome', required: true, label: 'Nome', align: 'left', field: row => row.nome, format: val => `${val}`,sortable: true},
@@ -1187,6 +1495,171 @@ text:'',data:'',date:'',
           sub:'sub3',
           foglio:'folgio3'
           }
+      ],
+      elencoImpiantoAutonomoEsistente:[
+          {
+            sub:'1',
+            tecnologiaImpianto:'2',
+            numeronUnitaGenerazione:'3',
+            tipologiaSistemaTermoregolazione:'4',
+            potenzaTermicaUtile:'5',
+            annoInstallazione:'6',
+            GeneratoreOggettoDiSostituzione:'7',
+          }
+      ],
+      elencoImpiantoAutonomoProposto:[
+          {
+            sub:'1',
+            tecnologiaImpianto:'2',
+            numeronUnitaGenerazione:'3',
+            tipologiaSistemaTermoregolazione:'4',
+            potenzaTermicaUtile:'5',
+            annoInstallazione:'6',
+            GeneratoreOggettoDiSostituzione:'7',
+          }
+      ],
+      tecnologieCentraliTermiche:[
+          {
+            label:'Caldaia a gas',
+            value:'CaldaiaGas'
+          },
+          {
+            label:'caldaia a condensazione',
+            value:'caldaiaCondensazione'
+          },
+          {
+            label:'pompa di calore',
+            value:'pompaDiCalore'
+          },
+          {
+            label:'caldaia a gasolio',
+            value:'caldaiaGasolio'
+          },
+          {
+            label:'altro (specificare)',
+            value:'altro'
+          }
+      ],
+      elencoAllegati:[
+        {
+        nomeFile:'file.pdf',
+        path:'pathfile',
+        noteFile:'Note file',
+        tipoAllegato:'Modello privacy'
+        },
+        {
+        nomeFile:'file.pdf',
+        path:'pathfile',
+        noteFile:'Note file',
+        tipoAllegato:'Modello privacy'
+        },
+        {
+        nomeFile:'file.pdf',
+        path:'pathfile',
+        noteFile:'Note file',
+        tipoAllegato:'Modello privacy'
+        },
+        {
+        nomeFile:'file.pdf',
+        path:'pathfile',
+        noteFile:'Note file',
+        tipoAllegato:'Modello privacy'
+        }
+
+
+
+      ],
+     elencoMetodoPagamenti:[
+       {value:'c/c',label:'Conto corrente'},
+       {value:'carta',label:'Carta'},
+       {value:'carta2',label:'Carta C'}
+       
+       ],
+     tipiDiAllegati:[
+        {
+        value:'ModelloPrivacy',
+        label:'Modello privacy',
+        },
+        {
+        value:'Visure',
+        label:'Visure',
+        },
+        {
+        value:'TitoloProvenienza',
+        label:'Titolo di provenienza',
+        },
+        {
+        value:'DocumentiIdentita',
+        label:'Documenti di identità',
+        },
+        {
+        value:'ConcessioneEdilizia',
+        label:'Concessione edilizia',
+        },
+        {
+        value:'Agibilita',
+        label:'Agibilità',
+        },
+        {
+        value:'PermessoCostruire',
+        label:'Permesso di Costruire',
+        },
+        {
+        value:'Cila',
+        label:'Cila',
+        },
+        {
+        value:'Cil',
+        label:'Cil',
+        },
+        {
+        value:'AgibilitaAbitabilita',
+        label:'Agibilità\abitabilità',
+        },
+        {
+        value:'SCA',
+        label:'SCA',
+        },
+        {
+        value:'SCIA',
+        label:'SCIA',
+        },
+        {
+        value:'DIA',
+        label:'DIA',
+        },
+        {
+        value:'CertificazioniVarie',
+        label:'Certificazioni varie',
+        },
+        {
+        value:'DocumentiStrutture',
+        label:'Documenti Strutture',
+        },
+        {
+        value:'DocumentiImpianti',
+        label:'Documenti Impianti',
+        },
+        {
+        value:'PareriVariEnti',
+        label:'Pareri vari enti',
+        },
+        {
+        value:'APE',
+        label:'APE',
+        },
+        {
+        value:'Contratto',
+        label:'Contratto',
+        },
+        
+      ],
+      elencoQuote:[
+        {quota:10,tipo:'Tipo A',dataPagamento:'01/11/2020',metodoPagamento:'C/C'},
+        {quota:15,tipo:'Tipo A',dataPagamento:'5/11/2020',metodoPagamento:'C/C'},
+        {quota:16,tipo:'Tipo A',dataPagamento:'10/11/2020',metodoPagamento:'C/C'},
+        {quota:20,tipo:'Tipo B',dataPagamento:'12/11/2020',metodoPagamento:'C/C'}
+  
         ]
     }
   },
