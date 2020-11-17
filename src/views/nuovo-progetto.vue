@@ -4,7 +4,7 @@
 
 <div class="q-pa-md" style="color:grey; background-color: ghostwhite;">
   
-  <q-tabs  v-model="tab"  class="text-teal">
+  <q-tabs  v-model="tab" style="border-bottom:1px black solid" >
       <q-tab name="progetto"  icon="account_box" label="Progetto" />
       <q-tab name="anagraficaIntervento"  icon="alarm" label="Anagrafica intervento" /> 
       <q-tab name="screening"  icon="movie" label="Screening" />
@@ -40,7 +40,7 @@
          
         </q-input>
         </div>
-        <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" /></div>
+        <div class="col-2"> <q-btn   label="Crea"   :dense='true' icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" /></div>
     </div>
     
     <div class="row" style="padding-top:20px">
@@ -77,7 +77,7 @@
          
         </q-input>
         </div>
-        <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" /></div>
+        <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true"  :dense="true" /></div>
     </div>
     
     <div class="row" style="padding-top:20px">
@@ -113,7 +113,7 @@
          
         </q-input>
         </div>
-        <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" /></div>
+        <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" :dense="true" /></div>
     </div>
     
     <div class="row" style="padding-top:20px">
@@ -1102,18 +1102,18 @@ Specificare le modalità e i tempi di sanatoria.
   
 <div class="row">
   <div class="col-3">
-     <label class="text-bold"> Tipo Allegato</label>
-  <q-file v-model="allegatoDiAllegati"   label="Carica file"   filled   style="max-width: 300px" /> 
+     <label class="text-bold"> Allegato</label>
+  <q-file v-model="allegatoDiAllegati"   label="Carica file"  outlined :dense="true"   style="max-width: 300px" /> 
   </div>
   <div class="col-6">  
     <label class="text-bold"> Tipo Allegato</label>
-    <q-select v-model="tipoAllegatodiAllegati" :options="tipiDiAllegati" :dense="true" outlined label="Standard" filled />
+    <q-select v-model="tipoAllegatodiAllegati" :options="tipiDiAllegati" :dense="true" outlined label="Standard"  />
   </div>
    <div class="col-12"> 
     <label for="" class="text-bold"> Note</label>
     <q-input v-model="noteallegatoDiallegati" outlined :dense="true" type="text" label="Label" />  
   </div>
-  <div class="col-12" style="margin-top:10px;"><q-btn class="white" icon="check" label="Aggiungi" @click="addrowAllegati()" /></div>
+  <div class="col-12" style="margin-top:10px;"><q-btn class="white" icon="add" label="Aggiungi" @click="addrowAllegati()" /></div>
    
      </div>
 <div class="row" style="margin-top:20px"> 
@@ -1169,7 +1169,7 @@ Specificare le modalità e i tempi di sanatoria.
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-       <formNuovaanagrafica></formNuovaanagrafica>
+       <formNuovaanagrafica idutente=''></formNuovaanagrafica>
          </q-card-section>
 
         <q-card-actions align="right">

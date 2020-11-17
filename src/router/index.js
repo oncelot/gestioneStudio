@@ -4,6 +4,7 @@ import NuovoProgetto from '@/views/nuovo-progetto'
 import ListaProgetti from '@/views/lista-progetti'
 import anagrafica from '@/views/anagrafica'
 
+
 Vue.use(VueRouter)
 
 
