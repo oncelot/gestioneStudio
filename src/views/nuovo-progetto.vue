@@ -29,11 +29,11 @@
     <!-- #region ANAGRAFICA CLIENTI -->
     <div style="padding-top:20px">
     <div class="row justify-center"  style="color:grey; ">
-      <div class="col-12 col-md-6 bgAree"><b>Aggiungi i Clienti</b></div>
+      <div class="col-12 col-md-7 bgAree"><b>Aggiungi i Clienti</b></div>
       
     </div>
     <div class="row justify-center">
-      <div class="col-12 col-md-6 bgAree">
+      <div class="col-12 col-md-7 bgAree">
         <q-input v-model="cercaAnagraficaClienti" debounce="500"  outlined :dense=true  placeholder="Cerca Cliente da aggiungere - Inserire 4 caratteri per avviare la ricerca" @keypress=" elencoCercaAnagraficaClientiFunction()">
           <div class="autocomplete-items" v-if="cercaAnagraficaClienti.length > 2">
             <div class="row"  v-for="item in elencoCercaAnagraficaClienti" :key="item.message">
@@ -57,12 +57,19 @@
       <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Nome</b> </div> 
       <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Cognome</b> </div>
       <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black ">  <b>Codice Fiscale</b> </div>  
+      <div class="col-1 col-md-1 bgAree" style="border-bottom:1px solid black ">  <b></b> </div>  
+     
   </div>
 
-  <div  class="row justify-center " v-for="item in elencoAnagraficaClienti" :key="item.message" >
+  <div  class="row justify-center " v-for="(item,index) in elencoAnagraficaClienti" :key="item.message" >
     <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
+    <div class="col-1 col-md-1 bgAree"> 
+    <q-btn   size="sm" round icon="delete" @click="elencoAnagraficaClienti.splice(index, 1)" />
+  
+  </div>
+ 
   </div>
   </div>
    <!-- #endregion -->
@@ -70,11 +77,11 @@
     <!-- collaboratori interni -->
     <div style="padding-top:20px">
     <div class="row justify-center">
-      <div class="col-12 col-md-6 bgAree"><b>Collaboratori interni</b></div>
+      <div class="col-12 col-md-7 bgAree"><b>Collaboratori interni</b></div>
         
     </div>
     <div class="row justify-center">
-      <div class="col-12 col-md-6 bgAree">
+      <div class="col-12 col-md-7 bgAree">
          <q-input v-model="cercaCollaboratoriInterni" debounce="500"  outlined :dense=true  placeholder="Inserire 4 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreInternoFunction()">
           <div class="autocomplete-items" v-if="cercaCollaboratoriInterni.length > 2">
             <div class="row"  v-for="item in elencoCercaCollaboratoreInterno" :key="item.message">
@@ -96,12 +103,17 @@
       <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Nome</b> </div> 
       <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black ">  <b>Cognome</b> </div>
       <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Codice Fiscale</b> </div>  
+      <div class="col-1 col-md-1 bgAree" style="border-bottom:1px solid black "></div>  
   </div>
 
   <div  class="row justify-center" v-for="item in elencoCollaboratoriInterno" :key="item.message" style="">
     <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
+    <div class="col-1 col-md-1 bgAree"> 
+    <q-btn   size="sm" round icon="delete" @click="elencoCollaboratoriInterno.splice(index, 1)" />
+  
+  </div>
   </div>
 </div>
 
@@ -110,11 +122,11 @@
     <!-- collaboratori esterni -->
     <div style=padding-top:20px>
     <div class="row justify-center">
-      <div class="col-12 col-md-6 bgAree"><b>Collaboratori Esterni</b></div>
+      <div class="col-12 col-md-7 bgAree"><b>Collaboratori Esterni</b></div>
         
     </div>
     <div class="row  justify-center">
-      <div class="col-12 col-md-6 bgAree">
+      <div class="col-12 col-md-7 bgAree">
        <q-input v-model="cercaCollaboratoriEsterni" debounce="500"  outlined :dense=true  placeholder="Inserire 4 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreEsternoFunction()">
           <div class="autocomplete-items" v-if="cercaCollaboratoriEsterni.length > 2">
             <div class="row"  v-for="item in elencoCercaCollaboratoreEsterno" :key="item.message">
@@ -137,12 +149,17 @@
       <div class="col-4 col-md-2 bgAree"  style="border-bottom:1px solid black"><b>Nome</b> </div> 
       <div class="col-4 col-md-2 bgAree"  style="border-bottom:1px solid black"><b>Cognome</b> </div>
       <div class="col-4 col-md-2 bgAree"  style="border-bottom:1px solid black"><b>Codice Fiscale</b> </div>  
+      <div class="col-1 col-md-1 bgAree"  style="border-bottom:1px solid black"></div>  
   </div>
 
   <div  class="row" v-for="item in elencoCollaboratoriEnterno" :key="item.message">
     <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
+     <div class="col-1 col-md-1 bgAree"> 
+    <q-btn   size="sm" round icon="delete" @click="elencoCollaboratoriEnterno.splice(index, 1)" />
+  
+  </div>
   </div>
   </div>
    <!-- FINE collaboratori esterni -->
@@ -457,15 +474,20 @@
            
           </div>
         </div>
-        <div class="row" style="padding-top:20px">
-            <div class="col-12">
+        <div class="row q-gutter-sm "  style="padding-top:20px">
+            <div class="col-7">
                <q-input v-model="cercaProgettista" @keypress=" elencoCercaAnagraficaProgettistiFunction()" outlined :dense=true type="text" label="Cerca" >
                <div class="autocomplete-items" v-if="cercaProgettista.length > 2">
             <div class="row"  v-for="item in elencoCercaAnagraficaProgettisti" :key="item.message">
+              
               <div class="col">
-                <a  @click="aggiungiElencoProgettisti(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
+                <a  @click="aggiungiElencoProgettisti(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a>
+              </div>
+                
+            
 
             </div>
+             
           </div>
            <template v-slot:append>
             <q-icon name="search" />
@@ -473,7 +495,7 @@
          
         </q-input>
                </div>
-            <div class="col-12">
+            <div class="col-2">
               <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" />
             </div>
         </div>
@@ -481,11 +503,15 @@
             <div class="col"><b>Nome</b> </div>  
             <div class="col"><b>Cognome</b> </div>  
             <div class="col"><b>Codice Fiscale</b> </div>  
+            <div class="col"> </div>  
         </div>
-        <div  class="row" v-for="item in elencoAnagraficaProgettisti" :key="item.message" style="border-bottom:1px solid black">
+        <div  class="row" v-for="(item ,index) in elencoAnagraficaProgettisti" :key="item.message" >
         <div class="col"> {{ item.nome }}</div>
         <div class="col"> {{ item.cognome }}</div>
         <div class="col"> {{ item.codiceFiscale }}</div>
+          <div class=""> 
+                <q-btn   size="sm" round icon="delete" @click="elencoAnagraficaProgettisti.splice(index, 1)" />
+              </div>
    </div>
 
 
@@ -750,23 +776,27 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     <div class="col"><b>Sub</b></div>
     <div class="col"><b>Successivi interventi</b></div>
     <div class="col"><b>Allegato</b></div>
-    <div class="col"></div>
+    <div class="col-1 col-md-1 "></div>
     
     </div>
   
 
 
- <div  class="row" v-for="item in elencoTitoliAutorizzatiInterventiSuccessivi" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
+ <div  class="row" v-for="(item,index) in elencoTitoliAutorizzatiInterventiSuccessivi" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
     <div class="col"> {{ item.sub }}</div>
     <div class="col"> {{ item.descrizione }}</div>
     <div class="col"> {{ item.allegato }}</div>
-    <div class="col"> </div>
+    <div class="col-1 col-md-1 "> 
+    <q-btn   size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi.splice(index, 1)" />
+  
+  </div>
   </div>
 </div>
 <div  style="background-color:white">
 <!-- DATI CATASTALI -->
   <div class="row " style="padding-top:10px" >
-    <div class="col-12"><label for="" class="text-h6"><b>Dati catastali</b></label>  </div>
+    <div class="col-12"><label for="" class="text-h6">
+      <b>Dati catastali</b></label>  </div>
    
   </div>
  
@@ -779,18 +809,21 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
     </div>
       <div class="row  q-gutter-sm" style="background-color:white; border-bottom:1px solid black">
-    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoSub" :dense="true" outlined  type="text" /></b></div>
-    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoParticella" :dense="true" outlined  type="text"  /></b></div>
     <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoFoglio" :dense="true" outlined  type="text" /></b></div>
+    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoParticella" :dense="true" outlined  type="text"  /></b></div>
+    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoSub" :dense="true" outlined  type="text" /></b></div>
 
     <div class="col"> <q-btn icon="add"  color="primary" @click="addrowDatiCatastaliTitoliAutorizzativi(); " outline :dense="true" /></div>
     
     </div>
- <div  class="row  q-gutter-sm" v-for="item in elencoTitoliAutorizzatiDatiCatastali" :key="item.message" >
+ <div  class="row  q-gutter-sm" v-for="(item,index) in elencoTitoliAutorizzatiDatiCatastali" :key="item.message" >
     <div class="col"> {{ item.foglio }}</div>
     <div class="col"> {{ item.particella }}</div>
     <div class="col"> {{ item.sub }}</div>
-    <div class="col"></div>
+   <div class="col-1 col-md-1 "> 
+    <q-btn   size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi.splice(index, 1)" />
+  
+  </div>
 
   </div>
   </div>
@@ -1199,21 +1232,159 @@ Specificare le modalità e i tempi di sanatoria.
 
 <div v-if="tab == 'quote'">
 
-<div class="row"><div class="col"></div></div>
 
-<div class="row">
-  <div class="col">Quota</div>
-  <div class="col">Tipo</div>
-  <div class="col">Data Pagamento</div>
-  <div class="col">Metodo di pagamento</div>
+<div class="row  q-gutter-sm bgAree"><div class="col-8 col-md-3">
+  <label for="" class="font-weigth:bold">Quota Preventivo €</label>
+  <q-input v-model="quotaPreventivo" :dense="true" outlined type="text" /></div>
+
+  <div class="col-2 col-md-2"> 
+    <label for="" class="text-bold"> Allega Preventivo Firmato</label>
+    <q-file
+      v-model="quoteAllegatoPreventivo"
+      label="Carica file"
+      outlined
+      :dense="true"
+      style="max-width: 300px" />
+      </div>
   </div>
-<div class="row" v-for="quota in elencoQuote" :key="quota.quota">
-  <div class="col"> {{quota.quota}}</div>
-  <div class="col">{{quota.tipo}}</div>
-  <div class="col">{{quota.dataPagamento}}</div>
-  <div class="col">{{quota.metodoPagamento}}</div>
+
+  <div class="bgAree" style="margin-top:20px" >
+<div class="row">
+  <div class="col">
+    <span class="text-h6 text-secondary">Acconti Ricevuti</span>
+  </div>
+</div>
+  
+  <div class="row  q-gutter-sm " style="padding-top:20px">
+    <div class="col-6 col-md-2 ">
+      <label class="text-bold">Data</label>
+     <q-input  outlined :dense="true"  v-model="dataAcconto" mask="date" :rules="['date']">
+      <template v-slot:append>
+        <q-icon name="event" class="cursor-pointer">
+          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+            <q-date v-model="dataAcconto">
+              <div class="row items-center justify-end">
+                <q-btn v-close-popup label="Close" color="primary" flat />
+              </div>
+            </q-date>
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+    </q-input>
+    </div>
+    <div class="col-6 col-md-2 ">
+      <label for="" class="text-bold">Importo</label>
+      <q-input v-model="quotaImportoAcconto" outlined :dense="true"  type="number" />
+      </div>
+   
+    <div class="col-6 col-md-2 ">
+      <label for="" class="text-bold">Modalità di pagamento</label>
+    
+      <q-select v-model="quotaAccontoModalitaPagamento" :options="elencoMetodoPagamenti" outlined :dense="true" /></div>
+    <div class="col-6 col-md-3 ">
+      <label for="" class="text-bold">Chi ha fatturato</label>
+      <q-input v-model="quoteChiFattura" type="text" outlined :dense="true"  />
+    </div>
+    
+    <div class="col-6 col-md-2">
+      <q-btn icon="add" style="margin-top:25px"  color="primary" @click="addrowQuoteAcconti(); " outline :dense="true" />
+    </div>
+   
+    
+    </div>
+
+<div class="row bgAree">
+  <div class="col text-bold">Quota</div>
+  <div class="col text-bold">Tipo</div>
+  <div class="col text-bold">Metodo di Pagamento</div>
+  <div class="col text-bold">Chi Fatturato</div>
+   <div class="col text-bold"></div>
+  </div>
+<div class="row bgAree"  v-for="(quota,index) in elencoQuote" :key="quota.quota">
+ <div class="col">{{quota.dataPagamento}}</div>
+  <div class="col"> {{quota.importo}}</div>
+   <div class="col">{{quota.metodoPagamento}}</div>
+  <div class="col">{{quota.chiFatturato}}</div>
+  <div class="col"> 
+    <q-btn   size="sm" round icon="delete" @click="elencoQuote.splice(index, 1)" />
+  
+  </div>
+ 
 
 </div>
+</div>
+
+
+  <div class="bgAree" style="margin-top:20px" >
+<div class="row">
+  <div class="col">
+    <span class="text-h6 text-secondary">Spese Effettuate</span>
+  </div>
+</div>
+  
+  <div class="row  q-gutter-sm " style="padding-top:20px">
+
+    <div class="col-6 col-md-2 ">
+      <label class="text-bold">Data</label>
+     <q-input  outlined :dense="true"  v-model="dataSpesaEffettuata" mask="date" :rules="['date']">
+      <template v-slot:append>
+        <q-icon name="event" class="cursor-pointer">
+          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+            <q-date v-model="dataSpesaEffettuata">
+              <div class="row items-center justify-end">
+                <q-btn v-close-popup label="Close" color="primary" flat />
+              </div>
+            </q-date>
+          </q-popup-proxy>
+        </q-icon>
+      </template>
+    </q-input>
+    </div>
+
+    <div class="col-6 col-md-2 ">
+      <label for="" class="text-bold">Importo</label>
+      <q-input v-model="importoSpesaEffettuata" outlined :dense="true"  type="number" />
+      </div>
+   
+    <div class="col-6 col-md-2 ">
+      <label for="" class="text-bold">Causale</label>
+      <q-input v-model="causaleSpesaEffettuata" outlined :dense="true"  type="text" />
+ </div>
+     <div class="col-6 col-md-3 ">
+      <label for="" class="text-bold">Chi ha Pagato</label>
+      <q-input v-model="chiHafattoSpesa" type="text" outlined :dense="true"  />
+    </div>
+    
+    <div class="col-6 col-md-2">
+      <q-btn icon="add" style="margin-top:25px"  color="primary" @click="addrowQuoteSpese(); " outline :dense="true" />
+    </div>
+   
+    
+    </div>
+
+<div class="row bgAree">
+  <div class="col text-bold">Quota</div>
+  <div class="col text-bold">Tipo</div>
+  <div class="col text-bold">Causale</div>
+  <div class="col text-bold">Chi ha pagato</div>
+  <div class="col text-bold"></div>
+  </div>
+<div class="row bgAree" v-for="(quota,index) in elencoSpese" :key="quota.dataPagamento" >
+ <div class="col">{{quota.dataPagamento}}</div>
+  <div class="col"> {{quota.importo}}</div>
+   <div class="col">{{quota.causale}}</div>
+  <div class="col">{{quota.chiHapagato}}</div>
+  <div class="col"> 
+    <q-btn   size="sm" round icon="delete" @click="elencoSpese.splice(index, 1)" />
+  
+  </div>
+
+
+</div>
+
+
+</div>
+
 
 </div>
 
@@ -1271,27 +1442,7 @@ Specificare le modalità e i tempi di sanatoria.
   </q-card>
 </q-dialog>
 
-<q-dialog v-model="modalDatiCatastaliTitoliAutorizzativi" persistent>
-  <q-card>
-    <q-card-section class="row items-center">
-     
-      <span class="q-ml-md">Aggiungi</span>
-    </q-card-section>
-    <q-card-section class="row items-center">
-    
-      <span class="q-ml-md">
-        <q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoSub" type="text" label="sub" />
-        <q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoParticella" type="text" label="particella" />
-        <q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoFoglio" type="text" label="foglio" />
-       
-        </span>
-    </q-card-section>
-    <q-card-actions align="right">
-      <q-btn flat label="Annulla" color="primary" v-close-popup />
-      <q-btn flat label="Conferma" color="primary" @click="addrowDatiCatastaliTitoliAutorizzativi();"/>
-    </q-card-actions>
-  </q-card>
-</q-dialog>
+
 <q-dialog v-model="modalAggiungiImpiantoEsistenteAutonomo" persistent>
   <q-card>
     <q-card-section class="row items-center">
@@ -1404,17 +1555,10 @@ export default {
     },
     addrowDatiCatastaliTitoliAutorizzativi(){
       this.elencoTitoliAutorizzatiDatiCatastali.push(
-        {
-          sub:this.modalDatiCatastaliTitoliAutorizzativiNuovoSub,
-          particella:this.modalDatiCatastaliTitoliAutorizzativiNuovoParticella,
-          foglio:this.modalDatiCatastaliTitoliAutorizzativiNuovoFoglio
-         
-        }
-         
-         );
-
-      this.modalDatiCatastaliTitoliAutorizzativi= false;
-    },
+        {sub:this.modalDatiCatastaliTitoliAutorizzativiNuovoSub,
+         particella:this.modalDatiCatastaliTitoliAutorizzativiNuovoParticella,
+         foglio:this.modalDatiCatastaliTitoliAutorizzativiNuovoFoglio});
+         },
     addrowImpiantoAutonomoEsistente(){
       this.elencoImpiantoAutonomoEsistente.push(
         {
@@ -1447,6 +1591,26 @@ export default {
 
       this.modalAggiungiImpiantoEsistenteAutonomo= false;
     },
+    addrowQuoteAcconti(){
+      this.elencoQuote.push(
+        {
+          dataPagamento:this.dataAcconto,
+          importo:this.quotaImportoAcconto,
+          metodoPagamento:this.quotaAccontoModalitaPagamento.value,
+          chiFatturato:this.quoteChiFattura
+
+        });
+        },
+    addrowQuoteSpese(){
+      this.elencoSpese.push(
+        {
+          dataPagamento:this.dataSpesaEffettuata,
+          importo:this.importoSpesaEffettuata,
+          causale:this.causaleSpesaEffettuata,
+          chiHapagato:this.chiHafattoSpesa
+
+        });
+        },
     addrowAllegati(){
 //TODO prevedere caricaemnto sul database diretto
 this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile:this.noteallegatoDiallegati, tipoAllegato:this.tipoAllegatodiAllegati.label });
@@ -1585,7 +1749,13 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
           modalAggiungiImpiantoEsistenteAutonomo:false,
           NuovoImpiantoEsistenteAutonomosub:'', NuovoImpiantoEsistenteAutonomotecnologiaImpianto:'',NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione:'',NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione:'',
           NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile:'',NuovoImpiantoEsistenteAutonomoannoInstallazione:'',NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione:'',
-       allegatoDiAllegati:null,tipoAllegatodiAllegati:'',noteallegatoDiallegati:'',
+          allegatoDiAllegati:null,tipoAllegatodiAllegati:'',noteallegatoDiallegati:'',
+
+          quotaPreventivo:'', quoteAllegatoPreventivo:null,
+          dataAcconto:'',quotaAccontoModalitaPagamento:'',quotaImportoAcconto:'',quoteChiFattura:'',
+
+          dataSpesaEffettuata:'',importoSpesaEffettuata:'', causaleSpesaEffettuata:'', chiHafattoSpesa:'',
+       
       columns: [
         { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
         { name: 'nome', required: true, label: 'Nome', align: 'left', field: row => row.nome, format: val => `${val}`,sortable: true},
@@ -1596,91 +1766,19 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
        
            ],
 
-      elencoCercaAnagraficaClienti: [{nome:'',cognome:'',denominazione:'',codiceFiscale:'',partitaIva:'',id:'' }],
-      elencoCercaCollaboratoreEsterno: [{nome:'',cognome:'',denominazione:'',codiceFiscale:'',partitaIva:'',id:'' }],
-      elencoCercaCollaboratoreInterno: [{nome:'',cognome:'',denominazione:'',codiceFiscale:'',partitaIva:'',id:'' }],
-      elencoCercaAnagraficaProgettisti: [{nome:'',cognome:'',denominazione:'',codiceFiscale:'',partitaIva:'',id:'' }],
+      elencoCercaAnagraficaClienti: [],
+      elencoCercaCollaboratoreEsterno: [],
+      elencoCercaCollaboratoreInterno: [],
+      elencoCercaAnagraficaProgettisti: [],
 
-      elencoAnagraficaClienti: [
-        {
-            id:'',
-            nome: '',
-            cognome: '',
-            codiceFiscale: '',
-            partitaIva:'',
-            denominazione:'',
-            indice:0,
-            cestino:''
-          
-        }],
-      elencoCollaboratoriEnterno: [
-        {
-            id:'',
-            nome: '',
-            cognome: '',
-            codiceFiscale: '',
-            partitaIva:'',
-            denominazione:'',
-            indice:0,
-            cestino:''
-          
-        }],
-      elencoCollaboratoriInterno: [
-        {
-            id:'',
-            nome: '',
-            cognome: '',
-            codiceFiscale: '',
-            partitaIva:'',
-            denominazione:'',
-            indice:0,
-            cestino:''
-          
-        }
-      ],
-      elencoAnagraficaProgettisti: [
-        {
-            id:'',
-            nome: '',
-            cognome: '',
-            codiceFiscale: '',
-            partitaIva:'',
-            denominazione:'',
-            indice:0,
-            cestino:''
-          
-        }
-      ],
-
-      elencoTitoliAutorizzatiInterventiSuccessivi:[
-       
-    
-      ],
-      elencoTitoliAutorizzatiDatiCatastali:[
-         
-      ],
-      elencoImpiantoAutonomoEsistente:[
-          {
-            sub:'1',
-            tecnologiaImpianto:'2',
-            numeronUnitaGenerazione:'3',
-            tipologiaSistemaTermoregolazione:'4',
-            potenzaTermicaUtile:'5',
-            annoInstallazione:'6',
-            GeneratoreOggettoDiSostituzione:'7',
-          }
-      ],
-      elencoImpiantoAutonomoProposto:[
-          {
-            sub:'1',
-            tecnologiaImpianto:'2',
-            numeronUnitaGenerazione:'3',
-            tipologiaSistemaTermoregolazione:'4',
-            potenzaTermicaUtile:'5',
-            annoInstallazione:'6',
-            GeneratoreOggettoDiSostituzione:'7',
-          }
-      ],
+      elencoAnagraficaClienti: [],
+      elencoCollaboratoriEnterno: [],
+      elencoCollaboratoriInterno: [],
+      elencoAnagraficaProgettisti: [],
+      elencoTitoliAutorizzatiInterventiSuccessivi:[],
+      elencoTitoliAutorizzatiDatiCatastali:[],
+      elencoImpiantoAutonomoEsistente:[],
+      elencoImpiantoAutonomoProposto:[],
       tecnologieCentraliTermiche:[
           {
             label:'Caldaia a gas',
@@ -1817,13 +1915,8 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
         },
         
       ],
-      elencoQuote:[
-        {quota:10,tipo:'Tipo A',dataPagamento:'01/11/2020',metodoPagamento:'C/C'},
-        {quota:15,tipo:'Tipo A',dataPagamento:'5/11/2020',metodoPagamento:'C/C'},
-        {quota:16,tipo:'Tipo A',dataPagamento:'10/11/2020',metodoPagamento:'C/C'},
-        {quota:20,tipo:'Tipo B',dataPagamento:'12/11/2020',metodoPagamento:'C/C'}
-  
-        ]
+      elencoQuote:[],
+      elencoSpese:[]
     }
   },
 
