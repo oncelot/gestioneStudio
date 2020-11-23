@@ -103,8 +103,8 @@ $dettagliutente=DB::table('anagrafica')->select('*')->where('id',$idutente)->get
    return  response()
             ->json($dettagliutente);
 });
-$router->get('/getCercaAnagrafica/{tipo}/{varie}',function (Request $request,$itpo,$varie){
-$dettagliutente=DB::table('anagrafica')->select('*')->where('tipo_anagrafica',$tipo)->orWhere('nome','like',$varie)->orwhere('cognome','like',$varie)->get();
+$router->get('/getCercaAnagrafica/{tipo}/{varie}',function (Request $request,$tipo,$varie){
+$dettagliutente=DB::table('anagrafica')->select('nome','cognome','denominazione','codice_fiscale','partita_iva','id')->where('tipo_anagrafica',$tipo)->where('nome','like',"%$varie%")->orwhere('cognome','like',"%$varie%")->get();
    return  response()
             ->json($dettagliutente);
 });

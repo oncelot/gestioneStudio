@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh Lpr lff">
-    <q-header elevated class="glossy">
+    <q-header >
       <q-toolbar>
         <q-btn
           flat
@@ -30,9 +30,11 @@
         :width="200"
         :breakpoint="500"
         bordered
-        content-class="bg-grey-3"
+        
+        
+        style="background-color:#d4e2e9"
     >
-      <q-list>
+      <q-list  style="background-color:#d4e2e9; " class="text-secondary"> 
         <q-item clickable   to="/nuovo-progetto" exact>
           <q-item-section avatar>
             <q-icon name="add_circle_outline" />

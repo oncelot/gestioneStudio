@@ -2,10 +2,10 @@
 
 <template>
 
-<div class="q-pa-md" style="color:grey; background-color: ghostwhite;">
+<div class="q-pa-md" style="color:grey; background-color:#f2f4f8;">
   
-  <q-tabs  v-model="tab" style="border-bottom:1px black solid" >
-      <q-tab name="progetto"  icon="account_box" label="Progetto" />
+  <q-tabs  v-model="tab" inline-label style="background-color:#fdfdfd"  >
+      <q-tab name="progetto"  icon="account_box" label="Progetto"  />
       <q-tab name="anagraficaIntervento"  icon="alarm" label="Anagrafica intervento" /> 
       <q-tab name="screening"  icon="movie" label="Screening" />
       <q-tab name="datiStrutturali"  icon="build" label="Dati Strutturali" />
@@ -16,125 +16,140 @@
 
 <!-- #region progetto -->
     <div  v-if="tab == 'progetto'">
-          <div class="row">
-              <div class="col text-h4 text-center">Dati del progetto</div>
+          <div class="row justify-center">
+              <div class=" text-h4 text-center text-secondary"><span class="text-secondary"> Nuovo Progetto</span></div>
           </div>
-    <div class="row" >
-        <div class="col">
+    <div class="row  justify-center"  >
+        <div class=" col-12 col-md-6 bgmargintop">
             <q-input outlined v-model="titoloProgetto" label="Titolo del progetto" />
         </div>
     </div>
 
 
     <!-- #region ANAGRAFICA CLIENTI -->
-    <div class="q-gutter-xs"  style="color:grey; ">
-      <div class="col"><hr><br><b>Anagrafica Clienti</b></div>
-        
+    <div style="padding-top:20px">
+    <div class="row justify-center"  style="color:grey; ">
+      <div class="col-12 col-md-6 bgAree"><b>Aggiungi i Clienti</b></div>
+      
     </div>
-    <div class="row">
-      <div class="col-10">
-        <q-input v-model="search" debounce="500"  outlined :dense=true filled placeholder="Cerca Anagrafica" >
+    <div class="row justify-center">
+      <div class="col-12 col-md-6 bgAree">
+        <q-input v-model="cercaAnagraficaClienti" debounce="500"  outlined :dense=true  placeholder="Cerca Cliente da aggiungere - Inserire 4 caratteri per avviare la ricerca" @keypress=" elencoCercaAnagraficaClientiFunction()">
+          <div class="autocomplete-items" v-if="cercaAnagraficaClienti.length > 2">
+            <div class="row"  v-for="item in elencoCercaAnagraficaClienti" :key="item.message">
+              <div class="col">
+                <a href="#" @click="aggiungiElencoClienti(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
+
+            </div>
+          </div>
           <template v-slot:append>
             <q-icon name="search" />
           </template>
          
         </q-input>
         </div>
-        <div class="col-2"> <q-btn   label="Crea"   :dense='true' icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" /></div>
+        <!-- <div class="col-2"> <q-btn   label="Crea"   :dense='true' icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" /></div> -->
     </div>
     
-    <div class="row" style="padding-top:20px">
-      <div class="col-12">
-       
-      </div>
-    </div>
     
-    <div class="row"  style="border-bottom:1px solid black">
-      <div class="col"><b>Nome</b> </div> 
-      <div class="col"><b>Cognome</b> </div>
-      <div class="col"><b>Codice Fiscale</b> </div>  
+        
+    <div class="row justify-center "  style="justify-center" >
+      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Nome</b> </div> 
+      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Cognome</b> </div>
+      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black ">  <b>Codice Fiscale</b> </div>  
   </div>
 
-  <div  class="row" v-for="item in elencoAnagraficaClienti" :key="item.message" style="border-bottom:1px solid black">
-    <div class="col"> {{ item.nome }}</div>
-    <div class="col"> {{ item.cognome }}</div>
-    <div class="col"> {{ item.codiceFiscale }}</div>
+  <div  class="row justify-center " v-for="item in elencoAnagraficaClienti" :key="item.message" >
+    <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
+  </div>
   </div>
    <!-- #endregion -->
 
     <!-- collaboratori interni -->
-    
-    <div class="row">
-      <div class="col"><hr><br><b>Collaboratori interni</b></div>
+    <div style="padding-top:20px">
+    <div class="row justify-center">
+      <div class="col-12 col-md-6 bgAree"><b>Collaboratori interni</b></div>
         
     </div>
-    <div class="row">
-      <div class="col-10">
-        <q-input v-model="search" debounce="500"  outlined :dense=true filled placeholder="Cerca Anagrafica" >
+    <div class="row justify-center">
+      <div class="col-12 col-md-6 bgAree">
+         <q-input v-model="cercaCollaboratoriInterni" debounce="500"  outlined :dense=true  placeholder="Inserire 4 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreInternoFunction()">
+          <div class="autocomplete-items" v-if="cercaCollaboratoriInterni.length > 2">
+            <div class="row"  v-for="item in elencoCercaCollaboratoreInterno" :key="item.message">
+              <div class="col">
+                <a href="#" @click="aggiungiElencoCollaboratoreInterno(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
+
+            </div>
+          </div>  
           <template v-slot:append>
             <q-icon name="search" />
           </template>
          
         </q-input>
         </div>
-        <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true"  :dense="true" /></div>
+       <!--  <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true"  :dense="true" /></div> -->
     </div>
     
-    <div class="row" style="padding-top:20px">
-      <div class="col-12">
-       
-      </div>
-    </div>
-    
-    <div class="row"  style="border-bottom:1px solid black">
-      <div class="col"><b>Nome</b> </div> 
-      <div class="col"><b>Cognome</b> </div>
-      <div class="col"><b>Codice Fiscale</b> </div>  
+    <div class="row justify-center"  style="">
+      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Nome</b> </div> 
+      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black ">  <b>Cognome</b> </div>
+      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Codice Fiscale</b> </div>  
   </div>
 
-  <div  class="row" v-for="item in elencoAnagraficaClienti" :key="item.message" style="border-bottom:1px solid black">
-    <div class="col"> {{ item.nome }}</div>
-    <div class="col"> {{ item.cognome }}</div>
-    <div class="col"> {{ item.codiceFiscale }}</div>
+  <div  class="row justify-center" v-for="item in elencoCollaboratoriInterno" :key="item.message" style="">
+    <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
   </div>
+</div>
+
    <!-- FINE collaboratori interni -->
 
     <!-- collaboratori esterni -->
-    <div class="row">
-      <div class="col"><hr><br><b>Collaboratori Esterni</b></div>
+    <div style=padding-top:20px>
+    <div class="row justify-center">
+      <div class="col-12 col-md-6 bgAree"><b>Collaboratori Esterni</b></div>
         
     </div>
-    <div class="row">
-      <div class="col-10">
-        <q-input v-model="search" debounce="500"  outlined :dense=true filled placeholder="Cerca Anagrafica" >
-          <template v-slot:append>
+    <div class="row  justify-center">
+      <div class="col-12 col-md-6 bgAree">
+       <q-input v-model="cercaCollaboratoriEsterni" debounce="500"  outlined :dense=true  placeholder="Inserire 4 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreEsternoFunction()">
+          <div class="autocomplete-items" v-if="cercaCollaboratoriEsterni.length > 2">
+            <div class="row"  v-for="item in elencoCercaCollaboratoreEsterno" :key="item.message">
+              <div class="col">
+                <a href="#" @click="aggiungiElencoClientiCollaboratoreEsterno(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
+
+            </div>
+          </div>  
+        <template v-slot:append>
             <q-icon name="search" />
           </template>
          
         </q-input>
         </div>
-        <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" :dense="true" /></div>
+       <!-- <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" :dense="true" /></div> -->
     </div>
     
-    <div class="row" style="padding-top:20px">
-      <div class="col-12">
-       
-      </div>
-    </div>
     
-    <div class="row"  style="border-bottom:1px solid black">
-      <div class="col"><b>Nome</b> </div> 
-      <div class="col"><b>Cognome</b> </div>
-      <div class="col"><b>Codice Fiscale</b> </div>  
+    <div class="row justify-center" >
+      <div class="col-4 col-md-2 bgAree"  style="border-bottom:1px solid black"><b>Nome</b> </div> 
+      <div class="col-4 col-md-2 bgAree"  style="border-bottom:1px solid black"><b>Cognome</b> </div>
+      <div class="col-4 col-md-2 bgAree"  style="border-bottom:1px solid black"><b>Codice Fiscale</b> </div>  
   </div>
 
-  <div  class="row" v-for="item in elencoAnagraficaClienti" :key="item.message" style="border-bottom:1px solid black">
-    <div class="col"> {{ item.nome }}</div>
-    <div class="col"> {{ item.cognome }}</div>
-    <div class="col"> {{ item.codiceFiscale }}</div>
+  <div  class="row" v-for="item in elencoCollaboratoriEnterno" :key="item.message">
+    <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
+  </div>
   </div>
    <!-- FINE collaboratori esterni -->
+<div class="">
+<div class="row"><div class="col"><div class="col-2"> <q-btn   label="Aggiungi Nuova Anagrafica" color="secondary"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" :dense="true" /></div></div></div>
 
+</div>
   </div>
 <!-- #endregion -->
 
@@ -146,7 +161,7 @@
                 <b>Tipologia Edificio</b>
                 <div class="q-gutter-sm">
       <q-radio v-model="tipologiaEdificio" val="condominio" label="Condominio" />
-      <q-radio v-model="tipologiaEdificio" val="edificioFamiliare" label="Edificio Familiare" />
+      <q-radio v-model="tipologiaEdificio" val="edificioFamiliare" label="Edificio Residenziale" />
       <q-radio v-model="tipologiaEdificio" val="commerciale" label="Commerciale" />
       <q-radio v-model="tipologiaEdificio" val="altro" label="altro" />
       
@@ -154,13 +169,16 @@
             </div>
         </div>
           <!--***** Edificio Familiare **** -->
-        <div v-if="tipologiaEdificio =='edificioFamiliare'" class="bgmargintop"  >
-          <span class="text-h6"><b>Edificio Unifamiliare</b></span>
+        <div v-if="tipologiaEdificio =='edificioFamiliare' || tipologiaEdificio =='commerciale'  || tipologiaEdificio =='altro' " class="bgmargintop"  >
+          <span class="text-h6"><b>Edificio</b></span>
           <div class="row">
             <div class="col">
               <q-radio v-model="edificioUnifamiliareTipo" val="unifimaliare" label="Edificio residenziale unifamiliare" /> 
               
               <q-radio v-model="edificioUnifamiliareTipo" val="plurifimiliare" label="Unità immobiliare sita all’interno di edifici plurifamiliari" /> 
+              <q-radio v-model="edificioUnifamiliareTipo" val="commeciale" label="Commerciale" /> 
+              <q-radio v-model="edificioUnifamiliareTipo" val="altro" label="Altro" /> 
+              <q-input v-model="text" type="text" label="Altro" :dense="true" outlined  v-if="edificioUnifamiliareTipo == 'altro' "/>
 
             </div>
           </div>
@@ -432,28 +450,45 @@
 
 
         <!--*** Progettisti *** -->
-        <div class="row">
+        <div class="bgAree">
+        <div class="row " >
           <div class="col">
             <div class="col-12"><b>Progettisti</b></div>
            
           </div>
         </div>
-         <div class="row" style="padding-top:20px">
-            <div class="col-12"> <q-input v-model="cercaProgettista" outlined :dense=true type="text" label="Cerca" /></div>
+        <div class="row" style="padding-top:20px">
+            <div class="col-12">
+               <q-input v-model="cercaProgettista" @keypress=" elencoCercaAnagraficaProgettistiFunction()" outlined :dense=true type="text" label="Cerca" >
+               <div class="autocomplete-items" v-if="cercaProgettista.length > 2">
+            <div class="row"  v-for="item in elencoCercaAnagraficaProgettisti" :key="item.message">
+              <div class="col">
+                <a  @click="aggiungiElencoProgettisti(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
+
+            </div>
+          </div>
+           <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+         
+        </q-input>
+               </div>
             <div class="col-12">
               <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" />
             </div>
-          </div>
-          <div class="row"  style="border-bottom:1px solid black">
+        </div>
+        <div class="row"  style="border-bottom:1px solid black">
             <div class="col"><b>Nome</b> </div>  
             <div class="col"><b>Cognome</b> </div>  
             <div class="col"><b>Codice Fiscale</b> </div>  
-  </div>
-  <div  class="row" v-for="item in elencoAnagraficaClienti" :key="item.message" style="border-bottom:1px solid black">
-    <div class="col"> {{ item.nome }}</div>
-    <div class="col"> {{ item.cognome }}</div>
-    <div class="col"> {{ item.codiceFiscale }}</div>
-   
+        </div>
+        <div  class="row" v-for="item in elencoAnagraficaProgettisti" :key="item.message" style="border-bottom:1px solid black">
+        <div class="col"> {{ item.nome }}</div>
+        <div class="col"> {{ item.cognome }}</div>
+        <div class="col"> {{ item.codiceFiscale }}</div>
+   </div>
+
+
             </div>
 
 
@@ -465,8 +500,9 @@
 
 <!-- #region  ******SCREENING********-->
 <div v-if="tab=='screening'" style="color:grey">
-  <div v-if="tipologiaEdificio == 'edificioFamiliare'">
-  <div class="row">
+
+  <div v-if="tipologiaEdificio == 'edificioFamiliare'" class="bgmargintop">
+  <div class="row " >
     <div class="col-12">
       <b>L’unità immobiliare è funzionalmente indipendente?</b>
       <q-icon name="info" >
@@ -534,7 +570,7 @@ ad es. rifacimento della pavimentazione, ringhiere, frontalini, ecc….
 
 
   </div>
-  <div v-if="tipologiaEdificio == 'condominio'">
+  <div v-if="tipologiaEdificio == 'condominio'" class="bgmargintop">
 
  <div class="row">
     <div class="col-12">
@@ -634,21 +670,24 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
       <!-- Titolo autorizzativi-->
 
- <div class="row">
-    <div class="col-13 col-md-13">
+ <div class=" bgmargintop q-pa-md q-gutter-sm row" >
+   <div class="col-12"><span class="text-h6 text-secondary">Titoli autorizzativi</span></div>
+   
+    <div class="col-12">
       <b>Tipologia Titolo</b>
       <q-icon name="info" >
         <q-tooltip anchor="top middle" self="bottom middle" >
         Riportare il titolo con il quale è stato edificato l’edificio
           </q-tooltip>
-      </q-icon>
+      </q-icon> <q-input v-model="tipologiaTitoloAutorizzativi" type="text" outlined :dense="true"  />
     </div>
-    <div class="col-12">
+    <div class="col-3">
       <label for="">Riferimenti</label>
-      <q-input v-model="text" type="text" outlined :dense="true"  />
-
+      <q-input v-model="riferimentiAutorizzativi" type="text" outlined :dense="true"  />
+ </div>
+ <div class="col-3">
       <label>Data</label>
-     <q-input  outlined :dense="true"  v-model="date" mask="date" :rules="['date']">
+     <q-input  outlined :dense="true"  v-model="dateAutorizzativi" mask="date" :rules="['date']">
       <template v-slot:append>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -661,19 +700,15 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
         </q-icon>
       </template>
     </q-input>
-      
-      </div>
-       <q-file
-      v-model="files"
-      label="Carica file"
-      filled
-      multiple
-      style="max-width: 300px"
-    />
+    </div>
+    <div class="col-3">
+      <label>Allegato</label>
+      <q-file v-model="files" label="Carica file"  :dense="true" outlined multiple style="max-width: 300px"    />
   </div>
+  
 
- <div class="row">
-    <div class="col-13 col-md-13">
+ <div class="row q-gutter-sm ">
+    <div class="col-12 col-md-12">
       <b>Successivi interventi di manutenzione straordinaria 
 (con SCIA, CILA, ecc..)</b>
       <q-icon name="info" >
@@ -682,61 +717,88 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
           </q-tooltip>
       </q-icon>
     </div>
-    <div class="col-12">
+    <div class="col-3">
       <label for="">Anno di intervento</label>
-      <q-input v-model="text" outlined :dense="true" type="text"/> 
-    
-      
-      </div>
-       <q-file
-      v-model="files"
-      label="Carica file"
-      filled
-      multiple
-      style="max-width: 300px"
-    />
+      <q-input v-model="text" outlined :dense="true" type="text"/> </div>
+      <div class="col-3"> 
+        <label for="">Allegato</label>
+         <q-file  v-model="files"  label="Carica file" outlined :dense="true"     style="max-width: 300px"  /></div>
+     
   </div>
-
+</div>
 <!-- ALLEGATI INTERVENTI SUCCESSIVI ALLA COSTRUZIONE -->
+<div  style="background-color:white">
   <div class="row " >
-    <div class="col-12"><label for=""><b>Titoli autorizzativi relativi ad interventi successivi alla costruzione – area allegato -</b></label></div>
-    <div class="col-2"> <q-btn icon="add" class="white" label="Aggiungi" @click=" modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione=true " /></div>
+    <div class="col-6"><label for=""><b>Titoli autorizzativi relativi ad interventi successivi alla costruzione – area allegato -</b></label></div>
+    <div class="col-2">
+      </div>
 
   </div>
-  <div class="row">
+  <div class="row  q-gutter-sm" style="background-color:white">
+    <div class="col"><b><q-input v-model="modalInterventiSuccessiviNuovoSub" :dense="true"  type="text" label="Sub" /></b></div>
+    <div class="col"><b><q-input v-model="modalInterventiSuccessiviNuovaDecrizione" :dense="true"  type="text" label="Successivi interventi" /></b></div>
+    <div class="col"><q-file
+      v-model="modalInterventiSuccessiviNuovoAllegato"
+      label="Carica file"
+      :dense="true"
+      filled
+      style="max-width: 300px" /></div>
+    <div class="col"> <q-btn icon="add"  color="primary" @click="addrowInterventiSuccessivi(); " outline :dense="true" /></div>
+    
+    </div>
+  <div class="row" style="background-color:white">
     <div class="col"><b>Sub</b></div>
     <div class="col"><b>Successivi interventi</b></div>
     <div class="col"><b>Allegato</b></div>
+    <div class="col"></div>
+    
     </div>
- <div  class="row" v-for="item in elencoTitoliAutorizzatiInterventiSuccessivi" :key="item.message" style="border-bottom:1px solid black">
+  
+
+
+ <div  class="row" v-for="item in elencoTitoliAutorizzatiInterventiSuccessivi" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
     <div class="col"> {{ item.sub }}</div>
     <div class="col"> {{ item.descrizione }}</div>
     <div class="col"> {{ item.allegato }}</div>
+    <div class="col"> </div>
   </div>
-
+</div>
+<div  style="background-color:white">
 <!-- DATI CATASTALI -->
   <div class="row " style="padding-top:10px" >
-    <div class="col-12"><label for=""><b>Dati catastali</b></label></div>
-    <div class="col-2"> <q-btn icon="add" class="white" label="Aggiungi" @click=" modalDatiCatastaliTitoliAutorizzativi=true " /></div>
-
+    <div class="col-12"><label for="" class="text-h6"><b>Dati catastali</b></label>  </div>
+   
   </div>
+ 
+   
   <div class="row">
     <div class="col"><b>foglio</b></div>
     <div class="col"><b>Particella</b></div>
     <div class="col"><b>Sub</b></div>
+    <div class="col"></div>
 
     </div>
- <div  class="row" v-for="item in elencoTitoliAutorizzatiDatiCatastali" :key="item.message" style="border-bottom:1px solid black">
+      <div class="row  q-gutter-sm" style="background-color:white; border-bottom:1px solid black">
+    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoSub" :dense="true" outlined  type="text" /></b></div>
+    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoParticella" :dense="true" outlined  type="text"  /></b></div>
+    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoFoglio" :dense="true" outlined  type="text" /></b></div>
+
+    <div class="col"> <q-btn icon="add"  color="primary" @click="addrowDatiCatastaliTitoliAutorizzativi(); " outline :dense="true" /></div>
+    
+    </div>
+ <div  class="row  q-gutter-sm" v-for="item in elencoTitoliAutorizzatiDatiCatastali" :key="item.message" >
     <div class="col"> {{ item.foglio }}</div>
     <div class="col"> {{ item.particella }}</div>
     <div class="col"> {{ item.sub }}</div>
+    <div class="col"></div>
 
   </div>
+  </div>
 
-
-  <div class="row"  style="padding-top:10px" >
+<div class="bgmargintop">
+  <div class="row "  style="padding-top:10px" >
     <div class="col-12">
-      <strong class="text-h6">Verifica di conformità</strong>
+      <strong class="text-h6  text-secondary" >Verifica di conformità</strong>
       </div>
   </div>
    
@@ -824,7 +886,7 @@ Specificare le modalità e i tempi di sanatoria.
     </div>
 
   </div>
-
+</div>
 
 
  </div><!-- DIV TAB Screening -->
@@ -833,8 +895,9 @@ Specificare le modalità e i tempi di sanatoria.
 
  <!-- #region Dati Strutturati-->
 <div v-if="tab == 'datiStrutturali' ">
-<div class="row"><div class="col-12"><span class="text-h6">Dati strutturali</span></div></div>
 
+<div class="bgmargintop">
+  <div class="row"><div class="col-12"><span class="text-h6 text-secondary">Dati strutturali</span></div></div>
   <div class="row">
     <div class="col-12">
     <strong>Tipologia struttura edificio:</strong>
@@ -852,6 +915,7 @@ Specificare le modalità e i tempi di sanatoria.
   <div class="row">
     <div class="col-12">
     <strong>Tipologia parete:</strong>
+   
     </div>
    
     <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="Laterizio" label="Laterizio" /></div>
@@ -870,9 +934,9 @@ Specificare le modalità e i tempi di sanatoria.
     <strong>Tipologia FOTO COSA FARE:</strong>
     </div>
    
-    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="Laterizio" label="Presenza intercapedine/camera d’aria" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="MuraturaCassaVuota" label="Isolante in camera d’aria (sughero, EPS, ecc…)" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="tipologiaParetechk" val="MuraturaCassaIsolanteIntercapedine" label=" Idoneo a insufflaggio" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="SegnapostotipologiaParetechk" val="presenzaIntercapedite" label="Presenza intercapedine/camera d’aria" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="SegnapostotipologiaParetechk" val="IsolamentoInCameraDaria" label="Isolante in camera d’aria (sughero, EPS, ecc…)" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="SegnapostotipologiaParetechk" val="idoneoInsuffiaggio" label=" Idoneo a insufflaggio" /></div>
     <div class="row">
     <div class="col-4 paddingInput">
     <label for="">Spessori muri esterni (cm)</label>
@@ -908,8 +972,10 @@ Specificare le modalità e i tempi di sanatoria.
 
   </div>
   <div class="row" v-if="isolamentoEsistentechk.includes('altro')"><div class="col"><q-input v-model="altroisolamentoEsistentechk" type="text" :dense="true" outlined label="Altro" /></div></div>
+</div>
 
-<div class="row" style="padding-top:20px"><div class="col"><span class="text-h6">Dati Centrale Termina</span></div></div>
+<div class="bgmargintop">
+<div class="row" style="padding-top:20px"><div class="col"><span class="text-h6 text-secondary">Dati Centrale Termina</span></div></div>
 
 <div class="row"><div class="col-12">
   <label class="text-bold">Tipologia Impianto esistente</label></div>
@@ -1091,7 +1157,7 @@ Specificare le modalità e i tempi di sanatoria.
   </div>
 
   </div>
-
+</div>
 </div>
 <!-- #endregion -->
 
@@ -1173,7 +1239,7 @@ Specificare le modalità e i tempi di sanatoria.
          </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn flat label="Chiudi" color="primary" v-close-popup />
+          <q-btn  label="Chiudi" color="secondary" v-close-popup />
         </q-card-actions>
         
       </q-card>
@@ -1264,9 +1330,40 @@ Specificare le modalità e i tempi di sanatoria.
 </template>
 <style scoped>
 .bgmargintop{
-  background-color: white; margin-top:10px;
+  background-color: white; margin-top:20px;
+}
+.bgAree{
+  background-color: white;padding:5px
 }
 .paddingInput{padding:10px;}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+  
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
 </style>
 <script>
 
@@ -1285,6 +1382,7 @@ export default {
 </script>
 <script>
 import formNuovaanagrafica from '@/components/NuovaAnagrafica'
+import Axios from 'axios';
 export default {
 
     methods: {
@@ -1358,14 +1456,77 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
     
     removeRow(index){
    this.elencoAnagraficaClienti.splice(index, 1)
-    }
+    },
+    elencoCercaAnagraficaClientiFunction(){
+      if (this.cercaAnagraficaClienti.length > 1){
+      Axios.get(this.linkApi+'/getCercaAnagrafica/cliente/'+this.cercaAnagraficaClienti).then(Response=>{console.log(Response.data);this.elencoCercaAnagraficaClienti= Response.data})
+      }
+      },
+    elencoCercaCollaboratoreInternoFunction(){
+      if (this.cercaCollaboratoriInterni.length>1){
+      Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreInterno/'+this.cercaCollaboratoriInterni).then(Response=>{console.log(Response.data);this.elencoCercaCollaboratoreInterno= Response.data})
+      }
+      },
+    elencoCercaCollaboratoreEsternoFunction(){
+      if (this.cercaCollaboratoriEsterni.length >1){
+      Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreEsterno/'+this.cercaCollaboratoriEsterni).then(Response=>{console.log(Response.data);this.elencoCercaCollaboratoreEsterno= Response.data})
+    }},
+    elencoCercaAnagraficaProgettistiFunction(){
+      if (this.cercaProgettista.length >1){
+      Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreInterno/'+this.cercaProgettista).then(Response=>{console.log(Response.data);this.elencoCercaAnagraficaProgettisti= Response.data})
+    }},
+  aggiungiElencoClienti(datiUtente){
+    this.elencoAnagraficaClienti.push({
+      nome:datiUtente.nome,
+       cognome:datiUtente.cognome,
+       denominazione:datiUtente.denominazione,
+       codiceFiscale:datiUtente.codice_fiscale,
+       partitaIva:datiUtente.partita_iva,
+       id:datiUtente.id});
+       this.cercaAnagraficaClienti='';
+       this.elencoCercaAnagraficaClienti=null;
+  },
+  aggiungiElencoCollaboratoreInterno(datiUtente){
+    this.elencoCollaboratoriInterno.push({
+      nome:datiUtente.nome,
+       cognome:datiUtente.cognome,
+       denominazione:datiUtente.denominazione,
+       codiceFiscale:datiUtente.codice_fiscale,
+       partitaIva:datiUtente.partita_iva,
+       id:datiUtente.id});
+       this.cercaCollaboratoriInterni='';
+       this.elencoCercaCollaboratoreInterno=null;
+  },
+  aggiungiElencoClientiCollaboratoreEsterno(datiUtente){
+    this.elencoCollaboratoriEnterno.push({
+      nome:datiUtente.nome,
+       cognome:datiUtente.cognome,
+       denominazione:datiUtente.denominazione,
+       codiceFiscale:datiUtente.codice_fiscale,
+       partitaIva:datiUtente.partita_iva,
+       id:datiUtente.id});
+       this.cercaCollaboratoriEsterni='';
+       this.elencoCercaCollaboratoreEsterno=null;
+  },
+     
+  aggiungiElencoProgettisti(datiUtente){
+    this.elencoAnagraficaProgettisti.push({
+      nome:datiUtente.nome,
+       cognome:datiUtente.cognome,
+       denominazione:datiUtente.denominazione,
+       codiceFiscale:datiUtente.codice_fiscale,
+       partitaIva:datiUtente.partita_iva,
+       id:datiUtente.id});
+       this.cercaProgettista='';
+       this.elencoCercaAnagraficaProgettisti=null;
+  }
     },
      
   data () {
     return {
         text:'',data:'',date:'',
-
-         tab: "datiStrutturali",
+        cercaAnagraficaClienti:'',cercaCollaboratoriInterni:'',cercaCollaboratoriEsterni:'',
+         tab: "progetto",
          modalNuovaAnagraficaClienti: false,
          modalNuovoNome:'',modalNuovoCognome:'',modalNuovoCodiceFiscale:'',
          
@@ -1395,7 +1556,7 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
          condominioAnnodicotruzione:'',condominioPianoimmboile:'',condominioPertinenzaC2:false,condominioPertinenzaC6:false,condominioPertinenzaC7:false,
          condominioformalmenteCostituito:false,condominioFormalmenteCostituitoCodiceFsicale:'',condominioFormalmenteCostituitoRiferimentoAmministatore:'',
          condominioNOformalmenteCostituitoReferente:'',condominioNOformalmenteCostituitoCodiceFiscaleReferente:'',
-         
+         dateAutorizzativi:'',			riferimentiAutorizzativi:'',			tipologiaTitoloAutorizzativi:'',
          TipoInterventoPropostoEnergetico:false,TipoInterventoPropostoSismico:false,TipoInterventoPropostoCombinato:false,
          
          condominioNumeroUnitaAccatastate:'',condominioNumerounitariscaldate:'',cercaProgettista:'',screeningUnifamiliareIndipendente:'',screeningUnifamiliareIAcessoAutonomo:'',
@@ -1434,67 +1595,69 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
        
        
            ],
+
+      elencoCercaAnagraficaClienti: [{nome:'',cognome:'',denominazione:'',codiceFiscale:'',partitaIva:'',id:'' }],
+      elencoCercaCollaboratoreEsterno: [{nome:'',cognome:'',denominazione:'',codiceFiscale:'',partitaIva:'',id:'' }],
+      elencoCercaCollaboratoreInterno: [{nome:'',cognome:'',denominazione:'',codiceFiscale:'',partitaIva:'',id:'' }],
+      elencoCercaAnagraficaProgettisti: [{nome:'',cognome:'',denominazione:'',codiceFiscale:'',partitaIva:'',id:'' }],
+
       elencoAnagraficaClienti: [
         {
-            id:'82',
-            nome: 'Mario',
-            cognome: 'rossi',
-            codiceFiscale: 'frlfgh67y57u576y',
-            indice:1,
-            cestino:'x'
+            id:'',
+            nome: '',
+            cognome: '',
+            codiceFiscale: '',
+            partitaIva:'',
+            denominazione:'',
+            indice:0,
+            cestino:''
           
-        },
+        }],
+      elencoCollaboratoriEnterno: [
         {
-            id:'58',
-            nome: 'Giuseppe ',
-            cognome: 'verdi',
-            codiceFiscale: 'frlfgh67y57u576y',
-            indice:2
-        },
+            id:'',
+            nome: '',
+            cognome: '',
+            codiceFiscale: '',
+            partitaIva:'',
+            denominazione:'',
+            indice:0,
+            cestino:''
+          
+        }],
+      elencoCollaboratoriInterno: [
         {
-            id:'35',
-            nome: 'Mario',
-            cognome: 'Bianchi',
-            codiceFiscale: 'frlfgh67y57u576y',
-            indice:3
+            id:'',
+            nome: '',
+            cognome: '',
+            codiceFiscale: '',
+            partitaIva:'',
+            denominazione:'',
+            indice:0,
+            cestino:''
+          
         }
-        
       ],
-      elencoTitoliAutorizzatiInterventiSuccessivi:[
+      elencoAnagraficaProgettisti: [
         {
-          sub:'321',
-          descrizione:'tipo intervento successivo 1',
-          allegato:'doc1.pdf'
-        },
-        {
-          sub:'321-2',
-          descrizione:'tipo intervento successivo 2',
-          allegato:'doc2.pdf'
+            id:'',
+            nome: '',
+            cognome: '',
+            codiceFiscale: '',
+            partitaIva:'',
+            denominazione:'',
+            indice:0,
+            cestino:''
           
-        },
-        {sub:'321-3',
-        descrizione:'tipo intervento successivo 3',
-        allegato:'doc3.pdf'},
-        {sub:'321-4',
-        descrizione:'tipo intervento successivo 4',
-        allegato:'doc4.pdf'}
+        }
+      ],
+
+      elencoTitoliAutorizzatiInterventiSuccessivi:[
+       
+    
       ],
       elencoTitoliAutorizzatiDatiCatastali:[
-          {
-          particella:'321654',
-          sub:'sub1',
-          foglio:'folgio1'
-          },
-          {
-          particella:'321654',
-          sub:'sub2',
-          foglio:'folgio2'
-          },
-          {
-          particella:'321654',
-          sub:'sub3',
-          foglio:'folgio3'
-          }
+         
       ],
       elencoImpiantoAutonomoEsistente:[
           {
@@ -1668,6 +1831,7 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
      
     formNuovaanagrafica
   },
+
 
 }
 </script>
