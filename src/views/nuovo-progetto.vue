@@ -20,10 +20,11 @@
               <div class=" text-h4 text-center text-secondary"><span class="text-secondary"> Nuovo Progetto</span></div>
           </div>
     <div class="row  justify-center"  >
-        <div class=" col-12 col-md-6 bgmargintop">
+        <div class=" col-12 col-md-7 bgmargintop">
             <q-input outlined v-model="titoloProgetto" label="Titolo del progetto" />
         </div>
     </div>
+<q-btn color="primary" icon="check" label="Salva" @click="aggiungiProgetto()" />
 
 
     <!-- #region ANAGRAFICA CLIENTI -->
@@ -378,12 +379,12 @@
                 </label>
               </div>
           <div class="col-12">
-                  <q-checkbox v-model="zonaclimaticaA" label="Zona A: GG<600" /> 
-                  <q-checkbox v-model="zonaclimaticaB" label="Zona B: 601<GG<900" /> 
-                  <q-checkbox v-model="zonaclimaticaC" label="Zona C: 901<GG>1400" /> 
-                  <q-checkbox v-model="zonaclimaticaD" label="Zona D: 1401<GG>2100" /> 
-                  <q-checkbox v-model="zonaclimaticaE" label="Zona E: 2101<GG>3000" /> 
-                  <q-checkbox v-model="zonaclimaticaF" label="Zona F: GG>3000" /> 
+                  <q-checkbox v-model="zonaClimatica" label="Zona A: GG<600" val="zonaA" /> 
+                  <q-checkbox v-model="zonaClimatica" label="Zona B: 601<GG<900" val="zonaB"  /> 
+                  <q-checkbox v-model="zonaClimatica" label="Zona C: 901<GG>1400" val="zonaC"  /> 
+                  <q-checkbox v-model="zonaClimatica" label="Zona D: 1401<GG>2100" val="zonaD"  /> 
+                  <q-checkbox v-model="zonaClimatica" label="Zona E: 2101<GG>3000" val="zonaE"  /> 
+                  <q-checkbox v-model="zonaClimatica" label="Zona F: GG>3000" val="zonaF"  /> 
 
                 </div>
           </div>
@@ -425,7 +426,7 @@
           <q-radio v-model="zonasismisca4" val="3" label="Zona 3" /> 
           <q-radio v-model="zonasismisca4" val="4" label="Zona 4" /> 
           <q-input  type="text"  v-model="zonasismisca4Interventiantisismici" v-if="zonasismisca4 != ''" label="Compilare solo nel caso in cui siano previsti interventi antisismici" />
-          <q-input  type="text"  v-model="zonasismisca4Interventiantisismici" v-if="zonasismisca4 != ''" label="Altri vincoli" />
+          <q-input  type="text"  v-model="zonasismisca4InterventiantisismiciAltriVincoli" v-if="zonasismisca4 != ''" label="Altri vincoli" />
           </div>
           </div>
         </div>
@@ -435,9 +436,9 @@
 
             </div>
             <div class="col4">
-              <q-checkbox right-label  v-model="TipoInterventoPropostoEnergetico" label="Energetico" />
-              <q-checkbox right-label v-model="TipoInterventoPropostoSismico" label="Sismico" />
-              <q-checkbox right-label v-model="TipoInterventoPropostoCombinato" label="Combinato" />
+              <q-checkbox right-label  v-model="TipoInterventoProposto" label="Energetico" val="energetico" />
+              <q-checkbox right-label v-model="TipoInterventoProposto" label="Sismico"  val="sismico"/>
+              <q-checkbox right-label v-model="TipoInterventoProposto" label="Combinato" val="combinato" />
             </div>
           </div>
         <div class="row" style="padding-top:20px">
@@ -446,12 +447,12 @@
 
             </div>
             <div class="col4">
-              <q-checkbox right-label  v-model="TipologiainterventoDPR3802001Ordinaria" value="ordinaria" label="Manutenzione Ordinaria" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001Straordinaria" value="straordinaria" label="Manutenzione straordinaria" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001RisanamentoConcervativo" value="risanamentoConservativo"  label="Restauro e risanamento conservativo" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001RistrutturazioneEdilizia" value="ristrutturazioneEdilizia"  label="Ristrutturazione Edilizia" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001NuovaCostruzione" value="nuovaCostruzione"  label="Nuova Costruzione" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001InterventiUrbanistici" value="ristrutturazioneUrbanistica"  label="Interventi di ristrutturazione urbanistica" />
+              <q-checkbox right-label  v-model="TipologiainterventoDPR3802001" val="ordinaria" label="Manutenzione Ordinaria" />
+              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="straordinaria" label="Manutenzione straordinaria" />
+              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="risanamentoConservativo"  label="Restauro e risanamento conservativo" />
+              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="ristrutturazioneEdilizia"  label="Ristrutturazione Edilizia" />
+              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="nuovaCostruzione"  label="Nuova Costruzione" />
+              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="ristrutturazioneUrbanistica"  label="Interventi di ristrutturazione urbanistica" />
             </div>
           </div>
 
@@ -729,10 +730,10 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     </div>
     <div class="col-3">
       <label>Allegato</label>
-      <q-file v-model="files" label="Carica file"  :dense="true" outlined multiple style="max-width: 300px"    />
+      <q-file v-model="AllegatoTitoloAutorizzativo" label="Carica file"  :dense="true" outlined multiple style="max-width: 300px"    />
   </div>
   
-
+<div class="col-12">
  <div class="row q-gutter-sm ">
     <div class="col-12 col-md-12">
       <b>Successivi interventi di manutenzione straordinaria 
@@ -745,13 +746,44 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     </div>
     <div class="col-3">
       <label for="">Anno di intervento</label>
-      <q-input v-model="text" outlined :dense="true" type="text"/> </div>
-      <div class="col-3"> 
-        <label for="">Allegato</label>
-         <q-file  v-model="files"  label="Carica file" outlined :dense="true"     style="max-width: 300px"  /></div>
-     
+      <q-input v-model="annoIntervento" outlined :dense="true" type="number" maxlength="4"/>
+    </div>
+
+    <div class="col-3"> 
+      <label for="">Allegato</label>
+      <q-file  v-model="allegatoIntervento"  label="Carica file" outlined :dense="true"     style="max-width: 300px"  />
+    </div>
+    
+    <div class="col-3"> 
+      <q-btn icon="add"  color="primary" @click="addrowInterventiManutenzioneSuccessivi(); " outline :dense="true" />
+    </div>
+   
   </div>
+   <div class="row" style="background-color:white">
+    <div class="col"><b>Anno di intervento</b></div>
+    <div class="col"><b>Allegato</b></div>
+    
+    <div class="col-1 col-md-1 "></div>
+    
+    </div>
+
+
+    <div  class="row" v-for="(item,index) in elencoInterventiManutenzioneStraordinariaSCIACILAltro" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
+    <div class="col"> {{ item.anno }}</div>
+    <div class="col"> {{ item.allegato.name }}</div>
+ 
+    <div class="col-1 col-md-1 "> 
+    <q-btn   size="sm" round icon="delete" @click="elencoInterventiManutenzioneStraordinariaSCIACILAltro.splice(index, 1)" />
+  
+  </div>
+  </div>
+
 </div>
+</div>
+
+
+
+
 <!-- ALLEGATI INTERVENTI SUCCESSIVI ALLA COSTRUZIONE -->
 <div  style="background-color:white">
   <div class="row " >
@@ -967,9 +999,9 @@ Specificare le modalità e i tempi di sanatoria.
     <strong>Tipologia FOTO COSA FARE:</strong>
     </div>
    
-    <div class="col-3"><q-checkbox right-label v-model="SegnapostotipologiaParetechk" val="presenzaIntercapedite" label="Presenza intercapedine/camera d’aria" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="SegnapostotipologiaParetechk" val="IsolamentoInCameraDaria" label="Isolante in camera d’aria (sughero, EPS, ecc…)" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="SegnapostotipologiaParetechk" val="idoneoInsuffiaggio" label=" Idoneo a insufflaggio" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologia_doppia_parete" val="presenzaIntercapedite" label="Presenza intercapedine/camera d’aria" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologia_doppia_parete" val="IsolamentoInCameraDaria" label="Isolante in camera d’aria (sughero, EPS, ecc…)" /></div>
+    <div class="col-3"><q-checkbox right-label v-model="tipologia_doppia_parete" val="idoneoInsuffiaggio" label=" Idoneo a insufflaggio" /></div>
     <div class="row">
     <div class="col-4 paddingInput">
     <label for="">Spessori muri esterni (cm)</label>
@@ -1004,7 +1036,11 @@ Specificare le modalità e i tempi di sanatoria.
 
 
   </div>
-  <div class="row" v-if="isolamentoEsistentechk.includes('altro')"><div class="col"><q-input v-model="altroisolamentoEsistentechk" type="text" :dense="true" outlined label="Altro" /></div></div>
+  <div class="row" v-if="isolamentoEsistentechk.includes('altro')">
+    <div class="col">
+      <q-input v-model="altroisolamentoEsistentechk" type="text" :dense="true" outlined label="Altro" />
+      </div>
+    </div>
 </div>
 
 <div class="bgmargintop">
@@ -1087,7 +1123,7 @@ Specificare le modalità e i tempi di sanatoria.
       QUI PURE ALLEGATI?</div>
   </div>
   <div class="col-md-12 col-12">
-    <label for="" class="text-bold">Disponibilità prove fumi aggiornate</label><br>
+    <label for="" class="text-bold">Disponibilità Certificato Prevenzione Incendi (CPI) aggiornato</label><br>
     <q-radio v-model="cetraleTermicaCentralizzatoCertificatoCPI" val="SI" label="SI" />
     <q-radio v-model="cetraleTermicaCentralizzatoCertificatoCPI" val="NO" label="NO" />
     <q-radio v-model="cetraleTermicaCentralizzatoCertificatoCPI" val="Assente" label="Assente" />
@@ -1150,10 +1186,11 @@ Specificare le modalità e i tempi di sanatoria.
   <div class="col">Tipologia sistema di termoregolazione</div>
   <div class="col">Potenza termica utile [kW]</div>
   <div class="col">Anno installazione</div>
-  <div class="col">Generatore oggetto di sostituzione?</div>
+  <div class="col">Generatore oggetto di sostituzione?</div> 
+  <div class="col-1 col-md-1 ">  </div>
   </div>
 
- <div  class="row" v-for="item in elencoImpiantoAutonomoEsistente" :key="item.message" style="border-bottom:1px solid black">
+ <div  class="row" v-for="(item,index) in elencoImpiantoAutonomoEsistente" :key="item.message" style="border-bottom:1px solid black">
      <div class="col"> {{ item.sub }}</div>
      <div class="col"> {{ item.tecnologiaImpianto }}</div>
      <div class="col"> {{ item.numeronUnitaGenerazione }}</div>
@@ -1161,11 +1198,14 @@ Specificare le modalità e i tempi di sanatoria.
      <div class="col"> {{ item.potenzaTermicaUtile }}</div>
      <div class="col"> {{ item.annoInstallazione }}</div>
      <div class="col"> {{ item.GeneratoreOggettoDiSostituzione }}</div>
-   
+    <div class="col-1 col-md-1 "> 
+    <q-btn   size="sm" round icon="delete" @click="elencoImpiantoAutonomoEsistente.splice(index, 1)" />
+  
+  </div>
   </div>
     <div class="row"><div class="col"><span class="text-bold text-h5">Stato di Progetto</span></div></div>
     <div class="row"><div class="col">
-      <q-btn  class="white" icon="add" label="Aggiungi" @click="modalAggiungiImpiantoEsistenteAutonomo=true" /><!--TODO CAMBIARE CLICK BOTTONE MODAL -->
+      <q-btn  class="white" icon="add" label="Aggiungi" @click="modalAggiungiImpiantoEsistenteAutonomoStatoProgetto=true" /><!--TODO CAMBIARE CLICK BOTTONE MODAL -->
       
       </div></div>
 <div class="row" style="border-bottom:1px solid black">
@@ -1176,9 +1216,10 @@ Specificare le modalità e i tempi di sanatoria.
   <div class="col">Potenza termica utile [kW]</div>
   <div class="col">Anno installazione</div>
   <div class="col">Generatore oggetto di sostituzione?</div>
+  <div class="col-1 col-md-1 "></div>
   </div>
 
- <div  class="row" v-for="item in elencoImpiantoAutonomoEsistente" :key="item.message" style="border-bottom:1px solid black">
+ <div  class="row" v-for="(item,index) in elencoImpiantoAutonomoEsistenteStatoDiProgetto" :key="item.message" style="border-bottom:1px solid black">
      <div class="col"> {{ item.sub }}</div>
      <div class="col"> {{ item.tecnologiaImpianto }}</div>
      <div class="col"> {{ item.numeronUnitaGenerazione }}</div>
@@ -1186,7 +1227,10 @@ Specificare le modalità e i tempi di sanatoria.
      <div class="col"> {{ item.potenzaTermicaUtile }}</div>
      <div class="col"> {{ item.annoInstallazione }}</div>
      <div class="col"> {{ item.GeneratoreOggettoDiSostituzione }}</div>
-   
+    <div class="col-1 col-md-1 "> 
+    <q-btn   size="sm" round icon="delete" @click="elencoImpiantoAutonomoEsistenteStatoDiProgetto.splice(index, 1)" />
+  
+  </div>
   </div>
 
   </div>
@@ -1235,7 +1279,7 @@ Specificare le modalità e i tempi di sanatoria.
 
 <div class="row  q-gutter-sm bgAree"><div class="col-8 col-md-3">
   <label for="" class="font-weigth:bold">Quota Preventivo €</label>
-  <q-input v-model="quotaPreventivo" :dense="true" outlined type="text" /></div>
+  <q-input v-model="quotaPreventivo" :dense="true" outlined type="number" /></div>
 
   <div class="col-2 col-md-2"> 
     <label for="" class="text-bold"> Allega Preventivo Firmato</label>
@@ -1295,7 +1339,7 @@ Specificare le modalità e i tempi di sanatoria.
 
 <div class="row bgAree">
   <div class="col text-bold">Quota</div>
-  <div class="col text-bold">Tipo</div>
+  <div class="col text-bold">Importo</div>
   <div class="col text-bold">Metodo di Pagamento</div>
   <div class="col text-bold">Chi Fatturato</div>
    <div class="col text-bold"></div>
@@ -1364,7 +1408,7 @@ Specificare le modalità e i tempi di sanatoria.
 
 <div class="row bgAree">
   <div class="col text-bold">Quota</div>
-  <div class="col text-bold">Tipo</div>
+  <div class="col text-bold">Importo</div>
   <div class="col text-bold">Causale</div>
   <div class="col text-bold">Chi ha pagato</div>
   <div class="col text-bold"></div>
@@ -1384,7 +1428,6 @@ Specificare le modalità e i tempi di sanatoria.
 
 
 </div>
-
 
 </div>
 
@@ -1473,6 +1516,36 @@ Specificare le modalità e i tempi di sanatoria.
     </q-card-actions>
   </q-card>
 </q-dialog>
+<q-dialog v-model="modalAggiungiImpiantoEsistenteAutonomoStatoProgetto" persistent>
+  <q-card>
+    <q-card-section class="row items-center">
+     
+      <span class="q-ml-md">Aggiungi</span>
+    </q-card-section>
+    <q-card-section class="row items-center">
+    
+      <span class="q-ml-md">
+          
+        <q-input v-model="NuovoImpiantoEsistenteAutonomosub" type="text" label="sub" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomotecnologiaImpianto" type="text" label="Tecnologia impianto" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione" type="text" label="N. unità di generazione" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione" type="text" label="Tipologia sistema di termoregolazione" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile" type="text" label="Potenza termica utile [kW]" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomoannoInstallazione" type="text" label="Anno installazione" />
+        <label class="text-bold">Generatore oggetto di sostituzione?</label>
+        <q-radio v-model="NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione" val="SI" label="SI" />
+        <q-radio v-model="NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione" val="NO" label="NO" />
+        
+       
+       
+        </span>
+    </q-card-section>
+    <q-card-actions align="right">
+      <q-btn flat label="Annulla" color="primary" v-close-popup />
+      <q-btn flat label="Conferma" color="primary" @click="addrowImpiantoAutonomoEsistenteStatoProgetto();"/>
+    </q-card-actions>
+  </q-card>
+</q-dialog>
 
 <!-- FINE  MODAL -->
 <!-- #endregion -->
@@ -1518,18 +1591,6 @@ Specificare le modalità e i tempi di sanatoria.
 </style>
 <script>
 
-
-/*
-import tabNuovo from '@/components/TabNuovoProgetto'
-
-export default {
-  name: 'tabDefault',
-
-  components: {
-    tabNuovo
-  }
-
-  }*/
 </script>
 <script>
 import formNuovaanagrafica from '@/components/NuovaAnagrafica'
@@ -1537,9 +1598,96 @@ import Axios from 'axios';
 export default {
 
     methods: {
+      aggiungiProgetto(){
+      const  sendForm={
+          titoloProgetto:this.titoloProgetto,
+         tipologiaEdificio:this.tipologiaEdificio,
+           zonaClimatica:this.zonaClimatica,
+          gradigiornoText:this.gradigiornoText ,
+          areavincolata42:this.areavincolata42 ,
+          zonasismisca4:this.zonasismisca4 ,
+          zonasismisca4Interventiantisismici:this.zonasismisca4Interventiantisismici ,
+          zonasismisca4InterventiantisismiciAltriVincoli:this.zonasismisca4InterventiantisismiciAltriVincoli ,
+          TipoInterventoProposto:this.TipoInterventoProposto ,
+          TipologiainterventoDPR3802001:this.TipologiainterventoDPR3802001 ,
+
+          tipologiaTitoloAutorizzativi:this.tipologiaTitoloAutorizzativi ,
+          riferimentiAutorizzativi:this.riferimentiAutorizzativi,
+          dateAutorizzativi:this.dateAutorizzativi,
+          AllegatoTitoloAutorizzativo:this.AllegatoTitoloAutorizzativo,
+
+          abusiEdilizi:this.abusiEdilizi,
+          TipologiaAbusiEdilizi:this.TipologiaAbusiEdilizi,
+          comuneStatoDiFatto:this.comuneStatoDiFatto,
+          NCEUStatoDiFatto:this.NCEUStatoDiFatto,
+          difformitaUrbanistiche:this.difformitaUrbanistiche,
+          noteDifformitaUrbanistiche:this.noteDifformitaUrbanistiche,
+          difformitaCatastali:this.difformitaCatastali,
+          noteDifformitaCatastali:this.noteDifformitaCatastali,
+          irregolaritaSanabili:this.irregolaritaSanabili,
+          noteIrregolaritaSanabili:this.noteIrregolaritaSanabili,
+
+          datistrutturalichk:this.datistrutturalichk,
+          altroDatiStrutturali:this.altroDatiStrutturali,
+
+          tipologiaParetechk:this.tipologiaParetechk,
+          altroTipologiaParetechk:this.altroTipologiaParetechk,
+
+          tipologia_doppia_parete:this.tipologia_doppia_parete,
+          SpessoreMuriEsterni:this.SpessoreMuriEsterni,
+          SpessoreCameraDaria:this.SpessoreCameraDaria,
+          SpessoreIsolamento:this.SpessoreIsolamento,
+          TipologiaIsolamentoIncameraDaria:this.TipologiaIsolamentoIncameraDaria,
+          isolamentoEsistentechk:this.isolamentoEsistentechk,
+          altroisolamentoEsistentechk:this.altroisolamentoEsistentechk,
+
+          tipologiaImpiantoEsistente:this.tipologiaImpiantoEsistente,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente:this.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro:this.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro,
+          cetraleTermicaCentralizzatoNumeroUnita:this.cetraleTermicaCentralizzatoNumeroUnita,
+          cetraleTermicaCentralizzatoAnnoInstallazione:this.cetraleTermicaCentralizzatoAnnoInstallazione ,
+          cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente:this.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente ,
+          cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste:this.cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste ,
+          cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente:this.cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente,
+          cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato:this.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato ,
+          cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato:this.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato ,
+          cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate:this.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate ,
+          cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato:this.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato ,
+          cetraleTermicaCentralizzatoCertificatoCPI:this.cetraleTermicaCentralizzatoCertificatoCPI ,
+          cetraleTermicaCentralizzatoCertificatoCPIAllegato:this.cetraleTermicaCentralizzatoCertificatoCPIAllegato ,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:this.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto ,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro:this.cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro ,
+          cetraleTermicaCentralizzatoNumeroUnitaProposte:this.cetraleTermicaCentralizzatoNumeroUnitaProposte ,
+          cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:this.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto ,
+          centraleTermivaCentralizzatoVettoreImpianto:this.centraleTermivaCentralizzatoVettoreImpianto ,
+          quotaPreventivo:this.quotaPreventivo ,
+          quoteAllegatoPreventivo:this.quoteAllegatoPreventivo,
+          clienti:this.elencoAnagraficaClienti,
+          collaboratoriInterni:this.elencoCollaboratoriInterno,
+          collaboratoriEsterni:this.elencoCollaboratoriEnterno,
+          progettisti:this.elencoAnagraficaProgettisti,
+          successiviInterventiStraordinaria:this.elencoInterventiManutenzioneStraordinariaSCIACILAltro,
+
+          
+          };
+          Axios.post(this.linkApi+"/aggiungi-progetto",sendForm).then(Response=>{console.log(Response.data)});
+
+      },
     addRow(){
        this.elencoAnagraficaClienti.push({nome:this.modalNuovoNome, cognome:this.modalNuovoCognome, codiceFiscale:this.modalNuovoCodiceFiscale});
       this.modalNuovaAnagraficaClienti= false;
+    },
+  
+    addrowInterventiManutenzioneSuccessivi(){
+      this.elencoInterventiManutenzioneStraordinariaSCIACILAltro.push(
+        {
+          anno:this.annoIntervento,
+          allegato:this.allegatoIntervento.name
+        }
+         
+         );
+
+      this.modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione= false;
     },
     addrowInterventiSuccessivi(){
       this.elencoTitoliAutorizzatiInterventiSuccessivi.push(
@@ -1547,9 +1695,7 @@ export default {
           sub:this.modalInterventiSuccessiviNuovoSub,
           descrizione:this.modalInterventiSuccessiviNuovaDecrizione,
           allegato:this.modalInterventiSuccessiviNuovoAllegato.name
-        }
-         
-         );
+        });
 
       this.modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione= false;
     },
@@ -1575,7 +1721,31 @@ export default {
 
       this.modalAggiungiImpiantoEsistenteAutonomo= false;
     },
-    addrowImpiantoAutonomoProposto(){
+    addrowImpiantoAutonomoEsistenteStatoProgetto(){
+      this.elencoImpiantoAutonomoEsistenteStatoDiProgetto.push(
+        {
+            sub:this.NuovoImpiantoEsistenteAutonomosub,
+            tecnologiaImpianto:this.NuovoImpiantoEsistenteAutonomotecnologiaImpianto,
+            numeronUnitaGenerazione:this.NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione,
+            tipologiaSistemaTermoregolazione:this.NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione,
+            potenzaTermicaUtile:this.NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile,
+            annoInstallazione:this.NuovoImpiantoEsistenteAutonomoannoInstallazione,
+            GeneratoreOggettoDiSostituzione:this.NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione
+            }
+         
+         );
+this.NuovoImpiantoEsistenteAutonomosub='';
+           this.NuovoImpiantoEsistenteAutonomotecnologiaImpianto='';
+           this.NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione='';
+           this.NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione='';
+           this.NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile='';
+            this.NuovoImpiantoEsistenteAutonomoannoInstallazione='';
+           this.NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione='';
+           
+      this.modalAggiungiImpiantoEsistenteAutonomoStatoProgetto= false;
+      
+    },
+  /*  addrowImpiantoAutonomoProposto(){
       this.elencoImpiantoAutonomoProposto.push(
         {
             sub:this.NuovoImpiantoEsistenteAutonomosub,
@@ -1588,9 +1758,9 @@ export default {
             }
          
          );
-
-      this.modalAggiungiImpiantoEsistenteAutonomo= false;
-    },
+        
+      this.modalAggiungiImpiantoEsistenteAutonomoStatoProgetto= false;
+    },*/
     addrowQuoteAcconti(){
       this.elencoQuote.push(
         {
@@ -1708,20 +1878,24 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
         
 
          titoloProgetto:'',search:'',tipologiaEdificio:'condominio',
-         TipologiainterventoDPR3802001Ordinaria:false,TipologiainterventoDPR3802001Straordinaria:false,TipologiainterventoDPR3802001RisanamentoConcervativo:false,TipologiainterventoDPR3802001RistrutturazioneEdilizia:false,TipologiainterventoDPR3802001NuovaCostruzione:false,TipologiainterventoDPR3802001InterventiUrbanistici:false,
-         
-         zonaclimaticaA:false,zonaclimaticaB:false,zonaclimaticaC:false,zonaclimaticaD:false,zonaclimaticaE:false,zonaclimaticaF:false,
+         TipologiainterventoDPR3802001:[],
+        /* TipologiainterventoDPR3802001Ordinaria:false,TipologiainterventoDPR3802001Straordinaria:false,TipologiainterventoDPR3802001RisanamentoConcervativo:false,TipologiainterventoDPR3802001RistrutturazioneEdilizia:false,TipologiainterventoDPR3802001NuovaCostruzione:false,TipologiainterventoDPR3802001InterventiUrbanistici:false,*/
+         zonaClimatica:[],
+        /* zonaclimaticaA:false,zonaclimaticaB:false,zonaclimaticaC:false,zonaclimaticaD:false,zonaclimaticaE:false,zonaclimaticaF:false,*/
          
          gradigiornoText:'',areavincolata42:'',
-         areaVicnolata42TipoVincolo:'',zonasismisca4:'',zonasismisca4Interventiantisismici:'',edificioUnifamiliareTipo:false,edificioUnifamiliareIndirizzo:'',
+         areaVicnolata42TipoVincolo:'',zonasismisca4:'',zonasismisca4Interventiantisismici:'',zonasismisca4InterventiantisismiciAltriVincoli:'',edificioUnifamiliareTipo:false,edificioUnifamiliareIndirizzo:'',
+         allegatoIntervento:null,annoIntervento:'',
          edificioUnifamiliarecitta:'', edificioUnifamiliareProvincia:'', edificioUnifamiliareAnnocostruzione:'',
          edificioUnifamiliarePianoImmobile:' di cui fuori terra n° ',edificioUnifamiliareTipologiaIntervento:false,
          condominioNome:'',condominioIndirizzo:'',condominioCitta:'',condominioProvincia:'',
          condominioAnnodicotruzione:'',condominioPianoimmboile:'',condominioPertinenzaC2:false,condominioPertinenzaC6:false,condominioPertinenzaC7:false,
          condominioformalmenteCostituito:false,condominioFormalmenteCostituitoCodiceFsicale:'',condominioFormalmenteCostituitoRiferimentoAmministatore:'',
          condominioNOformalmenteCostituitoReferente:'',condominioNOformalmenteCostituitoCodiceFiscaleReferente:'',
-         dateAutorizzativi:'',			riferimentiAutorizzativi:'',			tipologiaTitoloAutorizzativi:'',
-         TipoInterventoPropostoEnergetico:false,TipoInterventoPropostoSismico:false,TipoInterventoPropostoCombinato:false,
+         dateAutorizzativi:'',	AllegatoTitoloAutorizzativo:null,		riferimentiAutorizzativi:'',			tipologiaTitoloAutorizzativi:'',
+         
+         TipoInterventoProposto:[],
+         /*TipoInterventoPropostoEnergetico:false,TipoInterventoPropostoSismico:false,TipoInterventoPropostoCombinato:false,*/
          
          condominioNumeroUnitaAccatastate:'',condominioNumerounitariscaldate:'',cercaProgettista:'',screeningUnifamiliareIndipendente:'',screeningUnifamiliareIAcessoAutonomo:'',
          screeningUnifamiliareRiqualificazioneBalconi:'',
@@ -1733,7 +1907,8 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
 
           datistrutturalichk:[],altroDatiStrutturali:'',
           tipologiaParetechk:[],altroTipologiaParetechk:'',
-          SegnapostotipologiaParetechk:[],SpessoreMuriEsterni:'',SpessoreCameraDaria:'',SpessoreIsolamento:'',TipologiaIsolamentoIncameraDaria:'',
+          tipologia_doppia_parete:[],
+          SpessoreMuriEsterni:'',SpessoreCameraDaria:'',SpessoreIsolamento:'',TipologiaIsolamentoIncameraDaria:'',
           isolamentoEsistentechk:[],altroisolamentoEsistentechk:'',
 
           tipologiaImpiantoEsistente:'',
@@ -1746,7 +1921,7 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
           cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:'',cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro:'', cetraleTermicaCentralizzatoNumeroUnitaProposte:'', centraleTermivaCentralizzatoVettoreImpianto:'',cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:'',
 
 
-          modalAggiungiImpiantoEsistenteAutonomo:false,
+          modalAggiungiImpiantoEsistenteAutonomo:false,  modalAggiungiImpiantoEsistenteAutonomoStatoProgetto:false,
           NuovoImpiantoEsistenteAutonomosub:'', NuovoImpiantoEsistenteAutonomotecnologiaImpianto:'',NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione:'',NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione:'',
           NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile:'',NuovoImpiantoEsistenteAutonomoannoInstallazione:'',NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione:'',
           allegatoDiAllegati:null,tipoAllegatodiAllegati:'',noteallegatoDiallegati:'',
@@ -1775,9 +1950,11 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
       elencoCollaboratoriEnterno: [],
       elencoCollaboratoriInterno: [],
       elencoAnagraficaProgettisti: [],
+      elencoInterventiManutenzioneStraordinariaSCIACILAltro:[],
       elencoTitoliAutorizzatiInterventiSuccessivi:[],
       elencoTitoliAutorizzatiDatiCatastali:[],
       elencoImpiantoAutonomoEsistente:[],
+      elencoImpiantoAutonomoEsistenteStatoDiProgetto:[],
       elencoImpiantoAutonomoProposto:[],
       tecnologieCentraliTermiche:[
           {

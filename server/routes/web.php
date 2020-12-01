@@ -18,6 +18,184 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->post('/aggiungi-progetto',function(Request $i){
+   $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+    $out->writeln($i);
+    $zonaClimatica="";
+    $datistrutturalichk="";
+    $tipologiaParetechk="";
+    $tipologia_doppia_parete="";
+    $isolamentoEsistentechk="";
+    $TipoInterventoProposto="";
+    $TipologiainterventoDPR3802001="";
+    $quotaPreventivo=0;
+   
+
+    if(count ($i->zonaClimatica) > 0){
+        $zonaClimatica=implode(";",$i->zonaClimatica);}
+
+    if(count ($i->datistrutturalichk) > 0){
+        $datistrutturalichk= implode(";",$i->datistrutturalichk);}
+
+    if(count ($i->tipologiaParetechk) > 0){
+        $tipologiaParetechk= implode(";",$i->tipologiaParetechk);}
+
+    if(count ($i->tipologia_doppia_parete) > 0){
+        $tipologia_doppia_parete= implode(";",$i->tipologia_doppia_parete);}
+
+    if(count ($i->isolamentoEsistentechk) > 0){
+        $isolamentoEsistentechk= implode(";",$i->isolamentoEsistentechk);}
+
+    if(count ($i->TipoInterventoProposto) > 0){
+        $TipoInterventoProposto= implode(";",$i->TipoInterventoProposto);}
+
+    if(count ($i->TipologiainterventoDPR3802001) > 0){
+        $TipologiainterventoDPR3802001= implode(";",$i->TipologiainterventoDPR3802001);}
+    
+    if($i->dateAutorizzativi == ''){
+        $i->dateAutorizzativi='1900-01-01';
+    }
+    if($i->quotaPreventivo != ''){
+        $quotaPreventivo=$i->quotaPreventivo ;
+    }
+
+ //$form=$i->prova;
+
+
+try {
+    $idProgetto=DB::table('progetti')->insertGetId([
+        'titolo_progetto' =>$i->titoloProgetto,
+        'tipologia_edificio'=>$i->tipologiaEdificio,
+       
+        'zona_climatica'=> $zonaClimatica,
+        'gradi_giorno'=>$i->gradigiornoText,
+        'areavincolata'=>$i->areavincolata42,
+        'zonasismisca'=>$i->zonasismisca4,
+      'interventi_antisismici'=>$i->zonasismisca4Interventiantisismici,
+          'interventi_sismici_altri_vincoli'=>$i->zonasismisca4InterventiantisismiciAltriVincoli,
+        'TipoInterventoProposto'=>$TipoInterventoProposto,
+        'TipologiainterventoDPR3802001'=>$TipologiainterventoDPR3802001,
+        'tipologiaTitoloAutorizzativi'=>$i->tipologiaTitoloAutorizzativi,
+        'riferimentiAutorizzativi'=>$i->riferimentiAutorizzativi,
+        'dateAutorizzativi'=>$i->dateAutorizzativi,
+        'AllegatoTitoloAutorizzativo'=>$i->AllegatoTitoloAutorizzativo,
+
+        'abusiEdilizi'=>$i->abusiEdilizi ,
+        'TipologiaAbusiEdilizi'=>$i->TipologiaAbusiEdilizi ,
+        'comuneStatoDiFatto'=>$i->comuneStatoDiFatto,
+        'NCEUStatoDiFatto'=>$i->NCEUStatoDiFatto ,
+        'difformitaUrbanistiche'=>$i->difformitaUrbanistiche ,
+       'noteDifformitaUrbanistiche'=>$i->noteDifformitaUrbanistiche ,
+        'difformitaCatastali'=>$i->difformitaCatastali ,
+        'noteDifformitaCatastali'=>$i->noteDifformitaCatastali ,
+        'irregolaritaSanabili'=>$i->irregolaritaSanabili ,
+        'noteIrregolaritaSanabili'=>$i->noteIrregolaritaSanabili ,
+        
+        'tipologia_struttura_edificiio'=>$datistrutturalichk,
+        'altroDatiStrutturali'=>$i->altroDatiStrutturali,
+        
+       'tipologia_parete'=>$tipologiaParetechk,
+        'altroTipologiaParetechk'=>$i->altroTipologiaParetechk,
+        
+      'tipologia_doppia_parete'=>$tipologia_doppia_parete,
+        'spessori_muri_esternicm'=>$i->SpessoreMuriEsterni ,
+        'spessori_camera_ariacm'=>$i->SpessoreCameraDaria ,
+        'spessore_isolamentocm'=>$i->SpessoreIsolamento ,
+       'tipo_isolamento_camera_aria'=>$i->TipologiaIsolamentoIncameraDaria ,
+        
+         'cappotto'=>$isolamentoEsistentechk,
+        'altroisolamentoEsistente'=>$i->altroisolamentoEsistentechk,
+
+        'centraletermicaesistente_tipo_impianto'=>$i->tipologiaImpiantoEsistente ,
+        'centraletermicaesistente_tecnologia_impianto'=>$i->cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente ,
+        'cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro'=>$i->cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro ,      
+        
+        'centraletermicaesistente_numero_unita_generazione'=>$i->cetraleTermicaCentralizzatoNumeroUnita	 ,
+        'centraletermicaesistente_anno_installazione'=>$i->cetraleTermicaCentralizzatoAnnoInstallazione ,
+        'centraletermicaesistente_potenza_termica'=>$i->cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente ,
+        'centraletermicaesistente_tipologia_distribuzione'=>$i->cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste ,
+        'centraletermicaesistente_tipologia_termoregolazione'=>$i->cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente ,
+        'centraletermicaesistente_libretto_impianto_aggiornato'=>$i->cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato ,
+        //cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato TODO tabella allegati
+        'centraletermicaesistente_provefumi'=>$i->cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate ,
+        //cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato TODO tabella allegata
+        'centraletermicaesistente_cpi'=>$i->cetraleTermicaCentralizzatoCertificatoCPI ,
+        //cetraleTermicaCentralizzatoCertificatoCPIAllegato TODO TABELLA ALLEGATO
+        'centraletermicaprogetto_tecnologia_esistente'=>$i->cetraleTermicaCentralizzatoTecnologiaImpiantoProposto,
+        'centraletermicaprogetto_tecnologia_esistente_altro'=>$i->cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro,
+        
+        
+        'centraletermicaprogetto_numero_unita'=>$i->cetraleTermicaCentralizzatoNumeroUnitaProposte ,
+        'centraletermicaprogetto_potenza_termica'=>$i->cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto ,
+        'centraletermicaprogetto_vettore_energetico'=>$i->centraleTermivaCentralizzatoVettoreImpianto ,
+        'quota_preventivo'=>$quotaPreventivo ,
+
+        //quoteAllegatoPreventivo TOFO tabella allegato
+        
+        ]);
+        if ($idProgetto>0){
+            if (count($i->clienti) > 0){
+                foreach ($i->clienti as $value) {
+                   DB::table('clienti_progetto')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'id_cliente'=>$value['id'],
+                    ]);
+                }
+            }
+            if (count($i->collaboratoriInterni) > 0){
+                foreach ($i->collaboratoriInterni as $value) {
+                    DB::table('collaboratori_interni_progetto')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'id_collaboratore_interno'=>$value['id'],
+                    ]);
+                }
+            }
+            if (count($i->collaboratoriEsterni) > 0){
+                foreach ($i->collaboratoriEsterni as $value) {
+                   DB::table('collaboratori_esterni_progetto')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'id_collaboratore_esterno' =>$value['id'],
+                    ]);
+                }
+            }
+            if (count($i->progettisti) > 0){
+                foreach ($i->progettisti as $value) {
+                   DB::table('progettisti_progetto')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'id_progettista' =>$value['id'],
+                    ]);
+                }
+            }
+            if (count($i->successiviInterventiStraordinaria) > 0){
+                foreach ($i->successiviInterventiStraordinaria as $value) {
+                    $auxAllegato=$value['allegato'];
+                   $idIntervento=DB::table('interventi_manutenzione_straordinaria_progetto')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'anno_intervento' =>$value['anno'],
+                    ]);
+                    dd($auxAllegato);
+                    
+                   DB::table('allegati_progetto')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'id_legame' =>$idIntervento,
+                        'tipo_allegato' =>1,
+                        
+                        'nome_file'=>$auxAllegato['name'],
+                    ]);
+                }
+            }
+
+
+
+        }
+           $stringRitorno=["response"=>"ok","message"=> $i->titoloProgetto];
+
+} catch (\Throwable $th) {
+    $stringRitorno=["response"=>"Error","message"=>$th->getMessage()];
+}
+
+return response()->json($stringRitorno);
+});
 
 $router->post('/aggiungi-anagrafica',function (Request $request){
   
@@ -112,6 +290,51 @@ $dettagliutente=DB::table('anagrafica')->select('nome','cognome','denominazione'
 
 class foo{
     public $valore = "ciao";
+
+}
+ class elementiProgetto{
+    
+    public $titolo_progetto= 'titolo_progetto';
+    public $tipologia_edificio;
+    public $zona_climatica;
+    public $gradi_giorno;
+    public $areavincolata;
+    public $zonasismisca;
+    public $TipoInterventoProposto;
+    public $TipologiainterventoDPR3802001;
+    public $abusiEdilizi;
+    public $TipologiaAbusiEdilizi;
+    public $comuneStatoDiFatto;
+    public $NCEUStatoDiFatto;
+    public $difformitaUrbanistiche;
+    public $noteDifformitaUrbanistiche;
+    public $difformitaCatastali;
+    public $noteDifformitaCatastali;
+    public $irregolaritaSanabili;
+    public $noteIrregolaritaSanabili;
+    public $tipologia_struttura_edificiio;
+    public $tipologia_parete;
+    public $tipologia_doppia_parete;
+    public $spessori_muri_esternicm;
+    public $spessori_camera_ariacm;
+    public $spessore_isolamentocm;
+    public $tipo_isolamento_camera_aria;	
+    public $cappotto;	
+    public $centraletermicaesistente_tipo_impianto;	
+    public $centraletermicaesistente_tecnologia_impianto;	
+    public $centraletermicaesistente_numero_unita_generazione;	
+    public $centraletermicaesistente_anno_installazione;	
+    public $centraletermicaesistente_potenza_termica;	
+    public $centraletermicaesistente_tipologia_distribuzione;	
+    public $centraletermicaesistente_tipologia_termoregolazione;
+    public $centraletermicaesistente_libretto_impianto_aggiornato;
+    public $centraletermicaesistente_provefumi;
+    public $centraletermicaesistente_cpi;
+    public $centraletermicaprogetto_tecnologia_esistente;
+    public $centraletermicaprogetto_numero_unita;
+    public $centraletermicaprogetto_potenza_termica;
+    public $centraletermicaprogetto_vettore_energetico;																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																							
+
 
 }
 
