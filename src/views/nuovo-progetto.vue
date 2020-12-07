@@ -200,23 +200,51 @@
 
             </div>
           </div>
-          <div class="row" style="padding-top:20px">
+          <div class="row q-gutter-xs" style="padding-top:20px">
             <div class="col-12"><b> Dati proprietario dell'immobile </b></div>
-            <div class="col-12">
+            <!--<div class="col-12">
               <q-btn   label="Aggiungi"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" />
+            </div> -->
+            <div class="col-2">
+              <label>Nome</label>
+              <q-input v-model="NuovoProprietarioImmobileNome" type="text" :dense="true"  outlined/>
+              </div>
+            <div class="col-2">
+               <label>Cognome</label>
+              <q-input v-model="NuovoProprietarioImmobileCognome" type="text" :dense="true"  outlined/>
+           </div> 
+            <div class="col-2">
+               <label>Codice Fiscale</label>
+              <q-input v-model="NuovoProprietarioImmobileCodiceFiscale" type="text" maxlength="15" :dense="true"  outlined/>
+          
             </div>
+            <div class="col-2">
+               <label>Telefono</label>
+              <q-input v-model="NuovoProprietarioImmobileTelefono" type="text" :dense="true" outlined  />
+          </div>
+          <div class="col-2">
+            <q-btn color="primary"  style="margin-top:23px" icon="add" :dense="true"  outline @click="addRowProprietariImmobile()" /></div>
+
+
           </div>
           <div class="row"  style="border-bottom:1px solid black">
-            <div class="col"><b>Nome</b> </div>  
-            <div class="col"><b>Cognome</b> </div>  
-            <div class="col"><b>Codice Fiscale</b> </div>  
-  </div>
-  <div  class="row" v-for="item in elencoAnagraficaClienti" :key="item.message" style="border-bottom:1px solid black">
-    <div class="col"> {{ item.nome }}</div>
-    <div class="col"> {{ item.cognome }}</div>
-    <div class="col"> {{ item.codiceFiscale }}</div>
-   
+            <div class="col-2"><b>Nome</b> </div>  
+            <div class="col-2"><b>Cognome</b> </div>  
+            <div class="col-2"><b>Codice Fiscale</b></div>  
+            <div class="col-2"><b>Telefono</b></div>  
+            <div class="col-2"><b></b></div>  
+          </div>
+          
+          <div  class="row" v-for="(item,index) in elencoProprietariImmobile" :key="item.message" style="border-bottom:1px solid black">
+            <div class="col"> {{ item.nome }}</div>
+            <div class="col"> {{ item.cognome }}</div>
+            <div class="col"> {{ item.codiceFiscale }}</div>
+            <div class="col"> {{ item.telefono }}</div>
+            <div class="col">   <q-btn   size="sm" round icon="delete" @click="elencoProprietariImmobile.splice(index, 1)" />
             </div>
+   
+          </div>
+
            <div class="row" style="padding-top:20px">
              <div class="col">
                <label><b>Dati dell'immobile </b></label>
@@ -312,9 +340,9 @@
               
             </div>
             <div class="col-12">
-              <q-checkbox right-label v-model="condominioPertinenzaC2" value="C/2" label="C/2 magazzini e locali di deposito" />
-              <q-checkbox right-label v-model="condominioPertinenzaC6" value="C/6" label="C/6 stalle, scuderie, rimesse, autorimesse" />
-              <q-checkbox right-label v-model="condominioPertinenzaC7" value="C/7" label="C/7 tettoie chiuse o aperte" />
+              <q-checkbox right-label v-model="condominioPertinenzaC2C6C7" val="C/2" label="C/2 magazzini e locali di deposito" />
+              <q-checkbox right-label v-model="condominioPertinenzaC2C6C7" val="C/6" label="C/6 stalle, scuderie, rimesse, autorimesse" />
+              <q-checkbox right-label v-model="condominioPertinenzaC2C6C7" val="C/7" label="C/7 tettoie chiuse o aperte" />
             </div>
 
           </div>
@@ -678,8 +706,8 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
       
     </div>
     <div class="col-12">
-      <q-radio v-model="screeningCondominioA1A8A9" val="SI" label="SI" />
-      <q-radio v-model="screeningCondominioA1A8A9" val="NO" label="NO" />
+      <q-radio v-model="screeningCondominioUsufruito110" val="SI" label="SI" />
+      <q-radio v-model="screeningCondominioUsufruito110" val="NO" label="NO" />
       
       </div>
   </div>
@@ -751,8 +779,10 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
     <div class="col-3"> 
       <label for="">Allegato</label>
-      <q-file  v-model="allegatoIntervento"  label="Carica file" outlined :dense="true"     style="max-width: 300px"  />
+      <input type="file" @change="handleFile" >
+    <!--  <q-file  v-model="allegatoIntervento"  label="Carica filedddd"  outlined :dense="true"     style="max-width: 300px"  />-->
     </div>
+      
     
     <div class="col-3"> 
       <q-btn icon="add"  color="primary" @click="addrowInterventiManutenzioneSuccessivi(); " outline :dense="true" />
@@ -770,7 +800,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
     <div  class="row" v-for="(item,index) in elencoInterventiManutenzioneStraordinariaSCIACILAltro" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
     <div class="col"> {{ item.anno }}</div>
-    <div class="col"> {{ item.allegato.name }}</div>
+    <div class="col"> {{ item.allegato }}</div>
  
     <div class="col-1 col-md-1 "> 
     <q-btn   size="sm" round icon="delete" @click="elencoInterventiManutenzioneStraordinariaSCIACILAltro.splice(index, 1)" />
@@ -795,13 +825,19 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
   <div class="row  q-gutter-sm" style="background-color:white">
     <div class="col"><b><q-input v-model="modalInterventiSuccessiviNuovoSub" :dense="true"  type="text" label="Sub" /></b></div>
     <div class="col"><b><q-input v-model="modalInterventiSuccessiviNuovaDecrizione" :dense="true"  type="text" label="Successivi interventi" /></b></div>
-    <div class="col"><q-file
+    <div class="col">
+      <input type="file" @change="handleFile">
+   <!--   <q-file
       v-model="modalInterventiSuccessiviNuovoAllegato"
       label="Carica file"
       :dense="true"
       filled
-      style="max-width: 300px" /></div>
-    <div class="col"> <q-btn icon="add"  color="primary" @click="addrowInterventiSuccessivi(); " outline :dense="true" /></div>
+      style="max-width: 300px" />
+      -->
+      </div>
+    <div class="col">
+       <q-btn icon="add" color="primary" @click="addrowInterventiSuccessivi(); " outline :dense="true" />
+    </div>
     
     </div>
   <div class="row" style="background-color:white">
@@ -817,7 +853,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
  <div  class="row" v-for="(item,index) in elencoTitoliAutorizzatiInterventiSuccessivi" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
     <div class="col"> {{ item.sub }}</div>
     <div class="col"> {{ item.descrizione }}</div>
-    <div class="col"> {{ item.allegato }}</div>
+    <div class="col"> {{ item.nomeAllegato }}</div>
     <div class="col-1 col-md-1 "> 
     <q-btn   size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi.splice(index, 1)" />
   
@@ -1210,7 +1246,7 @@ Specificare le modalità e i tempi di sanatoria.
       </div></div>
 <div class="row" style="border-bottom:1px solid black">
   <div class="col">Sub</div>
-  <div class="col">Tecnologia impianto1</div>
+  <div class="col">Tecnologia impianto</div>
   <div class="col">N. unità di generazione</div>
   <div class="col">Tipologia sistema di termoregolazione</div>
   <div class="col">Potenza termica utile [kW]</div>
@@ -1246,7 +1282,8 @@ Specificare le modalità e i tempi di sanatoria.
 <div class="row">
   <div class="col-3">
      <label class="text-bold"> Allegato</label>
-  <q-file v-model="allegatoDiAllegati"   label="Carica file"  outlined :dense="true"   style="max-width: 300px" /> 
+     <input type="file" @change="handleFile"  >
+  <!--<q-file v-model="allegatoDiAllegati"   label="Carica file"  outlined :dense="true"   style="max-width: 300px" /> -->
   </div>
   <div class="col-6">  
     <label class="text-bold"> Tipo Allegato</label>
@@ -1263,12 +1300,15 @@ Specificare le modalità e i tempi di sanatoria.
   <div class="col">File</div>
   <div class="col">Note</div>
   <div class="col">Tipo Documento</div>
+  <div class="col"></div>
   
 </div>
-<div class="row" v-for="allegato in elencoAllegati" :key="allegato.nomeFile">
+<div class="row" v-for="(allegato,index) in elencoAllegati" :key="allegato.nomeFile">
   <div class="col"> {{allegato.nomeFile}}</div>
   <div class="col">{{allegato.noteFile}}</div>
   <div class="col">{{allegato.tipoAllegato}}</div>
+  <div class="col"> <q-btn   size="sm" round icon="delete" @click="elencoAllegati.splice(index, 1)" />
+  </div>
 </div>
 
 </div>
@@ -1433,10 +1473,7 @@ Specificare le modalità e i tempi di sanatoria.
 
 <!-- #region MODAL-->
 <!-- MODAL -->
- <q-dialog v-model="modalNuovaAnagraficaClienti" persistent
-      :maximized="maximizedToggle=true"
-      transition-show="slide-up"
-      transition-hide="slide-down">
+ <q-dialog v-model="modalNuovaAnagraficaClienti" persistent>
       <q-card>
          <q-bar>
           <q-space />
@@ -1449,11 +1486,16 @@ Specificare le modalità e i tempi di sanatoria.
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-       <formNuovaanagrafica idutente=''></formNuovaanagrafica>
+          <q-input v-model="NuovoProprietarioImmobileNome" type="text" label="Nome" />
+          <q-input v-model="NuovoProprietarioImmobileCognome" type="text" label="Cognome" />
+          <q-input v-model="NuovoProprietarioImmobileCodiceFiscale" type="text" label="Codice Fiscale" />
+          <q-input v-model="NuovoProprietarioImmobileTelefono" type="text" label="Telefono" />
+     
          </q-card-section>
 
         <q-card-actions align="right">
           <q-btn  label="Chiudi" color="secondary" v-close-popup />
+          <q-btn  label="Aggiungi" color="primary" v-close-popup />
         </q-card-actions>
         
       </q-card>
@@ -1498,10 +1540,10 @@ Specificare le modalità e i tempi di sanatoria.
           
         <q-input v-model="NuovoImpiantoEsistenteAutonomosub" type="text" label="sub" />
         <q-input v-model="NuovoImpiantoEsistenteAutonomotecnologiaImpianto" type="text" label="Tecnologia impianto" />
-        <q-input v-model="NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione" type="text" label="N. unità di generazione" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione" type="number" label="N. unità di generazione" />
         <q-input v-model="NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione" type="text" label="Tipologia sistema di termoregolazione" />
-        <q-input v-model="NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile" type="text" label="Potenza termica utile [kW]" />
-        <q-input v-model="NuovoImpiantoEsistenteAutonomoannoInstallazione" type="text" label="Anno installazione" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile" type="number" label="Potenza termica utile [kW]" />
+        <q-input v-model="NuovoImpiantoEsistenteAutonomoannoInstallazione" type="number" label="Anno installazione" />
         <label class="text-bold">Generatore oggetto di sostituzione?</label>
         <q-radio v-model="NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione" val="SI" label="SI" />
         <q-radio v-model="NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione" val="NO" label="NO" />
@@ -1667,34 +1709,97 @@ export default {
           collaboratoriEsterni:this.elencoCollaboratoriEnterno,
           progettisti:this.elencoAnagraficaProgettisti,
           successiviInterventiStraordinaria:this.elencoInterventiManutenzioneStraordinariaSCIACILAltro,
-
+          TitoliAutorizzatiInterventiSuccessivi:this.elencoTitoliAutorizzatiInterventiSuccessivi,
+          datiCatastali:this.elencoTitoliAutorizzatiDatiCatastali,
+          centraleTermicaDiFAtto:this.elencoImpiantoAutonomoEsistente,
+          centraleTermicaDiProgetto:this.elencoImpiantoAutonomoEsistenteStatoDiProgetto,
           
+          tipoEdificioEF:this.edificioUnifamiliareTipo,
+          propietariImmobiliEF:this.elencoProprietariImmobile,
+          indirizzoEF:this.edificioUnifamiliareIndirizzo,
+          cittaEF:this.edificioUnifamiliarecitta,
+          provinciaEF:this.edificioUnifamiliareProvincia,
+          annoCostruzioneEF:this.edificioUnifamiliareAnnocostruzione,
+          indipendenteEF:this.screeningUnifamiliareIndipendente,
+          accessoAutonomiEF:this.screeningUnifamiliareIAcessoAutonomo,
+          usufruito110EF:this.screeningUnifamiliareUsufruito110,
+          riqualificazioneBalconiEF:this.screeningUnifamiliareRiqualificazioneBalconi,
+
+          nomeCondominioCD:this.condominioNome,
+          indirizzoCD:this.condominioIndirizzo,
+          cittaCD:this.condominioCitta,
+          provinciaCD:this.condominioProvincia,
+          annoCostruzioneCD:this.condominioAnnodicotruzione,
+          pianoImmobileCD:this.condominioPianoimmboile,
+          numeroUnitaAccatastateCD:this.condominioNumeroUnitaAccatastate,
+          numeroUnitaScaldateCD:this.condominioNumerounitariscaldate,
+          numeroPertinnzeAccatastateCD:this.condominioPertinenzaC2C6C7,
+          condominioFormalmenteCostituitoCD:this.condominioformalmenteCostituito,
+          condominioUnicoProprietarioCD:this.screeningCondominioUnicoProprietario,
+          IRESCD:this.screeningCondominioSoggettiIRES,
+          mutliProprietaCD:this.screeningCondominioPossiedonoMultiProprieta,
+          condominioA1A8A9CD:this.screeningCondominioA1A8A9,
+          usufruito110CD:this.screeningCondominioUsufruito110,
+          cd_codicefiscale_condominio:this.condominioFormalmenteCostituitoCodiceFsicale,
+          cd_info_condominiocostituito:this.condominioFormalmenteCostituitoRiferimentoAmministatore,
+
+          elencoFile:this.elencoAllegati,
+
+
           };
           Axios.post(this.linkApi+"/aggiungi-progetto",sendForm).then(Response=>{console.log(Response.data)});
 
       },
     addRow(){
-       this.elencoAnagraficaClienti.push({nome:this.modalNuovoNome, cognome:this.modalNuovoCognome, codiceFiscale:this.modalNuovoCodiceFiscale});
+       this.elencoAnagraficaClienti.push(
+         {nome:this.modalNuovoNome, cognome:this.modalNuovoCognome, codiceFiscale:this.modalNuovoCodiceFiscale});
       this.modalNuovaAnagraficaClienti= false;
     },
-  
+    addRowProprietariImmobile(){
+       this.elencoProprietariImmobile.push(
+         {nome:this.NuovoProprietarioImmobileNome, 
+         cognome:this.NuovoProprietarioImmobileCognome,
+        codiceFiscale:this.NuovoProprietarioImmobileCodiceFiscale,
+        telefono:this.NuovoProprietarioImmobileTelefono,
+          });
+    
+    },
+    handleFile(e){
+      this.nameAuxFile=e.target.files[0].name;
+      const selectImage= e.target.files[0];
+      this.createBase64(selectImage);
+
+    },
+    createBase64(fileObject){
+      const reader = new FileReader();
+      reader.onload = (e)=>{
+       var aux= e.target.result;
+       var base64string = window.btoa(aux);
+       this.auxFile=base64string;
+      };
+      this.auxFile= reader.readAsBinaryString(fileObject);
+
+//return output;
+    },
+     
     addrowInterventiManutenzioneSuccessivi(){
+  
       this.elencoInterventiManutenzioneStraordinariaSCIACILAltro.push(
         {
           anno:this.annoIntervento,
-          allegato:this.allegatoIntervento.name
-        }
-         
-         );
+          allegato:this.nameAuxFile,
+          allegatoBase64:this.auxFile
 
-      this.modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione= false;
-    },
+        });
+
+        },
     addrowInterventiSuccessivi(){
       this.elencoTitoliAutorizzatiInterventiSuccessivi.push(
         {
           sub:this.modalInterventiSuccessiviNuovoSub,
           descrizione:this.modalInterventiSuccessiviNuovaDecrizione,
-          allegato:this.modalInterventiSuccessiviNuovoAllegato.name
+          nomeAllegato:this.nameAuxFile,
+          allegatoBase64:this.auxFile,
         });
 
       this.modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione= false;
@@ -1783,7 +1888,12 @@ this.NuovoImpiantoEsistenteAutonomosub='';
         },
     addrowAllegati(){
 //TODO prevedere caricaemnto sul database diretto
-this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile:this.noteallegatoDiallegati, tipoAllegato:this.tipoAllegatodiAllegati.label });
+this.elencoAllegati.push({
+  nomeFile:this.nameAuxFile,
+  fileBase64:this.auxFile,
+  noteFile:this.noteallegatoDiallegati,
+  tipoAllegato:this.tipoAllegatodiAllegati.value
+  });
 
     },
 
@@ -1858,7 +1968,7 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
      
   data () {
     return {
-        text:'',data:'',date:'',
+        text:'',data:'',date:'',auxFile:null,nameAuxFile:'',
         cercaAnagraficaClienti:'',cercaCollaboratoriInterni:'',cercaCollaboratoriEsterni:'',
          tab: "progetto",
          modalNuovaAnagraficaClienti: false,
@@ -1889,7 +1999,7 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
          edificioUnifamiliarecitta:'', edificioUnifamiliareProvincia:'', edificioUnifamiliareAnnocostruzione:'',
          edificioUnifamiliarePianoImmobile:' di cui fuori terra n° ',edificioUnifamiliareTipologiaIntervento:false,
          condominioNome:'',condominioIndirizzo:'',condominioCitta:'',condominioProvincia:'',
-         condominioAnnodicotruzione:'',condominioPianoimmboile:'',condominioPertinenzaC2:false,condominioPertinenzaC6:false,condominioPertinenzaC7:false,
+         condominioAnnodicotruzione:'',condominioPianoimmboile:'',condominioPertinenzaC2C6C7:[],
          condominioformalmenteCostituito:false,condominioFormalmenteCostituitoCodiceFsicale:'',condominioFormalmenteCostituitoRiferimentoAmministatore:'',
          condominioNOformalmenteCostituitoReferente:'',condominioNOformalmenteCostituitoCodiceFiscaleReferente:'',
          dateAutorizzativi:'',	AllegatoTitoloAutorizzativo:null,		riferimentiAutorizzativi:'',			tipologiaTitoloAutorizzativi:'',
@@ -1898,8 +2008,8 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
          /*TipoInterventoPropostoEnergetico:false,TipoInterventoPropostoSismico:false,TipoInterventoPropostoCombinato:false,*/
          
          condominioNumeroUnitaAccatastate:'',condominioNumerounitariscaldate:'',cercaProgettista:'',screeningUnifamiliareIndipendente:'',screeningUnifamiliareIAcessoAutonomo:'',
-         screeningUnifamiliareRiqualificazioneBalconi:'',
-         screeningCondominioUnicoProprietario:'',screeningCondominioSoggettiIRES:'',PossiedonoMultiProprieta:'',screeningCondominioA1A8A9:'', 
+         screeningUnifamiliareRiqualificazioneBalconi:'',screeningUnifamiliareUsufruito110:'',
+         screeningCondominioUnicoProprietario:'',screeningCondominioSoggettiIRES:'',PossiedonoMultiProprieta:'',screeningCondominioUsufruito110:'',screeningCondominioA1A8A9:'', 
           
           files: null,
           abusiEdilizi:false,TipologiaAbusiEdilizi:'',comuneStatoDiFatto:false,NCEUStatoDiFatto:false,difformitaUrbanistiche:false,difformitaCatastali:false,irregolaritaSanabili:false,
@@ -1930,6 +2040,7 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
           dataAcconto:'',quotaAccontoModalitaPagamento:'',quotaImportoAcconto:'',quoteChiFattura:'',
 
           dataSpesaEffettuata:'',importoSpesaEffettuata:'', causaleSpesaEffettuata:'', chiHafattoSpesa:'',
+          elencoProprietariImmobile:[],NuovoProprietarioImmobileNome:'',NuovoProprietarioImmobileCognome:'',NuovoProprietarioImmobileCodiceFiscale:'',NuovoProprietarioImmobileTelefono:'',
        
       columns: [
         { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
@@ -1978,35 +2089,7 @@ this.elencoAllegati.push({nomeFile:this.allegatoDiAllegati.name,path:'',noteFile
             value:'altro'
           }
       ],
-      elencoAllegati:[
-        {
-        nomeFile:'file.pdf',
-        path:'pathfile',
-        noteFile:'Note file',
-        tipoAllegato:'Modello privacy'
-        },
-        {
-        nomeFile:'file.pdf',
-        path:'pathfile',
-        noteFile:'Note file',
-        tipoAllegato:'Modello privacy'
-        },
-        {
-        nomeFile:'file.pdf',
-        path:'pathfile',
-        noteFile:'Note file',
-        tipoAllegato:'Modello privacy'
-        },
-        {
-        nomeFile:'file.pdf',
-        path:'pathfile',
-        noteFile:'Note file',
-        tipoAllegato:'Modello privacy'
-        }
-
-
-
-      ],
+      elencoAllegati:[],
      elencoMetodoPagamenti:[
        {value:'c/c',label:'Conto corrente'},
        {value:'carta',label:'Carta'},

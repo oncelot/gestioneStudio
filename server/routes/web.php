@@ -19,6 +19,7 @@ $router->get('/', function () use ($router) {
 });
 
 $router->post('/aggiungi-progetto',function(Request $i){
+    $path="C:\Users\Fausto\source\\repos\oncelot\gestionestudio\server\public";
    $out = new \Symfony\Component\Console\Output\ConsoleOutput();
     $out->writeln($i);
     $zonaClimatica="";
@@ -29,6 +30,7 @@ $router->post('/aggiungi-progetto',function(Request $i){
     $TipoInterventoProposto="";
     $TipologiainterventoDPR3802001="";
     $quotaPreventivo=0;
+    $numeroPertinnzeAccatastateCD=0;
    
 
     if(count ($i->zonaClimatica) > 0){
@@ -51,6 +53,9 @@ $router->post('/aggiungi-progetto',function(Request $i){
 
     if(count ($i->TipologiainterventoDPR3802001) > 0){
         $TipologiainterventoDPR3802001= implode(";",$i->TipologiainterventoDPR3802001);}
+    
+    if(count ($i->numeroPertinnzeAccatastateCD) > 0){
+        $numeroPertinnzeAccatastateCD= implode(";",$i->numeroPertinnzeAccatastateCD);}
     
     if($i->dateAutorizzativi == ''){
         $i->dateAutorizzativi='1900-01-01';
@@ -132,7 +137,88 @@ try {
 
         //quoteAllegatoPreventivo TOFO tabella allegato
         
+    ]);
+    $tipoEdificio= new tipologiaEdificio();
+    
+    if ($i->tipologiaEdificio == $tipoEdificio->condominio ){
+
+        $annoCostruzioneCD=$i->annoCostruzioneCD;
+        if($i->annoCostruzioneCD == ''){
+            $annoCostruzioneCD=-1;
+        }
+        $pianoImmobileCD=$i->pianoImmobileCD;
+        if($i->pianoImmobileCD == ''){
+            $pianoImmobileCD=-1;
+        }
+        $numeroUnitaAccatastateCD=$i->numeroUnitaAccatastateCD;
+        if($i->numeroUnitaAccatastateCD == ''){
+            $numeroUnitaAccatastateCD=-1;
+        }
+        $numeroUnitaScaldateCD=$i->numeroUnitaScaldateCD;
+        if($i->numeroUnitaScaldateCD == ''){
+            $numeroUnitaScaldateCD=-1;
+        }
+
+        DB::table('tipologia_edificio_progetto')->insertGetId([
+            'id_progetto'=>$idProgetto,
+            'tipo_edificio'=>$i->tipologiaEdificio,
+            'cd_unico_proprietario'=>$i->condominioUnicoProprietarioCD,
+            'cd_ires'=>$i->IRESCD,
+            'cd_condomini_altri_unita'=>$i->mutliProprietaCD,
+            'cd_a1a8a9'=>$i->condominioA1A8A9CD,
+            'cd_usufruito110'=>$i->usufruito110CD,
+            'cd_nome_condominio'=>$i->nomeCondominioCD,
+            'cd_indirizzo'=>$i->indirizzoCD,
+            'cd_citta'=>$i->cittaCD,
+            'cd_provincia'=>$i->provinciaCD,
+            'cd_unico_proprietario'=>$annoCostruzioneCD,
+            'cd_piano_immobile'=>$pianoImmobileCD,
+            'cd_numero_ui_accatastate'=>$numeroUnitaAccatastateCD,
+            'cd_numero_ui_riscaldate'=>$numeroUnitaScaldateCD,
+            'cd_numero_pertinnze_accatastate'=>$numeroPertinnzeAccatastateCD,
+            'cd_condominio_costituito'=>$i->condominioFormalmenteCostituitoCD,
+            'cd_codicefiscale_condominio'=>$i->cd_codicefiscale_condominio,
+            'cd_info_condominiocostituito'=>$i->cd_info_condominiocostituito,
+           
+
         ]);
+    }else{
+        $annoCostruzioneEF=$i->annoCostruzioneEF;
+        if($i->annoCostruzioneEF == ''){
+            $annoCostruzioneEF=-1;
+        }
+
+       $idTipoEdificioProgetto= DB::table('tipologia_edificio_progetto')->insertGetId([
+            'id_progetto'=>$idProgetto,
+            'tipo_edificio'=>$i->tipologiaEdificio,
+            'ef_tipo_edificio'=>$i->tipoEdificioEF,
+            'ef_indirizzo'=>$i->indirizzoEF,
+            'ef_citta'=>$i->cittaEF,
+            'ef_provincia'=>$i->provinciaEF,
+            'ef_annocostruzione'=>$annoCostruzioneEF,
+            'ef_indipendente'=>$i->indipendenteEF,
+            'ef_accesso_autonomo'=>$i->accessoAutonomiEF,
+            'ef_usufruito_110'=>$i->usufruito110EF,
+            'ef_riqualificazioni_balconi'=>$i->riqualificazioneBalconiEF,
+
+        ]);
+        if ($idProgetto>0){
+            if (count($i->propietariImmobiliEF) > 0){
+                foreach ($i->propietariImmobiliEF as $value) {
+                   DB::table('proprietari_immobilief_progetto')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'id_tipoedificio'=>$idTipoEdificioProgetto,
+                        'nome'=>$value['nome'],
+                        'cognome'=>$value['cognome'],
+                        'codicefiscale'=>$value['codiceFiscale'],
+                        'telefono'=>$value['telefono'],
+                    ]);
+                }
+            }
+            }
+        
+    }
+       
         if ($idProgetto>0){
             if (count($i->clienti) > 0){
                 foreach ($i->clienti as $value) {
@@ -166,6 +252,25 @@ try {
                     ]);
                 }
             }
+         //Allegati
+            if (count($i->elencoFile) > 0){
+                foreach ($i->elencoFile as $value) {
+                   DB::table('allegati_progetto')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'id_legame' =>0,
+                        'nome_file' =>$value['nomeFile'],
+                        'note_allegato' =>$value['nomeFile'],
+                        'tipo_allegato' =>$value['tipoAllegato'],
+                    ]);
+                    $file =base64_decode($value['fileBase64']);
+                    if (!file_exists($path."/".$idProgetto)){
+                    mkdir($path."/".$idProgetto);}
+                    file_put_contents($path."/".$idProgetto."/".$value['nomeFile'].date("YmdHis"), $file);
+                }
+            }
+         
+
+
             if (count($i->successiviInterventiStraordinaria) > 0){
                 foreach ($i->successiviInterventiStraordinaria as $value) {
                     $auxAllegato=$value['allegato'];
@@ -173,20 +278,97 @@ try {
                         'id_progetto' =>$idProgetto,
                         'anno_intervento' =>$value['anno'],
                     ]);
-                    dd($auxAllegato);
+                  
                     
                    DB::table('allegati_progetto')->insertGetId([
                         'id_progetto' =>$idProgetto,
                         'id_legame' =>$idIntervento,
                         'tipo_allegato' =>1,
-                        
-                        'nome_file'=>$auxAllegato['name'],
+                        'nome_file'=>$value['allegato'],
                     ]);
+                    $file =base64_decode($value['allegatoBase64']);
+                    mkdir($path."/".$idProgetto);
+                    file_put_contents($path."/".$idProgetto."/".$value['allegato'], $file);
+                }
+            }
+        
+            if (count($i->TitoliAutorizzatiInterventiSuccessivi) > 0){
+                foreach ($i->TitoliAutorizzatiInterventiSuccessivi as $value) {
+                  
+                   $idIntervento=DB::table('titoli_autorizzati_interventi_successivi')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'sub' =>$value['sub'],
+                        'descrizione' =>$value['descrizione'],
+                    ]);
+                  
+                    
+                   DB::table('allegati_progetto')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'id_legame' =>$idIntervento,
+                        'tipo_allegato' =>2,
+                        'nome_file'=>$value['nomeAllegato'],
+                    ]);
+                    $file =base64_decode($value['allegatoBase64']);
+                    mkdir($path."/".$idProgetto);
+                    file_put_contents($path."/".$idProgetto."/".$value['nomeAllegato'], $file);
+                }
+            }
+        
+        
+            if (count($i->datiCatastali) > 0){
+                foreach ($i->datiCatastali as $value) {
+                  
+                   $idIntervento=DB::table('dati_catastali')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'sub' =>$value['sub'],
+                        'foglio' =>$value['foglio'],
+                        'particella' =>$value['particella'],
+                    ]);
+                  
+             
+                }
+            }
+            if (count($i->centraleTermicaDiFAtto) > 0){
+                foreach ($i->centraleTermicaDiFAtto as $value) {
+                      
+                   $idIntervento=DB::table('centrale_termica_autonoma')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'sub' =>$value['sub'],
+                        'tecnologia_impianto' =>$value['tecnologiaImpianto'],
+                        'numero_unita' =>$value['numeronUnitaGenerazione'],
+                        'tipo_termoregolazione' =>$value['tipologiaSistemaTermoregolazione'],
+                        'potenza_kw' =>$value['potenzaTermicaUtile'],
+                        'anno_installazione' =>$value['annoInstallazione'],
+                        'oggetto_di_sostituzione' =>$value['GeneratoreOggettoDiSostituzione'],
+                        'difatto_diprogetto' =>'difatto',
+                    ]);
+                  
+             
+                }
+            }
+        
+            if (count($i->centraleTermicaDiProgetto) > 0){
+                foreach ($i->centraleTermicaDiProgetto as $value) {
+                      
+                   $idIntervento=DB::table('centrale_termica_autonoma')->insertGetId([
+                        'id_progetto' =>$idProgetto,
+                        'sub' =>$value['sub'],
+                        'tecnologia_impianto' =>$value['tecnologiaImpianto'],
+                        'numero_unita' =>$value['numeronUnitaGenerazione'],
+                        'tipo_termoregolazione' =>$value['tipologiaSistemaTermoregolazione'],
+                        'potenza_kw' =>$value['potenzaTermicaUtile'],
+                        'anno_installazione' =>$value['annoInstallazione'],
+                        'oggetto_di_sostituzione' =>$value['GeneratoreOggettoDiSostituzione'],
+                        'difatto_diprogetto' =>'diprogetto',
+                    ]);
+                  
+             
                 }
             }
 
+            /*Informazione sul tipo di edificio*/
 
-
+        
         }
            $stringRitorno=["response"=>"ok","message"=> $i->titoloProgetto];
 
@@ -288,8 +470,11 @@ $dettagliutente=DB::table('anagrafica')->select('nome','cognome','denominazione'
 });
 
 
-class foo{
-    public $valore = "ciao";
+class tipologiaEdificio{
+    public $condominio = "condominio";
+    public $edificiioResidenziale = "edificioFamiliare";
+    public $commerciale = "commerciale";
+    public $altro = "altro";
 
 }
  class elementiProgetto{
