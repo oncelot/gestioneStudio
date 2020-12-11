@@ -24,7 +24,7 @@
             <q-input outlined v-model="titoloProgetto" label="Titolo del progetto" />
         </div>
     </div>
-<q-btn color="primary" icon="check" label="Salva" @click="aggiungiProgetto()" />
+
 
 
     <!-- #region ANAGRAFICA CLIENTI -->
@@ -758,6 +758,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     </div>
     <div class="col-3">
       <label>Allegato</label>
+      <input  type="file" @change="handleFileTitoliAutorizzativi">
       <q-file v-model="AllegatoTitoloAutorizzativo" label="Carica file"  :dense="true" outlined multiple style="max-width: 300px"    />
   </div>
   
@@ -778,7 +779,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     </div>
 
     <div class="col-3"> 
-      <label for="">Allegato</label>
+      <label for="">Allegato</label><br>
       <input type="file" @change="handleFile" >
     <!--  <q-file  v-model="allegatoIntervento"  label="Carica filedddd"  outlined :dense="true"     style="max-width: 300px"  />-->
     </div>
@@ -826,6 +827,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     <div class="col"><b><q-input v-model="modalInterventiSuccessiviNuovoSub" :dense="true"  type="text" label="Sub" /></b></div>
     <div class="col"><b><q-input v-model="modalInterventiSuccessiviNuovaDecrizione" :dense="true"  type="text" label="Successivi interventi" /></b></div>
     <div class="col">
+      <label>Allegato</label><br>
       <input type="file" @change="handleFile">
    <!--   <q-file
       v-model="modalInterventiSuccessiviNuovoAllegato"
@@ -1281,7 +1283,7 @@ Specificare le modalità e i tempi di sanatoria.
   
 <div class="row">
   <div class="col-3">
-     <label class="text-bold"> Allegato</label>
+     <label class="text-bold"> Allegato</label><br>
      <input type="file" @change="handleFile"  >
   <!--<q-file v-model="allegatoDiAllegati"   label="Carica file"  outlined :dense="true"   style="max-width: 300px" /> -->
   </div>
@@ -1323,12 +1325,13 @@ Specificare le modalità e i tempi di sanatoria.
 
   <div class="col-2 col-md-2"> 
     <label for="" class="text-bold"> Allega Preventivo Firmato</label>
-    <q-file
+    <input type="file" @change="handleFilePreventivo">
+  <!--  <q-file
       v-model="quoteAllegatoPreventivo"
       label="Carica file"
       outlined
       :dense="true"
-      style="max-width: 300px" />
+      style="max-width: 300px" /> -->
       </div>
   </div>
 
@@ -1469,6 +1472,7 @@ Specificare le modalità e i tempi di sanatoria.
 
 </div>
 
+<q-btn color="primary" icon="check" label="Crea progetto" @click="aggiungiProgetto()" />
 </div>
 
 <!-- #region MODAL-->
@@ -1588,6 +1592,18 @@ Specificare le modalità e i tempi di sanatoria.
     </q-card-actions>
   </q-card>
 </q-dialog>
+ <q-dialog persistent  v-model="visualizzamessaggio">
+        <q-card>
+  <q-card-section class="row items-center">
+      {{messaggioDaVisualizzare}}
+  </q-card-section>
+  <q-card-actions align="right">
+      <q-btn flat label="ok" color="primary" v-close-popup @click="redirectlistaprogetti()" />
+    
+    </q-card-actions>
+        </q-card>
+    </q-dialog>
+
 
 <!-- FINE  MODAL -->
 <!-- #endregion -->
@@ -1636,6 +1652,7 @@ Specificare le modalità e i tempi di sanatoria.
 </script>
 <script>
 import formNuovaanagrafica from '@/components/NuovaAnagrafica'
+import message from '@/components/messaggio'
 import Axios from 'axios';
 export default {
 
@@ -1657,6 +1674,7 @@ export default {
           riferimentiAutorizzativi:this.riferimentiAutorizzativi,
           dateAutorizzativi:this.dateAutorizzativi,
           AllegatoTitoloAutorizzativo:this.AllegatoTitoloAutorizzativo,
+          Base64AllegatoTitoloAutorizzativo:this.Base64AllegatoTitoloAutorizzativo,
 
           abusiEdilizi:this.abusiEdilizi,
           TipologiaAbusiEdilizi:this.TipologiaAbusiEdilizi,
@@ -1702,8 +1720,13 @@ export default {
           cetraleTermicaCentralizzatoNumeroUnitaProposte:this.cetraleTermicaCentralizzatoNumeroUnitaProposte ,
           cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:this.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto ,
           centraleTermivaCentralizzatoVettoreImpianto:this.centraleTermivaCentralizzatoVettoreImpianto ,
-          quotaPreventivo:this.quotaPreventivo ,
-          quoteAllegatoPreventivo:this.quoteAllegatoPreventivo,
+          quotaPreventivo:this.quotaPreventivo,
+
+          quoteAllegatoPreventivo:this.nameAuxFilePreventivo,
+          base64AllegatoPreventivo:this.quoteAllegatoPreventivo,
+          elencoAcconti:this.elencoQuote,
+          elencoSpese:this.elencoSpese,
+
           clienti:this.elencoAnagraficaClienti,
           collaboratoriInterni:this.elencoCollaboratoriInterno,
           collaboratoriEsterni:this.elencoCollaboratoriEnterno,
@@ -1747,13 +1770,27 @@ export default {
 
 
           };
-          Axios.post(this.linkApi+"/aggiungi-progetto",sendForm).then(Response=>{console.log(Response.data)});
+          Axios.post(this.linkApi+"/aggiungi-progetto",sendForm).then(Response=>{
+            
+            console.log(Response.data)
+            if(Response.data.response=='ok'){
+              this.messaggioDaVisualizzare='Progetto Caricato con successo';
+              this.visualizzamessaggio=true;
+            
+              }else{
+                 this.messaggioDaVisualizzare=Response.data.message;
+              this.visualizzamessaggio=true;
+              }
+            });
 
       },
     addRow(){
        this.elencoAnagraficaClienti.push(
          {nome:this.modalNuovoNome, cognome:this.modalNuovoCognome, codiceFiscale:this.modalNuovoCodiceFiscale});
       this.modalNuovaAnagraficaClienti= false;
+    },
+    redirectlistaprogetti(){
+this.$router.push({ path:'lista-progetti'});
     },
     addRowProprietariImmobile(){
        this.elencoProprietariImmobile.push(
@@ -1764,12 +1801,48 @@ export default {
           });
     
     },
+    handleFilePreventivo(e){
+      this.nameAuxFilePreventivo=e.target.files[0].name;
+      const selectImage= e.target.files[0];
+      this.createBase64(selectImage);
+
+    },
+    handleFileTitoliAutorizzativi(e){
+      this.AllegatoTitoloAutorizzativo=e.target.files[0].name;
+      const selectImage= e.target.files[0];
+      this.createBase64TitoliAutorizzativi(selectImage);
+
+    },
+     createBase64TitoliAutorizzativi(fileObject){
+      const reader = new FileReader();
+      reader.onload = (e)=>{
+       var aux= e.target.result;
+       var base64string = window.btoa(aux);
+       this.Base64AllegatoTitoloAutorizzativo=base64string;
+      };
+      this.Base64AllegatoTitoloAutorizzativo= reader.readAsBinaryString(fileObject);
+
+//return output;
+    },
+      createBase64Preventivo(fileObject){
+      const reader = new FileReader();
+      reader.onload = (e)=>{
+       var aux= e.target.result;
+       var base64string = window.btoa(aux);
+       this.quoteAllegatoPreventivo=base64string;
+      };
+      this.quoteAllegatoPreventivo= reader.readAsBinaryString(fileObject);
+
+//return output;
+    },
     handleFile(e){
       this.nameAuxFile=e.target.files[0].name;
       const selectImage= e.target.files[0];
       this.createBase64(selectImage);
 
     },
+  
+     
     createBase64(fileObject){
       const reader = new FileReader();
       reader.onload = (e)=>{
@@ -1968,7 +2041,7 @@ this.elencoAllegati.push({
      
   data () {
     return {
-        text:'',data:'',date:'',auxFile:null,nameAuxFile:'',
+        text:'',data:'',date:'',auxFile:null,nameAuxFile:'',nameAuxFilePreventivo:'',
         cercaAnagraficaClienti:'',cercaCollaboratoriInterni:'',cercaCollaboratoriEsterni:'',
          tab: "progetto",
          modalNuovaAnagraficaClienti: false,
@@ -2002,7 +2075,10 @@ this.elencoAllegati.push({
          condominioAnnodicotruzione:'',condominioPianoimmboile:'',condominioPertinenzaC2C6C7:[],
          condominioformalmenteCostituito:false,condominioFormalmenteCostituitoCodiceFsicale:'',condominioFormalmenteCostituitoRiferimentoAmministatore:'',
          condominioNOformalmenteCostituitoReferente:'',condominioNOformalmenteCostituitoCodiceFiscaleReferente:'',
-         dateAutorizzativi:'',	AllegatoTitoloAutorizzativo:null,		riferimentiAutorizzativi:'',			tipologiaTitoloAutorizzativi:'',
+         dateAutorizzativi:'',	riferimentiAutorizzativi:'',			tipologiaTitoloAutorizzativi:'',
+         AllegatoTitoloAutorizzativo:null, 
+         Base64AllegatoTitoloAutorizzativo:'',
+         
          
          TipoInterventoProposto:[],
          /*TipoInterventoPropostoEnergetico:false,TipoInterventoPropostoSismico:false,TipoInterventoPropostoCombinato:false,*/
@@ -2031,7 +2107,7 @@ this.elencoAllegati.push({
           cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:'',cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro:'', cetraleTermicaCentralizzatoNumeroUnitaProposte:'', centraleTermivaCentralizzatoVettoreImpianto:'',cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:'',
 
 
-          modalAggiungiImpiantoEsistenteAutonomo:false,  modalAggiungiImpiantoEsistenteAutonomoStatoProgetto:false,
+          modalAggiungiImpiantoEsistenteAutonomo:false,  modalAggiungiImpiantoEsistenteAutonomoStatoProgetto:false,visualizzamessaggio:false,messaggioDaVisualizzare:'',
           NuovoImpiantoEsistenteAutonomosub:'', NuovoImpiantoEsistenteAutonomotecnologiaImpianto:'',NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione:'',NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione:'',
           NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile:'',NuovoImpiantoEsistenteAutonomoannoInstallazione:'',NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione:'',
           allegatoDiAllegati:null,tipoAllegatodiAllegati:'',noteallegatoDiallegati:'',
@@ -2182,7 +2258,7 @@ this.elencoAllegati.push({
 
   components: {
      
-    formNuovaanagrafica
+    formNuovaanagrafica,message
   },
 
 

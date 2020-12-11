@@ -136,8 +136,64 @@ try {
         'quota_preventivo'=>$quotaPreventivo ,
 
         //quoteAllegatoPreventivo TOFO tabella allegato
+       
         
     ]);
+    if ($i->AllegatoTitoloAutorizzativo != ''){
+
+        $file =base64_decode($i->Base64AllegatoTitoloAutorizzativo);
+        mkdir($path."/".$idProgetto);
+        file_put_contents($path."/".$idProgetto."/". $i->AllegatoTitoloAutorizzativo, $file);
+    }
+    if ($idProgetto>0){
+    if ($i->quoteAllegatoPreventivo != ''){
+          $nomefile=$i->quoteAllegatoPreventivo.date("YmdHis");
+        DB::table('allegati_progetto')->insertGetId([
+             'id_progetto' =>$idProgetto,
+             'id_legame' =>0,
+             'nome_file' =>$nomefile,
+             'note_allegato' =>'',
+             'tipo_allegato' =>4,
+         ]);
+         $file =base64_decode($i->base64AllegatoPreventivo);
+         if (!file_exists($path."/".$idProgetto)){
+         mkdir($path."/".$idProgetto);}
+         file_put_contents($path."/".$idProgetto."/".$nomefile, $file);
+        }
+
+        if (count($i->elencoAcconti) > 0){
+            foreach ($i->elencoAcconti as $value) {
+               DB::table('quote_progetto')->insertGetId([
+                    'id_progetto' =>$idProgetto,
+                    'data' =>$value['dataPagamento'],
+                    'importo'=>$value['importo'],
+                    'modalita_pagamento'=>$value['metodoPagamento'],
+                    'chi_ha_fatturata'=>$value['chiFatturato'],
+                    'chi_ha_pagato'=>'',
+                    'causale'=>'',
+                    'tipo_quota'=>'',
+
+                ]);
+            }
+        }
+        if (count($i->elencoSpese) > 0){
+            foreach ($i->elencoSpese as $value) {
+               DB::table('quote_progetto')->insertGetId([
+                    'id_progetto' =>$idProgetto,
+                    'data' =>$value['dataPagamento'],
+                    'importo'=>$value['importo'],
+                    'modalita_pagamento'=>'',
+                    'chi_ha_fatturata'=>'',
+                    'causale'=>$value['causale'],
+                    'chi_ha_pagato'=>$value['chiHapagato'],
+                    'tipo_quota'=>'',
+
+                ]);
+            }
+        }
+    }
+
+
     $tipoEdificio= new tipologiaEdificio();
     
     if ($i->tipologiaEdificio == $tipoEdificio->condominio ){
@@ -255,17 +311,18 @@ try {
          //Allegati
             if (count($i->elencoFile) > 0){
                 foreach ($i->elencoFile as $value) {
+                    $nomefile=$value['nomeFile'].date("YmdHis");
                    DB::table('allegati_progetto')->insertGetId([
                         'id_progetto' =>$idProgetto,
                         'id_legame' =>0,
-                        'nome_file' =>$value['nomeFile'],
-                        'note_allegato' =>$value['nomeFile'],
+                        'nome_file' =>$nomefile,
+                        'note_allegato' =>$value['noteFile'],
                         'tipo_allegato' =>$value['tipoAllegato'],
                     ]);
                     $file =base64_decode($value['fileBase64']);
                     if (!file_exists($path."/".$idProgetto)){
                     mkdir($path."/".$idProgetto);}
-                    file_put_contents($path."/".$idProgetto."/".$value['nomeFile'].date("YmdHis"), $file);
+                    file_put_contents($path."/".$idProgetto."/".$nomefile, $file);
                 }
             }
          
@@ -279,16 +336,16 @@ try {
                         'anno_intervento' =>$value['anno'],
                     ]);
                   
-                    
+                    $nomefile= $value['allegato'].date("YmdHis");
                    DB::table('allegati_progetto')->insertGetId([
                         'id_progetto' =>$idProgetto,
                         'id_legame' =>$idIntervento,
                         'tipo_allegato' =>1,
-                        'nome_file'=>$value['allegato'],
+                        'nome_file'=> $nomefile,
                     ]);
                     $file =base64_decode($value['allegatoBase64']);
                     mkdir($path."/".$idProgetto);
-                    file_put_contents($path."/".$idProgetto."/".$value['allegato'], $file);
+                    file_put_contents($path."/".$idProgetto."/". $nomefile, $file);
                 }
             }
         
@@ -301,16 +358,16 @@ try {
                         'descrizione' =>$value['descrizione'],
                     ]);
                   
-                    
+                    $nomefile= $value['nomeAllegato'].date("YmdHis");
                    DB::table('allegati_progetto')->insertGetId([
                         'id_progetto' =>$idProgetto,
                         'id_legame' =>$idIntervento,
                         'tipo_allegato' =>2,
-                        'nome_file'=>$value['nomeAllegato'],
+                        'nome_file'=>$nomefile,
                     ]);
                     $file =base64_decode($value['allegatoBase64']);
                     mkdir($path."/".$idProgetto);
-                    file_put_contents($path."/".$idProgetto."/".$value['nomeAllegato'], $file);
+                    file_put_contents($path."/".$idProgetto."/".$nomefile, $file);
                 }
             }
         
@@ -455,6 +512,11 @@ $router->get('/getAnagrafica',function (Request $request){
 $elencoanagrafica=DB::table('anagrafica')->select('*')->get();
    return  response()
             ->json($elencoanagrafica);
+});
+$router->get('/getProgetti',function (Request $request){
+$elencoprogetti=DB::table('progetti')->select('*')->get();
+   return  response()
+            ->json($elencoprogetti);
 });
 
 
