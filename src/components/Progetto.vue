@@ -1013,7 +1013,11 @@ Specificare le modalità e i tempi di sanatoria.
 
 
   </div>
-  <div class="row" v-if="datistrutturalichk.includes('altro')"><div class="col"><q-input v-model="altroDatiStrutturali" type="text" :dense="true" outlined label="Altro" /></div></div>
+  <div class="row" v-if="datistrutturalichk.includes('altro')">
+    <div class="col">
+      <q-input v-model="altroDatiStrutturali" type="text" :dense="true" outlined label="Altro" />
+      </div>
+    </div>
  
   <div class="row">
     <div class="col-12">
@@ -1030,7 +1034,9 @@ Specificare le modalità e i tempi di sanatoria.
 
 
   </div>
-  <div class="row" v-if="tipologiaParetechk.includes('altro')"><div class="col"><q-input v-model="altroTipologiaParetechk" type="text" :dense="true" outlined label="Altro" /></div></div>
+  <div class="row" v-if="tipologiaParetechk.includes('altro')">
+    <div class="col">
+      <q-input v-model="altroTipologiaParetechk" type="text" :dense="true" outlined label="Altro" /></div></div>
 
  <div class="row">
     <div class="col-12">
@@ -1788,7 +1794,9 @@ export default {
       },
     addRow(){
        this.elencoAnagraficaClienti.push(
-         {nome:this.modalNuovoNome, cognome:this.modalNuovoCognome, codiceFiscale:this.modalNuovoCodiceFiscale});
+         {nome:this.modalNuovoNome,
+          cognome:this.modalNuovoCognome,
+           codiceFiscale:this.modalNuovoCodiceFiscale});
       this.modalNuovaAnagraficaClienti= false;
     },
     redirectlistaprogetti(){
@@ -2062,7 +2070,7 @@ this.elencoAllegati.push({
          modalDatiCatastaliTitoliAutorizzativiNuovoFoglio:'',
         
 
-         titoloProgetto:'',search:'',tipologiaEdificio:'condominio',
+         titoloProgetto:'',search:'',tipologiaEdificio:[],
          TipologiainterventoDPR3802001:[],
         /* TipologiainterventoDPR3802001Ordinaria:false,TipologiainterventoDPR3802001Straordinaria:false,TipologiainterventoDPR3802001RisanamentoConcervativo:false,TipologiainterventoDPR3802001RistrutturazioneEdilizia:false,TipologiainterventoDPR3802001NuovaCostruzione:false,TipologiainterventoDPR3802001InterventiUrbanistici:false,*/
          zonaClimatica:[],
@@ -2262,6 +2270,108 @@ this.elencoAllegati.push({
      
     formNuovaanagrafica,message
   },
+  props:['idprogetto'],
+  beforeMount:function(){
+Axios.get(this.linkApi+'/getProgetto/'+this.idprogetto).then(response =>{
+//TODO PROBLEMA ALLEGATO
+/* LISTA CLIENTI */
+if (response.data['clienti'][0] != null){
+
+ response.data['clienti'].forEach(element => {
+   this.elencoAnagraficaClienti.push({
+     nome:element.nome,
+     cognome:element.cognome,
+     codiceFiscale:element.codice_fiscale });
+   });
+}
+
+/*DATI GENERICI PROGETTO */
+  this.titoloProgetto=response.data['progetto'][0].titolo_progetto;
+ this.tipologiaEdificio.val = response.data['progetto'][0].anagrafica;
+
+   var outputsplit= response.data['progetto'][0].zona_climatica.split(";");
+   if (outputsplit!= null){
+  outputsplit.forEach(element => {this.zonaClimatica.push(element); });}
+  //this.zonaClimatica = response.data['progetto'][0].zona_climatica;
+  this.gradigiornoText = response.data['progetto'][0].gradi_giorno ;
+  this.areavincolata42 = response.data['progetto'][0].areavincolata; 
+  this.zonasismisca4 = response.data['progetto'][0].zonasismisca ;
+  this.zonasismisca4Interventiantisismici = response.data['progetto'][0].interventi_antisismici ;
+  this.zonasismisca4InterventiantisismiciAltriVincoli = response.data['progetto'][0].interventi_sismici_altri_vincoli ;
+  if (response.data['progetto'][0].TipoInterventoProposto != null){
+  outputsplit= response.data['progetto'][0].TipoInterventoProposto.split(";");
+  if (outputsplit!= null){
+  outputsplit.forEach(element => {this.TipoInterventoProposto.push(element); });}}
+if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
+  outputsplit= response.data['progetto'][0].TipologiainterventoDPR3802001.split(";");
+  if (outputsplit != null){
+   outputsplit.forEach(element => {this.TipologiainterventoDPR3802001.push(element); });
+  }
+  }
+  this.tipologiaTitoloAutorizzativi= response.data['progetto'][0].tipologiaTitoloAutorizzativi;
+  this.riferimentiAutorizzativi= response.data['progetto'][0].riferimentiAutorizzativi;
+  this.dateAutorizzativi= response.data['progetto'][0].dateAutorizzativi;
+  this.abusiEdilizi= response.data['progetto'][0].abusiEdilizi;
+  this.TipologiaAbusiEdilizi = response.data['progetto'][0].TipologiaAbusiEdilizi;
+  this.comuneStatoDiFatto = response.data['progetto'][0].comuneStatoDiFatto;
+  this.NCEUStatoDiFatto = response.data['progetto'][0].NCEUStatoDiFatto;
+  this.difformitaUrbanistiche = response.data['progetto'][0].difformitaUrbanistiche;
+  this.noteDifformitaUrbanistiche = response.data['progetto'][0].noteDifformitaUrbanistiche;
+  this.difformitaCatastali = response.data['progetto'][0].difformitaCatastali;
+  this.noteDifformitaCatastali= response.data['progetto'][0].noteDifformitaCatastali;
+  this.irregolaritaSanabili= response.data['progetto'][0].irregolaritaSanabili;
+  this.noteIrregolaritaSanabili= response.data['progetto'][0].noteIrregolaritaSanabili;
+
+  if (response.data['progetto'][0].tipologia_struttura_edificiio != null){
+   outputsplit= response.data['progetto'][0].tipologia_struttura_edificiio.split(";");
+  
+   outputsplit.forEach(element => {this.datistrutturalichk.push(element); });
+  }
+  this.altroDatiStrutturali = response.data['progetto'][0].altroDatiStrutturali;
+  
+  if (response.data['progetto'][0].tipologia_parete != null){
+   outputsplit= response.data['progetto'][0].tipologia_parete.split(";");
+   outputsplit.forEach(element => {this.tipologiaParetechk.push(element); });
+  }
+
+  this.altroTipologiaParetechk = response.data['progetto'][0].altroTipologiaParetechk;
+ if ( response.data['progetto'][0].tipologia_doppia_parete  != null){
+   outputsplit= response.data['progetto'][0].tipologia_doppia_parete.split(";");
+   outputsplit.forEach(element => {this.tipologia_doppia_parete.push(element); });
+  }
+  this.SpessoreMuriEsterni = response.data['progetto'][0].spessori_muri_esternicm;
+  this.SpessoreCameraDaria = response.data['progetto'][0].spessori_camera_ariacm;
+  this.SpessoreIsolamento = response.data['progetto'][0].spessore_isolamentocm;
+  this.TipologiaIsolamentoIncameraDaria = response.data['progetto'][0].tipo_isolamento_camera_aria;
+  if (response.data['progetto'][0].cappotto != null){
+  outputsplit= response.data['progetto'][0].cappotto.split(";");
+  
+   outputsplit.forEach(element => {this.isolamentoEsistentechk.push(element); });
+  }
+  this.altroisolamentoEsistentechk= response.data['progetto'][0].altroisolamentoEsistente;
+  this.tipologiaImpiantoEsistente = response.data['progetto'][0].centraletermicaesistente_tipo_impianto;
+  /* centrale termina centralizzato */
+
+  this.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente= response.data['progetto'][0].centraletermicaesistente_tecnologia_impianto;
+  this.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro= response.data['progetto'][0].cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro;
+  this.cetraleTermicaCentralizzatoNumeroUnita= response.data['progetto'][0].centraletermicaesistente_numero_unita_generazione;
+  this.cetraleTermicaCentralizzatoAnnoInstallazione= response.data['progetto'][0].centraletermicaesistente_anno_installazione;
+  this.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente= response.data['progetto'][0].centraletermicaesistente_potenza_termica;
+  this.cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste= response.data['progetto'][0].centraletermicaesistente_tipologia_distribuzione;
+  this.cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente= response.data['progetto'][0].centraletermicaesistente_tipologia_termoregolazione;
+  this.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato=response.data['progetto'][0].centraletermicaesistente_libretto_impianto_aggiornato;
+  this.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate= response.data['progetto'][0].centraletermicaesistente_provefumi;
+  this.cetraleTermicaCentralizzatoCertificatoCPI=response.data['progetto'][0].centraletermicaesistente_cpi;
+  this.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto=response.data['progetto'][0].centraletermicaprogetto_tecnologia_esistente;
+  this.cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro=response.data['progetto'][0].centraletermicaprogetto_tecnologia_esistente_altro;
+  this.cetraleTermicaCentralizzatoNumeroUnitaProposte=response.data['progetto'][0].centraletermicaprogetto_numero_unita;
+  this.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto=response.data['progetto'][0].centraletermicaprogetto_potenza_termica;
+  this.centraleTermivaCentralizzatoVettoreImpianto=response.data['progetto'][0].centraletermicaprogetto_vettore_energetico;
+  this.quotaImportoAcconto= response.data['progetto'][0].quota_preventivo;
+  
+})
+
+  }
 
 
 }

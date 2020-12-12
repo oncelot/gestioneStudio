@@ -1,5 +1,5 @@
 <template>
-    <q-dialog persistent>
+    <q-dialog persistent v-model="visualizza">
         <q-card>
   <q-card-section class="row items-center">
       {{messaggio}}
@@ -14,6 +14,6 @@
 <script>
 export default {
    
-  props: ['messaggio'],
+  props: ['messaggio','visualizza'],
 }
 </script>

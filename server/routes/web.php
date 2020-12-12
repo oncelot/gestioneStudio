@@ -530,7 +530,13 @@ $dettagliutente=DB::table('anagrafica')->select('nome','cognome','denominazione'
    return  response()
             ->json($dettagliutente);
 });
-
+$router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto){
+    $dettagliutente=DB::table('progetti')->leftJoin('clienti_progetto','progetti.id','=','clienti_progetto.id_progetto')->where('progetti.id',$idprogetto)->select('*')->get();
+    $dettagliProgetto= DB::table('progetti')->where('progetti.id',$idprogetto)->select('*')->get();
+    $clientiProgetto=DB::table('clienti_progetto')->join('anagrafica','clienti_progetto.id_cliente','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
+    $progetto=['progetto'=>$dettagliProgetto,'clienti'=>$clientiProgetto];
+       return  response()->json($progetto);
+    });
 
 class tipologiaEdificio{
     public $condominio = "condominio";
