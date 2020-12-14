@@ -153,7 +153,7 @@
       <div class="col-1 col-md-1 bgAree"  style="border-bottom:1px solid black"></div>  
   </div>
 
-  <div  class="row" v-for="item in elencoCollaboratoriEnterno" :key="item.message">
+  <div  class="row justify-center" v-for="item in elencoCollaboratoriEnterno" :key="item.message">
     <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
@@ -2284,10 +2284,53 @@ if (response.data['clienti'][0] != null){
      codiceFiscale:element.codice_fiscale });
    });
 }
+if (response.data['collaboratoriEsterni'][0] != null){
+
+ response.data['collaboratoriEsterni'].forEach(element => {
+   this.elencoCollaboratoriEnterno.push({
+     nome:element.nome,
+     cognome:element.cognome,
+     codiceFiscale:element.codice_fiscale });
+   });
+}
+if (response.data['collaboratoriInterni'][0] != null){
+
+ response.data['collaboratoriInterni'].forEach(element => {
+   this.elencoCollaboratoriInterno.push({
+     nome:element.nome,
+     cognome:element.cognome,
+     codiceFiscale:element.codice_fiscale });
+   });
+}
+if (response.data['progettistiProgetto'][0] != null){
+
+ response.data['progettistiProgetto'].forEach(element => {
+   this.elencoAnagraficaProgettisti.push({
+     nome:element.nome,
+     cognome:element.cognome,
+     codiceFiscale:element.codice_fiscale });
+   });
+}
+
+if (response.data['infoEdificioProgetto'][0]!= null){
+var dettagliEdificio=response.data['infoEdificioProgetto'][0];
+this.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
+this.condominioNome=dettagliEdificio.cd_nome_condominio;
+this.condominioIndirizzo=dettagliEdificio.cd_indirizzo;
+this.condominioCitta=dettagliEdificio.cd_citta;
+this.condominioProvincia=dettagliEdificio.cd_citta;
+this.condominioAnnodicotruzione=dettagliEdificio.cd_annocostruzione;
+this.condominioPianoimmboile=dettagliEdificio.cd_piano_immobile;
+this.condominioNumeroUnitaAccatastate=dettagliEdificio.cd_numero_ui_accatastate;
+this.condominioNumerounitariscaldate= dettagliEdificio.cd_numero_ui_riscaldate;
+//Numero pertinenze autonomamente accatastate
+
+}
+
 
 /*DATI GENERICI PROGETTO */
   this.titoloProgetto=response.data['progetto'][0].titolo_progetto;
- this.tipologiaEdificio.val = response.data['progetto'][0].anagrafica;
+ this.tipologiaEdificio = response.data['progetto'][0].tipologia_edificio;
 
    var outputsplit= response.data['progetto'][0].zona_climatica.split(";");
    if (outputsplit!= null){

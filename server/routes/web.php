@@ -534,7 +534,20 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
     $dettagliutente=DB::table('progetti')->leftJoin('clienti_progetto','progetti.id','=','clienti_progetto.id_progetto')->where('progetti.id',$idprogetto)->select('*')->get();
     $dettagliProgetto= DB::table('progetti')->where('progetti.id',$idprogetto)->select('*')->get();
     $clientiProgetto=DB::table('clienti_progetto')->join('anagrafica','clienti_progetto.id_cliente','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
-    $progetto=['progetto'=>$dettagliProgetto,'clienti'=>$clientiProgetto];
+    $collaboratoriEsterniProgetto=DB::table('collaboratori_esterni_progetto')->join('anagrafica','id_collaboratore_esterno','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
+    $collaboratoriInterniProgetto=DB::table('collaboratori_interni_progetto')->join('anagrafica','id_collaboratore_interno','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
+    $progettistiProgetto=DB::table('progettisti_progetto')->join('anagrafica','id_progettista','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
+    $infoTipologiaEdificioProgetto=DB::table('tipologia_edificio_progetto')->where('id_progetto',$idprogetto)->select('*')->get();
+
+    
+    $progetto=[
+        'progetto'=>$dettagliProgetto,
+        'clienti'=>$clientiProgetto,
+        'collaboratoriEsterni'=>$collaboratoriEsterniProgetto,
+        'collaboratoriInterni'=>$collaboratoriInterniProgetto,
+        'progettistiProgetto'=>$progettistiProgetto,
+        'infoEdificioProgetto'=>$infoTipologiaEdificioProgetto,
+        ];
        return  response()->json($progetto);
     });
 
