@@ -538,6 +538,7 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
     $collaboratoriInterniProgetto=DB::table('collaboratori_interni_progetto')->join('anagrafica','id_collaboratore_interno','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
     $progettistiProgetto=DB::table('progettisti_progetto')->join('anagrafica','id_progettista','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
     $infoTipologiaEdificioProgetto=DB::table('tipologia_edificio_progetto')->where('id_progetto',$idprogetto)->select('*')->get();
+    $infoelencoProprietariImmobile=DB::table('proprietari_immobilief_progetto')->where('id_progetto',$idprogetto)->select('*')->get();
 
     
     $progetto=[
@@ -547,6 +548,7 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
         'collaboratoriInterni'=>$collaboratoriInterniProgetto,
         'progettistiProgetto'=>$progettistiProgetto,
         'infoEdificioProgetto'=>$infoTipologiaEdificioProgetto,
+        'infoelencoProprietariImmobile'=>$infoelencoProprietariImmobile,
         ];
        return  response()->json($progetto);
     });

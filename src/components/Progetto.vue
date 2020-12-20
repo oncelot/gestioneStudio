@@ -2315,6 +2315,7 @@ if (response.data['progettistiProgetto'][0] != null){
 if (response.data['infoEdificioProgetto'][0]!= null){
 var dettagliEdificio=response.data['infoEdificioProgetto'][0];
 this.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
+/* CONDOMINIO */
 this.condominioNome=dettagliEdificio.cd_nome_condominio;
 this.condominioIndirizzo=dettagliEdificio.cd_indirizzo;
 this.condominioCitta=dettagliEdificio.cd_citta;
@@ -2323,7 +2324,57 @@ this.condominioAnnodicotruzione=dettagliEdificio.cd_annocostruzione;
 this.condominioPianoimmboile=dettagliEdificio.cd_piano_immobile;
 this.condominioNumeroUnitaAccatastate=dettagliEdificio.cd_numero_ui_accatastate;
 this.condominioNumerounitariscaldate= dettagliEdificio.cd_numero_ui_riscaldate;
-//Numero pertinenze autonomamente accatastate
+if (dettagliEdificio.cd_numero_pertinnze_accatastate != null){
+var outputsplit = dettagliEdificio.cd_numero_pertinnze_accatastate.split(';');
+if (outputsplit!=null){
+   outputsplit.forEach(element=>{this.condominioPertinenzaC2C6C7.push(element)});
+}}
+this.condominioformalmenteCostituito=dettagliEdificio.cd_condominio_costituito;
+if(dettagliEdificio.cd_condominio_costituito=='SI'){
+this.condominioFormalmenteCostituitoCodiceFsicale=dettagliEdificio.cd_codicefiscale_condominio;
+this.condominioFormalmenteCostituitoRiferimentoAmministatore=dettagliEdificio.cd_info_condominiocostituito;}
+if(dettagliEdificio.cd_condominio_costituito=='NO'){
+this.condominioNOformalmenteCostituitoCodiceFiscaleReferente=dettagliEdificio.cd_codicefiscale_condominio;
+this.condominioNOformalmenteCostituitoReferente=dettagliEdificio.cd_info_condominiocostituito;}
+/* SCREENIN CONDOMINIO */
+this.screeningCondominioUnicoProprietario=dettagliEdificio.cd_unico_proprietario ;
+this.screeningCondominioSoggettiIRES=dettagliEdificio.cd_ires;
+this.screeningCondominioPossiedonoMultiProprieta=dettagliEdificio.cd_condomini_altri_unita;
+this.screeningCondominioA1A8A9=dettagliEdificio.cd_a1a8a9;
+this.screeningCondominioUsufruito110= dettagliEdificio.cd_usufruito110;
+
+
+/*FINE CONDOMINIO */
+
+
+
+/* familiare */
+if (response.data['infoelencoProprietariImmobile'][0] != null){
+  var listaProprietari=response.data['infoelencoProprietariImmobile'];
+listaProprietari.forEach(element =>{ this.elencoProprietariImmobile.push(
+         {nome:element.nome, 
+         cognome:element.cognome,
+        codiceFiscale:element.codicefiscale,
+        telefono:element.telefono,
+          });});
+}
+this.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
+this.edificioUnifamiliareIndirizzo=dettagliEdificio.ef_indirizzo;
+this.edificioUnifamiliarecitta=dettagliEdificio.ef_citta;
+this.edificioUnifamiliareProvincia=dettagliEdificio.ef_provincia;
+this.edificioUnifamiliareAnnocostruzione=dettagliEdificio.ef_annocostruzione;
+this.edificioUnifamiliarePianoImmobile=dettagliEdificio.ef_pianoImmobili;
+
+/*screening familiare */
+this.screeningUnifamiliareIndipendente=dettagliEdificio.ef_indipendente;
+this.screeningUnifamiliareIAcessoAutonomo=dettagliEdificio.ef_accesso_autonomo;
+this.screeningUnifamiliareUsufruito110=dettagliEdificio.ef_usufruito_110;
+this.screeningUnifamiliareRiqualificazioneBalconi=dettagliEdificio.ef_riqualificazioni_balconi;
+
+
+
+/* familiare */
+
 
 }
 
