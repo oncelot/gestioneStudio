@@ -14,8 +14,9 @@
         <q-toolbar-title>
          Gestionale Cantiere
         </q-toolbar-title>
-
-        <div>Login</div>
+{{isAuth}}
+        <div v-if="!isAuth"><a href="/login"> Login</a></div>
+        <div v-if="isAuth"><li>{{user.name}}</li> <a href="/logout">logout</a></div>
       </q-toolbar>
     </q-header>
 
@@ -112,7 +113,15 @@
 <script>
 //import HelloWorld from './components/HelloWorld.vue'
 
+import {mapGetters} from 'vuex'
 export default {
+  computed:{
+    ...mapGetters({
+      isAuth:'GET_AUTH',
+      user:'GET_AUTH_USER',
+
+    })
+  },
   /*name: 'LayoutDefault',
 
   components: {

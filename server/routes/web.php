@@ -3,6 +3,10 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -14,6 +18,50 @@ use Illuminate\Support\Facades\DB;
 |
 */
 
+$router->post('register',function(Request $request){
+
+$user = new User;
+$user->name='nome1';
+$user->email='email';
+$user->password=Hash::make('321654');
+$user->role='admin';
+$user->save();
+
+return response()->json(['message'=>'Utente creato con successo']);
+
+});
+
+$router->post('login',function(Request $request){
+
+$credenziali = $request->only(['email','password']);
+
+if($token = auth()->attempt($credenziali)){
+    $user=auth()->user();
+    $response=[
+        'user'=>[
+            'id'=>$user->id,
+            'email'=>$user->email,
+            'role'=>$user->role,
+
+        ], 
+        'token'=>[
+            'type'=>'Bearer',
+            'value'=>$token,
+            'expires_at'=>auth()->guard()->factory()->getTTl(),
+            ]
+        ];
+        return response()->json(['user'=>$response,'error'=>false]);
+        }
+        return response()->json(['error'=>true, 'message'=>'Email o password errati']);
+});
+$router->get('logout', function(){
+    auth()->logout();
+
+    return response()->json(['error'=>false,'message' => 'Successfully logged out']);
+
+});
+
+$router->get('/user','AccountController@index');
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
