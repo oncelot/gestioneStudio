@@ -4,6 +4,7 @@ import NuovoProgetto from '@/views/nuovo-progetto'
 import ListaProgetti from '@/views/lista-progetti'
 import anagrafica from '@/views/anagrafica'
 import dettaglioProgetto from '@/views/dettaglioProgetto'
+import utenti from '@/views/utenti'
 import login from '@/views/login'
 import store from '@/store'
 import baseApi from '@/baseApi'
@@ -46,6 +47,13 @@ return async (to,from,next)=>{
 
 const routes = [
   {path: '/nuovo-progetto', component:NuovoProgetto,
+        meta:{
+          requiredAuth:true,
+          userRoles:['admin']
+        },
+      beforeEnter:Middleware(),
+      },
+  {path: '/utenti', component:utenti,
         meta:{
           requiredAuth:true,
           userRoles:['admin']

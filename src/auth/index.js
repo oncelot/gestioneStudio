@@ -6,6 +6,7 @@ import { LocalStorage } from 'quasar';
 const LOGIN_URL = '/login';
 const LOGOUT_URL = '/logout';
 const REG_URL = '/register';
+const UPD_URL = '/update';
 
 export default ({
     userDefault:{
@@ -30,8 +31,18 @@ export default ({
             console.log(response.data);
         });
     },
-    Register(){
-        baseApi().post(REG_URL).then((response)=>{ console.log(response)});
+    Register(cred,redirect){
+        baseApi().post(REG_URL,cred).then((response)=>{
+            console.log(response);
+            if(response.data.error){alert('errore regsitrazione');}
+            else{router.push(redirect);}
+    });
+    },
+    Update(cred,redirect){
+        baseApi().put(UPD_URL,cred).then(response=>{
+            if(response.data.error){alert('errore update utente');}
+            else{router.push(redirect);}
+        })
     },
     LogOut(){
         baseApi().post(LOGOUT_URL).then((response)=>{

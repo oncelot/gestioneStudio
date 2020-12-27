@@ -63,7 +63,7 @@
             <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable  to="/anagrafica">
+        <q-item clickable  to="/utenti">
           <q-item-section avatar>
             <q-icon name="account_box" />
           </q-item-section>

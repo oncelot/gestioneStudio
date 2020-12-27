@@ -17,14 +17,21 @@ use Illuminate\Support\Facades\Hash;
 | and give it the Closure to call when that URI is requested.
 |
 */
-
+$router->put('/update',function(Request $request){
+$utente = DB::table('users')->where('id',$request->id)->update(
+    ['name'=>$request->nome,
+    'email'=>$request->email,
+    'role'=>$request->ruolo],
+);
+return response()->json(['message'=>'Utente Modificato con successo']);
+});
 $router->post('register',function(Request $request){
 
 $user = new User;
-$user->name='nome1';
-$user->email='email';
-$user->password=Hash::make('321654');
-$user->role='admin';
+$user->name=$request->nome;
+$user->email=$request->email;
+$user->password=Hash::make($request->password);
+$user->role=$request->ruolo;
 $user->save();
 
 return response()->json(['message'=>'Utente creato con successo']);
@@ -64,6 +71,17 @@ $router->get('logout', function(){
 $router->get('/user','AccountController@index');
 $router->get('/', function () use ($router) {
     return $router->app->version();
+});
+
+$router->get('/lista-users',function(){
+$users=DB::table('users')->get();
+return response()->json($users);
+
+});
+$router->post('/lista-users/{id}',function($id){
+$users=DB::table('users')->where('id',$id)->select('name','email','role','id')->get();
+return response()->json($users);
+
 });
 
 $router->post('/aggiungi-progetto',function(Request $i){
