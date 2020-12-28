@@ -18,20 +18,24 @@ use Illuminate\Support\Facades\Hash;
 |
 */
 $router->put('/update',function(Request $request){
+    if(count ($request->ruolo) > 0){
+        $ruoliUtente=implode(";",$request->ruolo);}
+
 $utente = DB::table('users')->where('id',$request->id)->update(
     ['name'=>$request->nome,
     'email'=>$request->email,
-    'role'=>$request->ruolo],
+    'role'=>$ruoliUtente],
 );
 return response()->json(['message'=>'Utente Modificato con successo']);
 });
+
 $router->post('register',function(Request $request){
 
 $user = new User;
 $user->name=$request->nome;
 $user->email=$request->email;
 $user->password=Hash::make($request->password);
-$user->role=$request->ruolo;
+$user->role='guest';
 $user->save();
 
 return response()->json(['message'=>'Utente creato con successo']);
@@ -141,6 +145,7 @@ try {
         'zona_climatica'=> $zonaClimatica,
         'gradi_giorno'=>$i->gradigiornoText,
         'areavincolata'=>$i->areavincolata42,
+        'tipo_vincolo'=>$i->tipoVincolo42,
         'zonasismisca'=>$i->zonasismisca4,
       'interventi_antisismici'=>$i->zonasismisca4Interventiantisismici,
           'interventi_sismici_altri_vincoli'=>$i->zonasismisca4InterventiantisismiciAltriVincoli,
@@ -580,7 +585,7 @@ $elencoanagrafica=DB::table('anagrafica')->select('*')->get();
             ->json($elencoanagrafica);
 });
 $router->get('/getProgetti',function (Request $request){
-$elencoprogetti=DB::table('progetti')->select('*')->get();
+$elencoprogetti=DB::table('progetti')->select('*')->orderBy('id','desc')->get();
    return  response()
             ->json($elencoprogetti);
 });

@@ -8,7 +8,7 @@
      
      
     </q-tabs> 
-    <div  v-if="menu =='nuovoutente' " class="row">
+    <div  v-if="menu =='nuovoutente' " class="">
         <nuovoutente iduser=''></nuovoutente>
     </div>
     <div v-if="menu =='listautenti' ">
@@ -28,7 +28,7 @@
     
     </div>
 </div>
-<div v-if="menu == 'dettagliutente'" class="row">
+<div v-if="menu == 'dettagliutente'" >
     <nuovoutente  v-bind:iduser="idUser"></nuovoutente>
   <!--  dettagli utente - {{idUser}}<br>
     <label for="" style="font-weight:bold" >Nome</label>

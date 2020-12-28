@@ -1666,6 +1666,7 @@ export default {
            zonaClimatica:this.zonaClimatica,
           gradigiornoText:this.gradigiornoText ,
           areavincolata42:this.areavincolata42 ,
+          tipoVincolo42:this.areaVicnolata42TipoVincolo,
           zonasismisca4:this.zonasismisca4 ,
           zonasismisca4Interventiantisismici:this.zonasismisca4Interventiantisismici ,
           zonasismisca4InterventiantisismiciAltriVincoli:this.zonasismisca4InterventiantisismiciAltriVincoli ,

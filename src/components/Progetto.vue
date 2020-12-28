@@ -1,8 +1,8 @@
 
 
 <template>
-
-<div class="q-pa-md" style="color:grey; background-color:#f2f4f8;">
+<!--q-pa-md-->
+<div class=" " style="color:grey; background-color:#f2f4f8; width:100%">
   
   <q-tabs  v-model="tab" inline-label style="background-color:#fdfdfd"  >
       <q-tab name="progetto"  icon="account_box" label="Progetto"  />
@@ -17,7 +17,7 @@
 <!-- #region progetto -->
     <div  v-if="tab == 'progetto'">
           <div class="row justify-center">
-              <div class=" text-h4 text-center text-secondary"><span class="text-secondary"> Nuovo Progetto</span></div>
+              <div class=" text-h4 text-center text-secondary"><span class="text-secondary"> Dettagli Progetto</span></div>
           </div>
     <div class="row  justify-center"  >
         <div class=" col-12 col-md-7 bgmargintop">
@@ -759,7 +759,8 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     <div class="col-3">
       <label>Allegato</label>
       <input  type="file" @change="handleFileTitoliAutorizzativi">
-      <q-file v-model="AllegatoTitoloAutorizzativo" label="Carica file"  :dense="true" outlined multiple style="max-width: 300px"    />
+      <a :href="'/'+this.idprogetto+'/'+AllegatoTitoloAutorizzativo">download</a>
+      <!--<q-file v-model="AllegatoTitoloAutorizzativo" label="Carica file"  :dense="true" outlined multiple style="max-width: 300px"    />-->
   </div>
   
 <div class="col-12">
@@ -1662,6 +1663,7 @@ Specificare le modalità e i tempi di sanatoria.
 import formNuovaanagrafica from '@/components/NuovaAnagrafica'
 import message from '@/components/messaggio'
 import Axios from 'axios';
+import nuovoProgettoVue from '../views/nuovo-progetto.vue';
 export default {
 
     methods: {
@@ -1672,6 +1674,7 @@ export default {
            zonaClimatica:this.zonaClimatica,
           gradigiornoText:this.gradigiornoText ,
           areavincolata42:this.areavincolata42 ,
+          tipoVincolo42:this.areaVicnolata42TipoVincolo,
           zonasismisca4:this.zonasismisca4 ,
           zonasismisca4Interventiantisismici:this.zonasismisca4Interventiantisismici ,
           zonasismisca4InterventiantisismiciAltriVincoli:this.zonasismisca4InterventiantisismiciAltriVincoli ,
@@ -2052,6 +2055,7 @@ this.elencoAllegati.push({
   data () {
     return {
         text:'',data:'',date:'',auxFile:null,nameAuxFile:'',nameAuxFilePreventivo:'',
+        nuovoProgetto:true,
         cercaAnagraficaClienti:'',cercaCollaboratoriInterni:'',cercaCollaboratoriEsterni:'',
          tab: "progetto",
          modalNuovaAnagraficaClienti: false,
@@ -2272,6 +2276,8 @@ this.elencoAllegati.push({
   },
   props:['idprogetto'],
   beforeMount:function(){
+   if (this.idprogetto >0){ 
+    this.nuovoProgetto=false;
 Axios.get(this.linkApi+'/getProgetto/'+this.idprogetto).then(response =>{
 //TODO PROBLEMA ALLEGATO
 /* LISTA CLIENTI */
@@ -2389,6 +2395,7 @@ this.screeningUnifamiliareRiqualificazioneBalconi=dettagliEdificio.ef_riqualific
   //this.zonaClimatica = response.data['progetto'][0].zona_climatica;
   this.gradigiornoText = response.data['progetto'][0].gradi_giorno ;
   this.areavincolata42 = response.data['progetto'][0].areavincolata; 
+  this.areaVicnolata42TipoVincolo = response.data['progetto'][0].tipo_vincolo; 
   this.zonasismisca4 = response.data['progetto'][0].zonasismisca ;
   this.zonasismisca4Interventiantisismici = response.data['progetto'][0].interventi_antisismici ;
   this.zonasismisca4InterventiantisismiciAltriVincoli = response.data['progetto'][0].interventi_sismici_altri_vincoli ;
@@ -2405,6 +2412,7 @@ if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
   this.tipologiaTitoloAutorizzativi= response.data['progetto'][0].tipologiaTitoloAutorizzativi;
   this.riferimentiAutorizzativi= response.data['progetto'][0].riferimentiAutorizzativi;
   this.dateAutorizzativi= response.data['progetto'][0].dateAutorizzativi;
+  this.AllegatoTitoloAutorizzativo=response.data['progetto'][0].AllegatoTitoloAutorizzativo;
   this.abusiEdilizi= response.data['progetto'][0].abusiEdilizi;
   this.TipologiaAbusiEdilizi = response.data['progetto'][0].TipologiaAbusiEdilizi;
   this.comuneStatoDiFatto = response.data['progetto'][0].comuneStatoDiFatto;
@@ -2465,8 +2473,10 @@ if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
   
 })
 
+  }else{
+    this.nuovoProgetto=true;
   }
-
+  }
 
 }
 </script>

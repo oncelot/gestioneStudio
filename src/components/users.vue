@@ -1,8 +1,8 @@
 <template>
- <div class="q-gutter-sm  justify-center">
+ <div class="q-gutter-sm row  justify-center">
        <q-form @submit="creautente"  >
-         {{iduser}}
-         <q-input
+     
+     <q-input
          class="col-md-7 col-sm-12" v-model="cred.nome" :dense='false' outlined label="Nome*" 
          :disable="!modificaUtente"
          lazy-rules
@@ -12,10 +12,25 @@
                 :disable="!modificaUtente"
                 lazy-rules
                   :rules="[ val => val && val.length > 0 || 'Valore obbligatorio']" />
-          <q-input class="col-md-7 col-sm-12" name="ruolo" v-model="cred.ruolo" :dense='false' outlined type="text" label="Ruolo*"
+
+          <div v-if="!modificaUtente">
+              <label>Ruolo Utente</label>
+              {{cred.ruolo}}
+          </div>
+
+          <div v-if="modificaUtente">
+            <label>Ruolo Utente</label>
+            <q-option-group
+              :options="ruoliUtenti"
+              label="Notifications"
+              type="checkbox"
+              v-model="cred.ruolo"
+              />
+              </div>
+         <!-- <q-input class="col-md-7 col-sm-12" name="ruolo" v-model="cred.ruolo" :dense='false' outlined type="text" label="Ruolo*"
                   :disable="!modificaUtente"
                  lazy-rules
-                  :rules="[ val => val && val.length > 0 || 'Valore obbligatorio']"  />
+                  :rules="[ val => val && val.length > 0 || 'Valore obbligatorio']"  /> -->
           <q-input v-if="nuovoutente" class="col-md-7 col-sm-12" v-model="pass1" :dense='false' outlined type="password" label="Password*"
                
                  lazy-rules
@@ -36,7 +51,9 @@
 <script>
 import auth from '@/auth'
 import Axios from 'axios'
+
 export default {
+ 
      props: ['iduser'],
     data(){return {
          cred:{
@@ -44,12 +61,19 @@ export default {
              nome:null,
              email:'',
              password:'',
-             ruolo:''
+             ruolo:[]
              },
              pass1:'',
              pass2:'',
            nuovoutente:true,
            modificaUtente:false,
+          ruoliUtenti:[
+            {value:'guest',label:'Ospite'},
+            {value:'admin',label:'Admin'},
+            {value:'collaboratoreInterno',label:'Collaboratore Interno'},
+            
+            ]
+           
       
     }},
     methods:{
@@ -79,17 +103,28 @@ if(this.modificaUtente){this.modificaUtente=false}else{this.modificaUtente=true}
           this.pass1=null;
           this.pass2=null;
           this.nuovoutente=true;
-          this.modificaUtente=true;
+          this.modificaUtente=false;
 
         }
         else{
         this.nuovoutente=false;
         this.modificaUtente=false;
+        /**recupero dati */
          Axios.post(this.linkApi+'/lista-users/'+this.iduser).then(response=>{
           console.log(response.data[0]);
           this.cred.nome=response.data[0].name;
             this.cred.email=response.data[0].email;
-            this.cred.ruolo=response.data[0].role;
+
+            if (response.data[0].role != null){
+            var  ruoliUtentiSplit=response.data[0].role.split(';');
+              if (ruoliUtentiSplit != null){
+
+               ruoliUtentiSplit.forEach(element => {
+                  this.cred.ruolo.push(element);
+                });
+              }
+            }
+            
             this.cred.id=response.data[0].id;
         })
         }
