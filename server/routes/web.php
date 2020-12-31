@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -88,6 +89,24 @@ return response()->json($users);
 
 });
 
+$router->get('/download',function(Request $request){
+
+  //  $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+//$out->writeln($request->pp);
+    //$path="C:\\Users\\Fausto\\source\\repos\\oncelot\\gestionestudio\\server\\public\\";
+   
+    $path =  app()->basePath('public/');
+    try {
+        $response=response()->download($path.$request->pp);
+    ob_end_clean();
+    return  $response;
+    } catch (\Throwable $th) {
+       $response="";
+       return  $response;
+    }
+   
+   
+});
 $router->post('/aggiungi-progetto',function(Request $i){
     $path="C:\Users\Fausto\source\\repos\oncelot\gestionestudio\server\public";
    $out = new \Symfony\Component\Console\Output\ConsoleOutput();
@@ -610,6 +629,8 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
     $progettistiProgetto=DB::table('progettisti_progetto')->join('anagrafica','id_progettista','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
     $infoTipologiaEdificioProgetto=DB::table('tipologia_edificio_progetto')->where('id_progetto',$idprogetto)->select('*')->get();
     $infoelencoProprietariImmobile=DB::table('proprietari_immobilief_progetto')->where('id_progetto',$idprogetto)->select('*')->get();
+    $interventiSuccessivi=DB::table('interventi_manutenzione_straordinaria_progetto')->join('allegati_progetto','interventi_manutenzione_straordinaria_progetto.id','id_legame')->where('interventi_manutenzione_straordinaria_progetto.id_progetto',$idprogetto)->select('*')->get();
+    $titoliAutorizzativiInterventiSuccessici= DB::table('titoli_autorizzati_interventi_successivi')->join('allegati_progetto','titoli_autorizzati_interventi_successivi.id','id_legame')->where('titoli_autorizzati_interventi_successivi.id_progetto',$idprogetto)->get();
 
     
     $progetto=[
@@ -620,6 +641,8 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
         'progettistiProgetto'=>$progettistiProgetto,
         'infoEdificioProgetto'=>$infoTipologiaEdificioProgetto,
         'infoelencoProprietariImmobile'=>$infoelencoProprietariImmobile,
+        'interventiSuccessivi'=>$interventiSuccessivi,
+        'titoliAutorizzativiInterventiSuccessici'=>$titoliAutorizzativiInterventiSuccessici,
         ];
        return  response()->json($progetto);
     });

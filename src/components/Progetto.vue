@@ -757,9 +757,9 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     </q-input>
     </div>
     <div class="col-3">
-      <label>Allegato</label>
+      <label>Allegato</label><br>
       <input  type="file" @change="handleFileTitoliAutorizzativi">
-      <a :href="'/'+this.idprogetto+'/'+AllegatoTitoloAutorizzativo">download</a>
+      <a href="#"  v-if="!nuovoProgetto" @click="downloadFile(idprogetto+'/'+AllegatoTitoloAutorizzativo,AllegatoTitoloAutorizzativo)" >{{AllegatoTitoloAutorizzativo}}</a>
       <!--<q-file v-model="AllegatoTitoloAutorizzativo" label="Carica file"  :dense="true" outlined multiple style="max-width: 300px"    />-->
   </div>
   
@@ -802,7 +802,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
     <div  class="row" v-for="(item,index) in elencoInterventiManutenzioneStraordinariaSCIACILAltro" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
     <div class="col"> {{ item.anno }}</div>
-    <div class="col"> {{ item.allegato }}</div>
+    <div class="col"><span  @click="downloadFile(idprogetto+'/'+item.allegato, item.allegato)" style=" cursor: pointer; text-decoration:underline"> {{ item.allegato }}</span></div>
  
     <div class="col-1 col-md-1 "> 
     <q-btn   size="sm" round icon="delete" @click="elencoInterventiManutenzioneStraordinariaSCIACILAltro.splice(index, 1)" />
@@ -815,7 +815,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
 
 
-
+<div class="row"><hr></div>
 <!-- ALLEGATI INTERVENTI SUCCESSIVI ALLA COSTRUZIONE -->
 <div  style="background-color:white">
   <div class="row " >
@@ -856,7 +856,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
  <div  class="row" v-for="(item,index) in elencoTitoliAutorizzatiInterventiSuccessivi" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
     <div class="col"> {{ item.sub }}</div>
     <div class="col"> {{ item.descrizione }}</div>
-    <div class="col"> {{ item.nomeAllegato }}</div>
+    <div class="col"><span  @click="downloadFile(idprogetto+'/'+item.allegato, item.allegato)" style=" cursor: pointer; text-decoration:underline"> {{ item.nomeAllegato }}</span></div>
     <div class="col-1 col-md-1 "> 
     <q-btn   size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi.splice(index, 1)" />
   
@@ -1667,6 +1667,27 @@ import nuovoProgettoVue from '../views/nuovo-progetto.vue';
 export default {
 
     methods: {
+      downloadFile(path,titoloFile){
+        Axios({
+          url: 'http://localhost:8000/download/?pp='+path,
+          method:'get',
+          responseType: 'arraybuffer',
+          }).then(response=>{
+            console.log(response);
+            if(response.data.byteLength >2){
+            
+            const url = window.URL.createObjectURL(new Blob([response.data]))
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download',titoloFile)
+            document.body.appendChild(link)
+            link.click()}
+            else{
+              alert('Errore file non esistente');
+
+            }
+            });
+        },
       aggiungiProgetto(){
       const  sendForm={
           titoloProgetto:this.titoloProgetto,
@@ -2054,6 +2075,7 @@ this.elencoAllegati.push({
      
   data () {
     return {
+      pathAllegatoTitoloAutorizzativo:'',
         text:'',data:'',date:'',auxFile:null,nameAuxFile:'',nameAuxFilePreventivo:'',
         nuovoProgetto:true,
         cercaAnagraficaClienti:'',cercaCollaboratoriInterni:'',cercaCollaboratoriEsterni:'',
@@ -2090,7 +2112,7 @@ this.elencoAllegati.push({
          condominioformalmenteCostituito:false,condominioFormalmenteCostituitoCodiceFsicale:'',condominioFormalmenteCostituitoRiferimentoAmministatore:'',
          condominioNOformalmenteCostituitoReferente:'',condominioNOformalmenteCostituitoCodiceFiscaleReferente:'',
          dateAutorizzativi:'',	riferimentiAutorizzativi:'',			tipologiaTitoloAutorizzativi:'',
-         AllegatoTitoloAutorizzativo:null, 
+         AllegatoTitoloAutorizzativo:'', 
          Base64AllegatoTitoloAutorizzativo:'',
          
          
@@ -2317,6 +2339,23 @@ if (response.data['progettistiProgetto'][0] != null){
      codiceFiscale:element.codice_fiscale });
    });
 }
+if (response.data['interventiSuccessivi'][0] != null){
+
+ response.data['interventiSuccessivi'].forEach(element => {
+   this.elencoInterventiManutenzioneStraordinariaSCIACILAltro.push({
+     anno:element.anno_intervento,
+     allegato:element.nome_file });
+   });
+}
+if (response.data['titoliAutorizzativiInterventiSuccessici'][0] != null){
+
+ response.data['titoliAutorizzativiInterventiSuccessici'].forEach(element => {
+   this.elencoTitoliAutorizzatiInterventiSuccessivi.push({
+     sub:element.sub,
+     descrizione:element.descrizione, 
+     nomeAllegato:element.nome_file, });
+   });
+}
 
 if (response.data['infoEdificioProgetto'][0]!= null){
 var dettagliEdificio=response.data['infoEdificioProgetto'][0];
@@ -2413,6 +2452,7 @@ if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
   this.riferimentiAutorizzativi= response.data['progetto'][0].riferimentiAutorizzativi;
   this.dateAutorizzativi= response.data['progetto'][0].dateAutorizzativi;
   this.AllegatoTitoloAutorizzativo=response.data['progetto'][0].AllegatoTitoloAutorizzativo;
+  this.pathAllegatoTitoloAutorizzativo= 'http://localhost:8000/public/'+this.idprogetto+'/'+this.AllegatoTitoloAutorizzativo;
   this.abusiEdilizi= response.data['progetto'][0].abusiEdilizi;
   this.TipologiaAbusiEdilizi = response.data['progetto'][0].TipologiaAbusiEdilizi;
   this.comuneStatoDiFatto = response.data['progetto'][0].comuneStatoDiFatto;
