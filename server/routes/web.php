@@ -261,7 +261,7 @@ try {
                     'chi_ha_fatturata'=>$value['chiFatturato'],
                     'chi_ha_pagato'=>'',
                     'causale'=>'',
-                    'tipo_quota'=>'',
+                    'tipo_quota'=>$value['tipo_quota'],
 
                 ]);
             }
@@ -276,7 +276,7 @@ try {
                     'chi_ha_fatturata'=>'',
                     'causale'=>$value['causale'],
                     'chi_ha_pagato'=>$value['chiHapagato'],
-                    'tipo_quota'=>'',
+                    'tipo_quota'=>$value['tipo_quota'],
 
                 ]);
             }
@@ -631,8 +631,13 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
     $infoelencoProprietariImmobile=DB::table('proprietari_immobilief_progetto')->where('id_progetto',$idprogetto)->select('*')->get();
     $interventiSuccessivi=DB::table('interventi_manutenzione_straordinaria_progetto')->join('allegati_progetto','interventi_manutenzione_straordinaria_progetto.id','id_legame')->where('interventi_manutenzione_straordinaria_progetto.id_progetto',$idprogetto)->select('*')->get();
     $titoliAutorizzativiInterventiSuccessici= DB::table('titoli_autorizzati_interventi_successivi')->join('allegati_progetto','titoli_autorizzati_interventi_successivi.id','id_legame')->where('titoli_autorizzati_interventi_successivi.id_progetto',$idprogetto)->get();
+    $datiCatastali= DB::table('dati_catastali')->where('id_progetto',$idprogetto)->get();
+    $impiantoAutonomoDiFatto=DB::table('centrale_termica_autonoma')->where('id_progetto',$idprogetto)->where('difatto_diprogetto','difatto')->get();
+    $impiantoAutonomoDiProgetto=DB::table('centrale_termica_autonoma')->where('id_progetto',$idprogetto)->where('difatto_diprogetto','diprogetto')->get();
+    $allegatiProgetto= DB::table('allegati_progetto')->where('id_progetto',$idprogetto)->get();
+    $quoteAcconti= DB::table('quote_progetto')->where('id_progetto',$idprogetto)->where('tipo_quota','entrata')->get();
+    $quoteSpese= DB::table('quote_progetto')->where('id_progetto',$idprogetto)->where('tipo_quota','uscita')->get();
 
-    
     $progetto=[
         'progetto'=>$dettagliProgetto,
         'clienti'=>$clientiProgetto,
@@ -643,6 +648,12 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
         'infoelencoProprietariImmobile'=>$infoelencoProprietariImmobile,
         'interventiSuccessivi'=>$interventiSuccessivi,
         'titoliAutorizzativiInterventiSuccessici'=>$titoliAutorizzativiInterventiSuccessici,
+        'dataCatastali'=>$datiCatastali,
+        'impiantoAutonomoDiFatto'=>$impiantoAutonomoDiFatto,
+        'impiantoAutonomoDiProgetto'=>$impiantoAutonomoDiProgetto,
+        'allegatiProgetto'=>$allegatiProgetto,
+        'quoteAcconti'=>$quoteAcconti,
+        'quoteSpese'=>$quoteSpese,
         ];
        return  response()->json($progetto);
     });

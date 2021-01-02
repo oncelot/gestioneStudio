@@ -892,7 +892,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     <div class="col"> {{ item.particella }}</div>
     <div class="col"> {{ item.sub }}</div>
    <div class="col-1 col-md-1 "> 
-    <q-btn   size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi.splice(index, 1)" />
+    <q-btn   size="sm" round icon="delete" @click="elencoTitoliAutorizzatiDatiCatastali.splice(index, 1)" />
   
   </div>
 
@@ -1296,11 +1296,12 @@ Specificare le modalità e i tempi di sanatoria.
   </div>
   <div class="col-6">  
     <label class="text-bold"> Tipo Allegato</label>
-    <q-select v-model="tipoAllegatodiAllegati" :options="tipiDiAllegati" :dense="true" outlined label="Standard"  />
+    <q-select v-model="tipoAllegatodiAllegati" :options="tipiDiAllegati" :dense="true" outlined label="Seleziona..."  />
+    <q-input v-if="tipoAllegatodiAllegati.value =='altro'" v-model="tipoAltroAllegato" type="text" label="Altro tipo allegato" :dense=true />
   </div>
    <div class="col-12"> 
     <label for="" class="text-bold"> Note</label>
-    <q-input v-model="noteallegatoDiallegati" outlined :dense="true" type="text" label="Label" />  
+    <q-input v-model="noteallegatoDiallegati" outlined :dense="true" type="text"  />  
   </div>
   <div class="col-12" style="margin-top:10px;"><q-btn class="white" icon="add" label="Aggiungi" @click="addrowAllegati()" /></div>
    
@@ -1313,7 +1314,10 @@ Specificare le modalità e i tempi di sanatoria.
   
 </div>
 <div class="row" v-for="(allegato,index) in elencoAllegati" :key="allegato.nomeFile">
-  <div class="col"> {{allegato.nomeFile}}</div>
+  <div class="col">
+    <span v-if="allegato.idprogetto != '0'"  @click="downloadFile(idprogetto+'/'+allegato.nomeFile, allegato.nomeFile)" style=" cursor: pointer; text-decoration:underline">{{allegato.nomeFile}}</span>
+    <span v-if="allegato.idprogetto == '0'" >{{allegato.nomeFile}}</span>
+     </div>
   <div class="col">{{allegato.noteFile}}</div>
   <div class="col">{{allegato.tipoAllegato}}</div>
   <div class="col"> <q-btn   size="sm" round icon="delete" @click="elencoAllegati.splice(index, 1)" />
@@ -1979,7 +1983,8 @@ this.NuovoImpiantoEsistenteAutonomosub='';
           dataPagamento:this.dataAcconto,
           importo:this.quotaImportoAcconto,
           metodoPagamento:this.quotaAccontoModalitaPagamento.value,
-          chiFatturato:this.quoteChiFattura
+          chiFatturato:this.quoteChiFattura,
+          tipo_quota:'entrata'
 
         });
         },
@@ -1989,8 +1994,8 @@ this.NuovoImpiantoEsistenteAutonomosub='';
           dataPagamento:this.dataSpesaEffettuata,
           importo:this.importoSpesaEffettuata,
           causale:this.causaleSpesaEffettuata,
-          chiHapagato:this.chiHafattoSpesa
-
+          chiHapagato:this.chiHafattoSpesa,
+          tipo_quota:'uscita'
         });
         },
     addrowAllegati(){
@@ -1999,7 +2004,8 @@ this.elencoAllegati.push({
   nomeFile:this.nameAuxFile,
   fileBase64:this.auxFile,
   noteFile:this.noteallegatoDiallegati,
-  tipoAllegato:this.tipoAllegatodiAllegati.value
+  tipoAllegato:this.tipoAllegatodiAllegati.value,
+  idprogetto:0
   });
 
     },
@@ -2153,7 +2159,7 @@ this.elencoAllegati.push({
 
           dataSpesaEffettuata:'',importoSpesaEffettuata:'', causaleSpesaEffettuata:'', chiHafattoSpesa:'',
           elencoProprietariImmobile:[],NuovoProprietarioImmobileNome:'',NuovoProprietarioImmobileCognome:'',NuovoProprietarioImmobileCodiceFiscale:'',NuovoProprietarioImmobileTelefono:'',
-       
+       tipoAltroAllegato:'',
       columns: [
         { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
         { name: 'nome', required: true, label: 'Nome', align: 'left', field: row => row.nome, format: val => `${val}`,sortable: true},
@@ -2285,6 +2291,10 @@ this.elencoAllegati.push({
         value:'Contratto',
         label:'Contratto',
         },
+        {
+        value:'altro',
+        label:'Altro',
+        },
         
       ],
       elencoQuote:[],
@@ -2354,6 +2364,83 @@ if (response.data['titoliAutorizzativiInterventiSuccessici'][0] != null){
      sub:element.sub,
      descrizione:element.descrizione, 
      nomeAllegato:element.nome_file, });
+   });
+}
+if (response.data['dataCatastali'][0] != null){
+
+ response.data['dataCatastali'].forEach(element => {
+   this.elencoTitoliAutorizzatiDatiCatastali.push({
+     sub:element.sub,
+     foglio:element.foglio, 
+     particella:element.particella, });
+   });
+}
+if (response.data['impiantoAutonomoDiFatto'][0] != null){
+
+ response.data['impiantoAutonomoDiFatto'].forEach(element => {
+   this.elencoImpiantoAutonomoEsistente.push({
+     sub:element.sub,
+     tecnologiaImpianto:element.tecnologia_impianto, 
+     numeronUnitaGenerazione:element.numero_unita,
+     tipologiaSistemaTermoregolazione:element.tipo_termoregolazione,
+     potenzaTermicaUtile:element.potenza_kw,
+     annoInstallazione:element.anno_installazione,
+     GeneratoreOggettoDiSostituzione:element.oggetto_di_sostituzione,
+     
+     });
+   });
+}
+if (response.data['impiantoAutonomoDiProgetto'][0] != null){
+
+ response.data['impiantoAutonomoDiProgetto'].forEach(element => {
+   this.elencoImpiantoAutonomoEsistenteStatoDiProgetto.push({
+     sub:element.sub,
+     tecnologiaImpianto:element.tecnologia_impianto, 
+     numeronUnitaGenerazione:element.numero_unita,
+     tipologiaSistemaTermoregolazione:element.tipo_termoregolazione,
+     potenzaTermicaUtile:element.potenza_kw,
+     annoInstallazione:element.anno_installazione,
+     GeneratoreOggettoDiSostituzione:element.oggetto_di_sostituzione,
+     
+     });
+   });
+}
+if (response.data['allegatiProgetto'][0] != null){
+
+ response.data['allegatiProgetto'].forEach(element => {
+   this.elencoAllegati.push({
+     nomeFile:element.nome_file,
+     noteFile:element.note_allegato, 
+     tipoAllegato:element.tipo_allegato,
+     idprogetto:element.id_progetto,
+     
+     });
+   });
+}
+if (response.data['quoteAcconti'][0] != null){
+
+ response.data['quoteAcconti'].forEach(element => {
+   this.elencoQuote.push({
+     dataPagamento:element.data,
+     importo:element.importo, 
+     metodoPagamento:element.modalita_pagamento,
+     chiFatturato:element.chi_ha_fatturata,
+     tipo_quota:element.tipo_quota,
+     
+     });
+   });
+}
+if (response.data['quoteSpese'][0] != null){
+
+ response.data['quoteSpese'].forEach(element => {
+   this.elencoSpese.push({
+     dataPagamento:element.data,
+     importo:element.importo, 
+     causale:element.modalita_pagamento,
+     chiHapagato:element.chi_ha_fatturata,
+     tipo_quota:element.tipo_quota,
+     
+     });
    });
 }
 
