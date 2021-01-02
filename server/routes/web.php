@@ -107,6 +107,12 @@ $router->get('/download',function(Request $request){
    
    
 });
+$router->post('/aggiorna-progetto','ProgettoController@aggiornaProgetto');
+
+
+
+
+            
 $router->post('/aggiungi-progetto',function(Request $i){
     $path="C:\Users\Fausto\source\\repos\oncelot\gestionestudio\server\public";
    $out = new \Symfony\Component\Console\Output\ConsoleOutput();
@@ -623,10 +629,10 @@ $dettagliutente=DB::table('anagrafica')->select('nome','cognome','denominazione'
 $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto){
     $dettagliutente=DB::table('progetti')->leftJoin('clienti_progetto','progetti.id','=','clienti_progetto.id_progetto')->where('progetti.id',$idprogetto)->select('*')->get();
     $dettagliProgetto= DB::table('progetti')->where('progetti.id',$idprogetto)->select('*')->get();
-    $clientiProgetto=DB::table('clienti_progetto')->join('anagrafica','clienti_progetto.id_cliente','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
-    $collaboratoriEsterniProgetto=DB::table('collaboratori_esterni_progetto')->join('anagrafica','id_collaboratore_esterno','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
-    $collaboratoriInterniProgetto=DB::table('collaboratori_interni_progetto')->join('anagrafica','id_collaboratore_interno','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
-    $progettistiProgetto=DB::table('progettisti_progetto')->join('anagrafica','id_progettista','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale')->get();
+    $clientiProgetto=DB::table('clienti_progetto')->join('anagrafica','clienti_progetto.id_cliente','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale','anagrafica.id','denominazione','partita_iva')->get();
+    $collaboratoriEsterniProgetto=DB::table('collaboratori_esterni_progetto')->join('anagrafica','id_collaboratore_esterno','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale','anagrafica.id','denominazione','partita_iva')->get();
+    $collaboratoriInterniProgetto=DB::table('collaboratori_interni_progetto')->join('anagrafica','id_collaboratore_interno','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale','anagrafica.id','denominazione','partita_iva')->get();
+    $progettistiProgetto=DB::table('progettisti_progetto')->join('anagrafica','id_progettista','=','anagrafica.id')->where('id_progetto',$idprogetto)->select('nome','cognome','codice_fiscale','anagrafica.id','denominazione','partita_iva')->get();
     $infoTipologiaEdificioProgetto=DB::table('tipologia_edificio_progetto')->where('id_progetto',$idprogetto)->select('*')->get();
     $infoelencoProprietariImmobile=DB::table('proprietari_immobilief_progetto')->where('id_progetto',$idprogetto)->select('*')->get();
     $interventiSuccessivi=DB::table('interventi_manutenzione_straordinaria_progetto')->join('allegati_progetto','interventi_manutenzione_straordinaria_progetto.id','id_legame')->where('interventi_manutenzione_straordinaria_progetto.id_progetto',$idprogetto)->select('*')->get();

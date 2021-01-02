@@ -63,7 +63,7 @@
   </div>
 
   <div  class="row justify-center " v-for="(item,index) in elencoAnagraficaClienti" :key="item.message" >
-    <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.nome }} {{ item.id }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
     <div class="col-1 col-md-1 bgAree"> 
@@ -1483,7 +1483,8 @@ Specificare le modalità e i tempi di sanatoria.
 
 </div>
 
-<q-btn color="primary" icon="check" label="Crea progetto" @click="aggiungiProgetto()" />
+<q-btn color="primary" v-if="nuovoProgetto" icon="check" label="Crea progetto" @click="aggiungiProgetto()" />
+<q-btn color="positive" v-if="!nuovoProgetto" icon="check" label="Aggiorna progetto" @click="aggiungiProgetto()" />
 </div>
 
 <!-- #region MODAL-->
@@ -1694,10 +1695,11 @@ export default {
         },
       aggiungiProgetto(){
       const  sendForm={
+        idprogetto:this.idprogetto,
           titoloProgetto:this.titoloProgetto,
          tipologiaEdificio:this.tipologiaEdificio,
-           zonaClimatica:this.zonaClimatica,
-          gradigiornoText:this.gradigiornoText ,
+         zonaClimatica:this.zonaClimatica,
+         gradigiornoText:this.gradigiornoText ,
           areavincolata42:this.areavincolata42 ,
           tipoVincolo42:this.areaVicnolata42TipoVincolo,
           zonasismisca4:this.zonasismisca4 ,
@@ -1806,7 +1808,8 @@ export default {
 
 
           };
-          Axios.post(this.linkApi+"/aggiungi-progetto",sendForm).then(Response=>{
+          if (this.nuovoProgetto){
+               Axios.post(this.linkApi+"/aggiungi-progetto",sendForm).then(Response=>{
             
             console.log(Response.data)
             if(Response.data.response=='ok'){
@@ -1818,6 +1821,22 @@ export default {
               this.visualizzamessaggio=true;
               }
             });
+          }
+          if (!this.nuovoProgetto){
+               Axios.post(this.linkApi+"/aggiorna-progetto/",sendForm).then(Response=>{
+            
+            console.log(Response.data)
+            if(Response.data.response=='ok'){
+              this.messaggioDaVisualizzare='Progetto Aggiornato con successo';
+              this.visualizzamessaggio=true;
+            
+              }else{
+                 this.messaggioDaVisualizzare=Response.data.message;
+              this.visualizzamessaggio=true;
+              }
+            });
+          }
+       
 
       },
     addRow(){
@@ -2034,7 +2053,7 @@ this.elencoAllegati.push({
     }},
   aggiungiElencoClienti(datiUtente){
     this.elencoAnagraficaClienti.push({
-      nome:datiUtente.nome,
+        nome:datiUtente.nome,
        cognome:datiUtente.cognome,
        denominazione:datiUtente.denominazione,
        codiceFiscale:datiUtente.codice_fiscale,
@@ -2319,7 +2338,11 @@ if (response.data['clienti'][0] != null){
    this.elencoAnagraficaClienti.push({
      nome:element.nome,
      cognome:element.cognome,
-     codiceFiscale:element.codice_fiscale });
+     codiceFiscale:element.codice_fiscale,
+     denominazione:element.denominazione,
+     partitaIva:element.partita_iva,
+     id:element.id
+     });
    });
 }
 if (response.data['collaboratoriEsterni'][0] != null){
@@ -2328,7 +2351,10 @@ if (response.data['collaboratoriEsterni'][0] != null){
    this.elencoCollaboratoriEnterno.push({
      nome:element.nome,
      cognome:element.cognome,
-     codiceFiscale:element.codice_fiscale });
+     codiceFiscale:element.codice_fiscale,
+     denominazione:element.denominazione,
+     partitaIva:element.partita_iva,
+     id:element.id });
    });
 }
 if (response.data['collaboratoriInterni'][0] != null){
@@ -2337,7 +2363,11 @@ if (response.data['collaboratoriInterni'][0] != null){
    this.elencoCollaboratoriInterno.push({
      nome:element.nome,
      cognome:element.cognome,
-     codiceFiscale:element.codice_fiscale });
+     codiceFiscale:element.codice_fiscale,
+     denominazione:element.denominazione,
+     partitaIva:element.partita_iva,
+     id:element.id
+        });
    });
 }
 if (response.data['progettistiProgetto'][0] != null){
