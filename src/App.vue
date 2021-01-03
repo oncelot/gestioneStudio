@@ -16,7 +16,7 @@
         </q-toolbar-title>
 {{isAuth}}
         <div v-if="!isAuth"><a href="/login"> Login</a></div>
-        <div v-if="isAuth"><li>{{user.name}}</li> <a href="/logout">logout</a></div>
+        <div v-if="isAuth"><li>{{user.name}}</li> <a href="#" @click="logout()">logout</a></div>
       </q-toolbar>
     </q-header>
 
@@ -112,7 +112,7 @@
 
 <script>
 //import HelloWorld from './components/HelloWorld.vue'
-
+import auth from '@/auth'
 import {mapGetters} from 'vuex'
 export default {
   computed:{
@@ -132,7 +132,11 @@ export default {
     return {
       leftDrawerOpen: false,miniState: true
     }
+  },
+  methods:{logout(){
+    auth.LogOut(this.cred,'/');
   }
+}
 }
 </script>
 

@@ -1,7 +1,7 @@
 import baseApi from '@/baseApi'
 import router from '@/router'
 import store from '@/store'
-import { LocalStorage } from 'quasar';
+//import { LocalStorage } from 'quasar';
 
 const LOGIN_URL = '/login';
 const LOGOUT_URL = '/logout';
@@ -45,7 +45,7 @@ export default ({
         })
     },
     LogOut(){
-        baseApi().post(LOGOUT_URL).then((response)=>{
+        baseApi().get(LOGOUT_URL).then((response)=>{
             if(!response.data.error){
                 this.clear();
                 router.push('/')}
@@ -65,7 +65,7 @@ export default ({
         store.dispatch('GET_AUTH_USER',this.userDefault);
         store.dispatch('SET_TOKEN','');
         store.dispatch('SET_AUTH',false);
-        LocalStorage.removeItem('token');
+        localStorage.removeItem('token');
 
     }
 })

@@ -25,7 +25,7 @@ $router->put('/update',function(Request $request){
 $utente = DB::table('users')->where('id',$request->id)->update(
     ['name'=>$request->nome,
     'email'=>$request->email,
-    'role'=>$ruoliUtente],
+    'role'=>$ruoliUtente]
 );
 return response()->json(['message'=>'Utente Modificato con successo']);
 });
@@ -62,7 +62,7 @@ if($token = auth()->attempt($credenziali)){
             'expires_at'=>auth()->guard()->factory()->getTTl(),
             ]
         ];
-        return response()->json(['user'=>$response,'error'=>false]);
+        return response()->json(['user'=>$response,'error'=>false])->header('Authorization',$token);
         }
         return response()->json(['error'=>true, 'message'=>'Email o password errati']);
 });
@@ -610,16 +610,27 @@ $elencoanagrafica=DB::table('anagrafica')->select('*')->get();
             ->json($elencoanagrafica);
 });
 $router->get('/getProgetti',function (Request $request){
-$elencoprogetti=DB::table('progetti')->select('*')->orderBy('id','desc')->get();
-   return  response()
-            ->json($elencoprogetti);
+    try {
+        $elencoprogetti=DB::table('progetti')->select('*')->orderBy('id','desc')->get();
+        return  response()
+                 ->json($elencoprogetti);
+    } catch (\Throwable $th) {
+        return response()->json($th);
+    }
+
 });
 
 
 $router->get('/getAnagrafica/{idutente}',function (Request $request,$idutente){
-$dettagliutente=DB::table('anagrafica')->select('*')->where('id',$idutente)->get();
-   return  response()
+    try {
+        $dettagliutente=DB::table('anagrafica')->select('*')->where('id',$idutente)->get();
+        return  response()
             ->json($dettagliutente);
+    } catch (\Throwable $th) {
+       return response()->json($th);
+    }
+
+   
 });
 $router->get('/getCercaAnagrafica/{tipo}/{varie}',function (Request $request,$tipo,$varie){
 $dettagliutente=DB::table('anagrafica')->select('nome','cognome','denominazione','codice_fiscale','partita_iva','id')->where('tipo_anagrafica',$tipo)->where('nome','like',"%$varie%")->orwhere('cognome','like',"%$varie%")->get();
