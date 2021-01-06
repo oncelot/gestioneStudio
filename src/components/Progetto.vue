@@ -799,14 +799,17 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     
     </div>
 
-
-    <div  class="row" v-for="(item,index) in elencoInterventiManutenzioneStraordinariaSCIACILAltro" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
+<!--  --> 
+    <div   v-for="(item,index) in elencoInterventiManutenzioneStraordinariaSCIACILAltro" :key="item.message"  style="border-bottom:1px solid black background-color:white; ">
+    <div class="row" v-if="item.cancellare != '1'">
     <div class="col"> {{ item.anno }}</div>
     <div class="col"><span  @click="downloadFile(idprogetto+'/'+item.allegato, item.allegato)" style=" cursor: pointer; text-decoration:underline"> {{ item.allegato }}</span></div>
  
     <div class="col-1 col-md-1 "> 
-    <q-btn   size="sm" round icon="delete" @click="elencoInterventiManutenzioneStraordinariaSCIACILAltro.splice(index, 1)" />
-  
+    <q-btn v-if="nuovoProgetto"  size="sm" round icon="delete" @click="elencoInterventiManutenzioneStraordinariaSCIACILAltro.splice(index, 1)" />
+    <q-btn v-if="!nuovoProgetto"  size="sm" round icon="delete" @click="elencoInterventiManutenzioneStraordinariaSCIACILAltro[index].cancellare='1'" />
+
+  </div>
   </div>
   </div>
 
@@ -853,13 +856,17 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
   
 
 
- <div  class="row" v-for="(item,index) in elencoTitoliAutorizzatiInterventiSuccessivi" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
+ <div v-for="(item,index) in elencoTitoliAutorizzatiInterventiSuccessivi" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
+   <div  class="row"  v-if="item.cancellare == '0'">
+
     <div class="col"> {{ item.sub }}</div>
     <div class="col"> {{ item.descrizione }}</div>
     <div class="col"><span  @click="downloadFile(idprogetto+'/'+item.allegato, item.allegato)" style=" cursor: pointer; text-decoration:underline"> {{ item.nomeAllegato }}</span></div>
     <div class="col-1 col-md-1 "> 
-    <q-btn   size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi.splice(index, 1)" />
-  
+    <q-btn v-if="nuovoProgetto"  size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi.splice(index, 1)" />
+    <q-btn v-if="!nuovoProgetto"  size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi[index].cancellare='1'" />
+   
+</div>
   </div>
   </div>
 </div>
@@ -1313,15 +1320,18 @@ Specificare le modalità e i tempi di sanatoria.
   <div class="col"></div>
   
 </div>
-<div class="row" v-for="(allegato,index) in elencoAllegati" :key="allegato.nomeFile">
+<div  v-for="(allegato,index) in elencoAllegati" :key="allegato.nomeFile">
+ <div class="row" v-if="allegato.cancellare=='0'">
   <div class="col">
     <span v-if="allegato.idprogetto != '0'"  @click="downloadFile(idprogetto+'/'+allegato.nomeFile, allegato.nomeFile)" style=" cursor: pointer; text-decoration:underline">{{allegato.nomeFile}}</span>
     <span v-if="allegato.idprogetto == '0'" >{{allegato.nomeFile}}</span>
      </div>
   <div class="col">{{allegato.noteFile}}</div>
   <div class="col">{{allegato.tipoAllegato}}</div>
-  <div class="col"> <q-btn   size="sm" round icon="delete" @click="elencoAllegati.splice(index, 1)" />
+  <div class="col"> <q-btn   size="sm" round icon="delete" @click="elencoAllegati[index].cancellare='1'" />
   </div>
+  </div>
+
 </div>
 
 </div>
@@ -1918,7 +1928,9 @@ this.$router.push({ path:'lista-progetti'});
         {
           anno:this.annoIntervento,
           allegato:this.nameAuxFile,
-          allegatoBase64:this.auxFile
+          allegatoBase64:this.auxFile,
+          new:1,
+          cancellare:0
 
         });
 
@@ -1930,6 +1942,8 @@ this.$router.push({ path:'lista-progetti'});
           descrizione:this.modalInterventiSuccessiviNuovaDecrizione,
           nomeAllegato:this.nameAuxFile,
           allegatoBase64:this.auxFile,
+          new:1,
+          cancellare:0,
         });
 
       this.modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione= false;
@@ -2024,7 +2038,9 @@ this.elencoAllegati.push({
   fileBase64:this.auxFile,
   noteFile:this.noteallegatoDiallegati,
   tipoAllegato:this.tipoAllegatodiAllegati.value,
-  idprogetto:0
+  idprogetto:0,
+  new:1,
+  cancellare:0,
   });
 
     },
@@ -2058,7 +2074,8 @@ this.elencoAllegati.push({
        denominazione:datiUtente.denominazione,
        codiceFiscale:datiUtente.codice_fiscale,
        partitaIva:datiUtente.partita_iva,
-       id:datiUtente.id});
+       id:datiUtente.id,
+      });
        this.cercaAnagraficaClienti='';
        this.elencoCercaAnagraficaClienti=null;
   },
@@ -2326,8 +2343,13 @@ this.elencoAllegati.push({
     formNuovaanagrafica,message
   },
   props:['idprogetto'],
+
   beforeMount:function(){
+
+
    if (this.idprogetto >0){ 
+/********** DETTAGLI PROGETTO **********/
+
     this.nuovoProgetto=false;
 Axios.get(this.linkApi+'/getProgetto/'+this.idprogetto).then(response =>{
 //TODO PROBLEMA ALLEGATO
@@ -2341,7 +2363,8 @@ if (response.data['clienti'][0] != null){
      codiceFiscale:element.codice_fiscale,
      denominazione:element.denominazione,
      partitaIva:element.partita_iva,
-     id:element.id
+     id:element.id,
+     
      });
    });
 }
@@ -2354,7 +2377,8 @@ if (response.data['collaboratoriEsterni'][0] != null){
      codiceFiscale:element.codice_fiscale,
      denominazione:element.denominazione,
      partitaIva:element.partita_iva,
-     id:element.id });
+     id:element.id,
+     });
    });
 }
 if (response.data['collaboratoriInterni'][0] != null){
@@ -2366,7 +2390,8 @@ if (response.data['collaboratoriInterni'][0] != null){
      codiceFiscale:element.codice_fiscale,
      denominazione:element.denominazione,
      partitaIva:element.partita_iva,
-     id:element.id
+     id:element.id,
+     
         });
    });
 }
@@ -2376,15 +2401,23 @@ if (response.data['progettistiProgetto'][0] != null){
    this.elencoAnagraficaProgettisti.push({
      nome:element.nome,
      cognome:element.cognome,
-     codiceFiscale:element.codice_fiscale });
+     codiceFiscale:element.codice_fiscale,
+      });
    });
 }
 if (response.data['interventiSuccessivi'][0] != null){
 
  response.data['interventiSuccessivi'].forEach(element => {
    this.elencoInterventiManutenzioneStraordinariaSCIACILAltro.push({
+     id:element.id,
+     id_legame:element.id_legame,
+     id_progetto:element.id_progetto,
      anno:element.anno_intervento,
-     allegato:element.nome_file });
+     allegato:element.nome_file,
+     allegatoBase64:0,
+     new:0,
+     cancellare:0,
+      });
    });
 }
 if (response.data['titoliAutorizzativiInterventiSuccessici'][0] != null){
@@ -2393,7 +2426,11 @@ if (response.data['titoliAutorizzativiInterventiSuccessici'][0] != null){
    this.elencoTitoliAutorizzatiInterventiSuccessivi.push({
      sub:element.sub,
      descrizione:element.descrizione, 
-     nomeAllegato:element.nome_file, });
+     nomeAllegato:element.nome_file,
+      allegatoBase64:0,
+      new:0,
+      cancellare:0
+      });
    });
 }
 if (response.data['dataCatastali'][0] != null){
@@ -2402,7 +2439,8 @@ if (response.data['dataCatastali'][0] != null){
    this.elencoTitoliAutorizzatiDatiCatastali.push({
      sub:element.sub,
      foglio:element.foglio, 
-     particella:element.particella, });
+     particella:element.particella,
+    });
    });
 }
 if (response.data['impiantoAutonomoDiFatto'][0] != null){
@@ -2416,6 +2454,7 @@ if (response.data['impiantoAutonomoDiFatto'][0] != null){
      potenzaTermicaUtile:element.potenza_kw,
      annoInstallazione:element.anno_installazione,
      GeneratoreOggettoDiSostituzione:element.oggetto_di_sostituzione,
+     nuovo:0
      
      });
    });
@@ -2431,7 +2470,7 @@ if (response.data['impiantoAutonomoDiProgetto'][0] != null){
      potenzaTermicaUtile:element.potenza_kw,
      annoInstallazione:element.anno_installazione,
      GeneratoreOggettoDiSostituzione:element.oggetto_di_sostituzione,
-     
+     nuovo:0
      });
    });
 }
@@ -2439,11 +2478,13 @@ if (response.data['allegatiProgetto'][0] != null){
 
  response.data['allegatiProgetto'].forEach(element => {
    this.elencoAllegati.push({
+     id:element.id,
      nomeFile:element.nome_file,
      noteFile:element.note_allegato, 
      tipoAllegato:element.tipo_allegato,
      idprogetto:element.id_progetto,
-     
+     new:0,
+     cancellare:0,
      });
    });
 }
@@ -2456,7 +2497,7 @@ if (response.data['quoteAcconti'][0] != null){
      metodoPagamento:element.modalita_pagamento,
      chiFatturato:element.chi_ha_fatturata,
      tipo_quota:element.tipo_quota,
-     
+   
      });
    });
 }

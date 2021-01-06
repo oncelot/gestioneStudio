@@ -263,18 +263,20 @@ class ProgettoController extends Controller
                         }
                     }
                     
-                    $this->cancellaElementiDaAggiornare('interventi_manutenzione_straordinaria_progetto',$idProgetto);
+
                    
                     if (count($i->successiviInterventiStraordinaria) > 0){
                         foreach ($i->successiviInterventiStraordinaria as $value) {
+                            if ($value['new']==1 && $value['cancellare'] == '0'){
+
                             $auxAllegato=$value['allegato'];
-                           
-                           $idIntervento=DB::table('interventi_manutenzione_straordinaria_progetto')->insertGetId([
+                            $idIntervento=DB::table('interventi_manutenzione_straordinaria_progetto')->insertGetId([
                                 'id_progetto' =>$idProgetto,
                                 'anno_intervento' =>$value['anno'],
                             ]);
-                           // $this->cancellaElementiDaAggiornare('allegati_progetto',$idProgetto,$idIntervento);
-                            $nomefile= $value['allegato'].date("YmdHis");
+                           
+                            $nomefile=explode(".",$value['allegato']);
+                            $nomefile= $nomefile[0].'_'.date("YmdHis").".".$nomefile[1];
                            DB::table('allegati_progetto')->insertGetId([
                                 'id_progetto' =>$idProgetto,
                                 'id_legame' =>$idIntervento,
@@ -282,98 +284,61 @@ class ProgettoController extends Controller
                                 'nome_file'=> $nomefile,
                                 'note_allegato'=>'',
                             ]);
+                            if($value['allegatoBase64'] != '0'){
                             $file =base64_decode($value['allegatoBase64']);
-                            mkdir($path."/".$idProgetto);
-                            file_put_contents($path."/".$idProgetto."/". $nomefile, $file);
-                        }
-                    }
-            
-        
-            /*
-            
-            if ($idProgetto>0){
-           
-        
-                if (count($i->elencoAcconti) > 0){
-                    foreach ($i->elencoAcconti as $value) {
-                       DB::table('quote_progetto')->insertGetId([
-                            'id_progetto' =>$idProgetto,
-                            'data' =>$value['dataPagamento'],
-                            'importo'=>$value['importo'],
-                            'modalita_pagamento'=>$value['metodoPagamento'],
-                            'chi_ha_fatturata'=>$value['chiFatturato'],
-                            'chi_ha_pagato'=>'',
-                            'causale'=>'',
-                            'tipo_quota'=>$value['tipo_quota'],
-        
-                        ]);
-                    }
-                }
-                if (count($i->elencoSpese) > 0){
-                    foreach ($i->elencoSpese as $value) {
-                       DB::table('quote_progetto')->insertGetId([
-                            'id_progetto' =>$idProgetto,
-                            'data' =>$value['dataPagamento'],
-                            'importo'=>$value['importo'],
-                            'modalita_pagamento'=>'',
-                            'chi_ha_fatturata'=>'',
-                            'causale'=>$value['causale'],
-                            'chi_ha_pagato'=>$value['chiHapagato'],
-                            'tipo_quota'=>$value['tipo_quota'],
-        
-                        ]);
-                    }
-                }
-            }
-        
-               
-               
-                 
-                 //Allegati
-                    if (count($i->elencoFile) > 0){
-                        foreach ($i->elencoFile as $value) {
-                            $nomefile=$value['nomeFile'].date("YmdHis");
-                           DB::table('allegati_progetto')->insertGetId([
-                                'id_progetto' =>$idProgetto,
-                                'id_legame' =>0,
-                                'nome_file' =>$nomefile,
-                                'note_allegato' =>$value['noteFile'],
-                                'tipo_allegato' =>$value['tipoAllegato'],
-                            ]);
-                            $file =base64_decode($value['fileBase64']);
                             if (!file_exists($path."/".$idProgetto)){
-                            mkdir($path."/".$idProgetto);}
-                            file_put_contents($path."/".$idProgetto."/".$nomefile, $file);
+                                mkdir($path."/".$idProgetto);}
+                           
+                            file_put_contents($path."/".$idProgetto."/". $nomefile, $file);
+                            }
+                        }
+                        if ($value['new']=='0' && $value['cancellare'] == '1'){
+                            $id= $value['id'];
+                            $idLegame= $value['id_legame'];
+                            $this->cancellaElementiDaAggiornareConID('interventi_manutenzione_straordinaria_progetto',$id);
+                            $this->cancellaElementiDaAggiornareConID('allegati_progetto',$id,$idLegame);
+
+                        }
                         }
                     }
-                 
-        
-        
                    
-                
                     if (count($i->TitoliAutorizzatiInterventiSuccessivi) > 0){
                         foreach ($i->TitoliAutorizzatiInterventiSuccessivi as $value) {
+                            if($value['new'] == '1' && $value['cancellare'] == '0'){
                           
                            $idIntervento=DB::table('titoli_autorizzati_interventi_successivi')->insertGetId([
                                 'id_progetto' =>$idProgetto,
                                 'sub' =>$value['sub'],
                                 'descrizione' =>$value['descrizione'],
                             ]);
-                          
-                            $nomefile= $value['nomeAllegato'].date("YmdHis");
+                           
+                            $nomefile=explode(".",$value['nomeAllegato']);
+                            $nomefile= $nomefile[0].'_'.date("YmdHis").".".$nomefile[1];
+                         
                            DB::table('allegati_progetto')->insertGetId([
                                 'id_progetto' =>$idProgetto,
                                 'id_legame' =>$idIntervento,
                                 'tipo_allegato' =>2,
                                 'nome_file'=>$nomefile,
+                                'note_allegato'=>'',
                             ]);
+                            if($value['allegatoBase64'] != '0'){
                             $file =base64_decode($value['allegatoBase64']);
-                            mkdir($path."/".$idProgetto);
+                            if (!file_exists($path."/".$idProgetto)){
+                                mkdir($path."/".$idProgetto);}
                             file_put_contents($path."/".$idProgetto."/".$nomefile, $file);
+                            }
+                        }
+                        if ($value['new'] == 0 && $value['cancellare'] == '1'){
+                            $id= $value['id'];
+                            
+                            $this->cancellaElementiDaAggiornareConID('interventi_manutenzione_straordinaria_progetto',$id);
+                            $this->cancellaElementiDaAggiornareConID('allegati_progetto',$id,$id);
+                        }
                         }
                     }
-                
-                
+
+                    $this->cancellaElementiDaAggiornare('dati_catastali',$idProgetto);
                     if (count($i->datiCatastali) > 0){
                         foreach ($i->datiCatastali as $value) {
                           
@@ -387,6 +352,72 @@ class ProgettoController extends Controller
                      
                         }
                     }
+                    $this->cancellaElementiDaAggiornare('quote_progetto',$idProgetto);
+                    if (count($i->elencoAcconti) > 0){
+                        foreach ($i->elencoAcconti as $value) {
+                           DB::table('quote_progetto')->insertGetId([
+                                'id_progetto' =>$idProgetto,
+                                'data' =>$value['dataPagamento'],
+                                'importo'=>$value['importo'],
+                                'modalita_pagamento'=>$value['metodoPagamento'],
+                                'chi_ha_fatturata'=>$value['chiFatturato'],
+                                'chi_ha_pagato'=>'',
+                                'causale'=>'',
+                                'tipo_quota'=>$value['tipo_quota'],
+            
+                            ]);
+                        }
+                    }
+                   // $this->cancellaElementiDaAggiornare('dati_catastali',$idProgetto);
+                    if (count($i->elencoSpese) > 0){
+                        foreach ($i->elencoSpese as $value) {
+                           DB::table('quote_progetto')->insertGetId([
+                                'id_progetto' =>$idProgetto,
+                                'data' =>$value['dataPagamento'],
+                                'importo'=>$value['importo'],
+                                'modalita_pagamento'=>'',
+                                'chi_ha_fatturata'=>'',
+                                'causale'=>$value['causale'],
+                                'chi_ha_pagato'=>$value['chiHapagato'],
+                                'tipo_quota'=>$value['tipo_quota'],
+            
+                            ]);
+                        }
+                    }
+                    if (count($i->elencoFile) > 0){
+                        foreach ($i->elencoFile as $value) {
+                            if($value['new']=='1' && $value['cancellare'] == '0'){
+                                $nomefile=explode(".",$value['nomeFile']);
+                                $nomefile= $nomefile[0].'_'.date("YmdHis").".".$nomefile[1];
+                                
+                                DB::table('allegati_progetto')->insertGetId([
+                                'id_progetto' =>$idProgetto,
+                                'id_legame' =>0,
+                                'nome_file' =>$nomefile,
+                                'note_allegato' =>$value['noteFile'],
+                                'tipo_allegato' =>$value['tipoAllegato'],
+                            ]);
+                            $file =base64_decode($value['fileBase64']);
+                            if (!file_exists($path."/".$idProgetto)){
+                            mkdir($path."/".$idProgetto);}
+                            file_put_contents($path."/".$idProgetto."/".$nomefile, $file);
+                        }
+                        if($value['new']==0 && $value['cancellare']==1){
+                            $id=$value['id'];
+                            $this->cancellaElementiDaAggiornareConID('allegati_progetto',$id);
+                           
+                            $this->cancellaFile($path."/".$idProgetto."/".$value['nomeFile']);
+                        }
+
+                        }
+                    }
+            /*
+            
+                 //Allegati
+                    
+                 
+        
+                    
                     if (count($i->centraleTermicaDiFAtto) > 0){
                         foreach ($i->centraleTermicaDiFAtto as $value) {
                               
@@ -456,15 +487,31 @@ class ProgettoController extends Controller
                     break;
             }*/
 
-        public function cancellaElementiDaAggiornare(string $tabella, int $idProgetto){
-//,int $idIntervento = 0
-          //  if ($idIntervento == 0){
+        public function cancellaElementiDaAggiornare(string $tabella, int $idProgetto,int $idIntervento = 0){
+
+            if ($idIntervento == 0){
             DB::table($tabella)->where('id_progetto',$idProgetto)->delete();
-        //}
+        }
             
-            /*if ($idIntervento != 0){
-            DB::table($tabella)->where('id_progetto',$idProgetto)->where('id_intervento',$idIntervento)->delete();}
-            */
+            if ($idIntervento != 0){
+            DB::table($tabella)->where('id_progetto',$idProgetto)->where('id_legame',$idIntervento)->delete();
+        }
+            
+        }
+        public function cancellaElementiDaAggiornareConID(string $tabella, int $id,int $idLegame = 0){
+
+            if ($idLegame == 0){
+            DB::table($tabella)->where('id',$id)->delete();
+        }
+            
+            if ($idLegame != 0){
+            DB::table($tabella)->where('id_legame',$idLegame)->delete();
+        }
+            
+        }
+        public function cancellaFile(string $path){
+
+            unlink($path);
         }
    
     }
