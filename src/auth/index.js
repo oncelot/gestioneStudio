@@ -1,6 +1,8 @@
 import baseApi from '@/baseApi'
 import router from '@/router'
 import store from '@/store'
+import Vue from 'vue'
+import { Quasar,Notify } from 'quasar'
 //import { LocalStorage } from 'quasar';
 
 const LOGIN_URL = '/login';
@@ -8,7 +10,24 @@ const LOGOUT_URL = '/logout';
 const REG_URL = '/register';
 const UPD_URL = '/update';
 
+Vue.use(Quasar, {
+    config: {
+      notify: { /* look at QUASARCONFOPTIONS from the API card (bottom of page) */ }
+    },
+    plugins: { Notify
+    }
+   })
+
 export default ({
+   
+    methods:{
+        triggerPositive () {
+            this.$q.notify({
+              type: 'positive',
+              message: `This is a "positive" type notification.`
+            })
+          },
+    },
     userDefault:{
         id:'',
         name:'',
@@ -35,7 +54,12 @@ export default ({
         baseApi().post(REG_URL,cred).then((response)=>{
             console.log(response);
             if(response.data.error){alert('errore regsitrazione');}
-            else{router.push(redirect);}
+            else{
+                Notify.create({
+                    type: 'positive',
+                    message: `Utente Creato con successo`
+                  });
+                router.push(redirect);}
     });
     },
     Update(cred,redirect){

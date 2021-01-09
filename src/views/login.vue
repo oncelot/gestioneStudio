@@ -1,13 +1,19 @@
 <template>
     <div class="q-pa-md">
-        <div class="row">
-            <div class="col">
+        <div class="q-gutter-md">
+        <div class=" row justify-center ">
+            <div class="col-3">
                 <q-input v-model="cred.email" type="text" label="Email" />
-                <q-input v-model="cred.password" type="password" label="Label" />
-                <q-btn color="primary" icon="check" label="Login" @click="login()" />
+                <q-input v-model="cred.password" type="password" label="Password" />
+               
 
             </div>
         </div>
+        <div class=" row justify-center q-gutter-md">
+            <q-btn color="primary"  style="text-align:center" icon="check" label="Login" @click="login()" />
+            <q-btn color="secondary"  style="text-align:center" icon="check" label="Registrati" @click="$router.push({ path:'Registrazione-utente'});" />
+        </div>
+    </div>
     </div>
 </template>
 <script>
@@ -24,7 +30,8 @@ export default {
         login(){
             auth.LogIn(this.cred,'/');
 
-        }
+        },
+     
     }
  
    

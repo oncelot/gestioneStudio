@@ -4,6 +4,7 @@ import NuovoProgetto from '@/views/nuovo-progetto'
 import ListaProgetti from '@/views/lista-progetti'
 import anagrafica from '@/views/anagrafica'
 import dettaglioProgetto from '@/views/dettaglioProgetto'
+import RegistrazioneUtente from '@/views/Registrazione-utente'
 import utenti from '@/views/utenti'
 import login from '@/views/login'
 import store from '@/store'
@@ -64,6 +65,7 @@ const routes = [
   {path: '/anagrafica', component:anagrafica},
   {path: '/dettaglio-progetto/:id', component:dettaglioProgetto},
   {path: '/login', component:login},
+  {path: '/Registrazione-utente', component:RegistrazioneUtente},
 ]
 
 // eslint-disable-next-line no-new
