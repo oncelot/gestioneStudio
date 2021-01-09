@@ -1347,6 +1347,8 @@ Specificare le modalità e i tempi di sanatoria.
   <div class="col-2 col-md-2"> 
     <label for="" class="text-bold"> Allega Preventivo Firmato</label>
     <input type="file" @change="handleFilePreventivo">
+      <a href="#"  v-if="!nuovoProgetto" @click="downloadFile(idprogetto+'/'+quoteAllegatoPreventivo,quoteAllegatoPreventivo)" >{{quoteAllegatoPreventivo}}</a>
+   
   <!--  <q-file
       v-model="quoteAllegatoPreventivo"
       label="Carica file"
@@ -2331,8 +2333,14 @@ this.elencoAllegati.push({
         value:'altro',
         label:'Altro',
         },
+       
         
       ],
+      //deve essere uguale a quello di back-end
+      staticTipoAllegato:{
+        preventivoFirmato:'preventivoFirmato'
+
+      },
       elencoQuote:[],
       elencoSpese:[]
     }
@@ -2486,6 +2494,10 @@ if (response.data['allegatiProgetto'][0] != null){
      new:0,
      cancellare:0,
      });
+     if (element.tipo_allegato == this.staticTipoAllegato.preventivoFirmato){
+     
+     this.quoteAllegatoPreventivo=element.nome_file;
+     }
    });
 }
 if (response.data['quoteAcconti'][0] != null){

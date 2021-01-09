@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Classes\CommandCode;
 
 
 
@@ -114,6 +115,7 @@ $router->post('/aggiorna-progetto','ProgettoController@aggiornaProgetto');
 
             
 $router->post('/aggiungi-progetto',function(Request $i){
+    $tipoAllegati= new CommandCode();
     $path="C:\Users\Fausto\source\\repos\oncelot\gestionestudio\server\public";
    $out = new \Symfony\Component\Console\Output\ConsoleOutput();
     $out->writeln($i);
@@ -126,7 +128,8 @@ $router->post('/aggiungi-progetto',function(Request $i){
     $TipologiainterventoDPR3802001="";
     $quotaPreventivo=0;
     $numeroPertinnzeAccatastateCD=0;
-   
+
+ 
 
     if(count ($i->zonaClimatica) > 0){
         $zonaClimatica=implode(";",$i->zonaClimatica);}
@@ -242,14 +245,16 @@ try {
         file_put_contents($path."/".$idProgetto."/". $i->AllegatoTitoloAutorizzativo, $file);
     }
     if ($idProgetto>0){
+       
     if ($i->quoteAllegatoPreventivo != ''){
+
           $nomefile=$i->quoteAllegatoPreventivo.date("YmdHis");
         DB::table('allegati_progetto')->insertGetId([
              'id_progetto' =>$idProgetto,
              'id_legame' =>0,
              'nome_file' =>$nomefile,
              'note_allegato' =>'',
-             'tipo_allegato' =>4,
+             'tipo_allegato' =>$tipoAllegati::$preventivoFirmato,
          ]);
          $file =base64_decode($i->base64AllegatoPreventivo);
          if (!file_exists($path."/".$idProgetto)){

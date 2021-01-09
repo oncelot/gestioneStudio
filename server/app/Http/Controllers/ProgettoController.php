@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Classes\CommandCode;
+
 
 class ProgettoController extends Controller
 {
@@ -10,7 +12,7 @@ class ProgettoController extends Controller
 
     public function aggiornaProgetto(Request $i){
         $path =  app()->basePath('public/');
-        
+        $tipoAllegati= new CommandCode();
           //  $path="C:\Users\Fausto\source\\repos\oncelot\gestionestudio\server\public";
          //  $out = new \Symfony\Component\Console\Output\ConsoleOutput();
          //   $out->writeln($i);
@@ -127,6 +129,7 @@ class ProgettoController extends Controller
                 'centraletermicaprogetto_potenza_termica'=>$i->cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto ,
                 'centraletermicaprogetto_vettore_energetico'=>$i->centraleTermivaCentralizzatoVettoreImpianto ,
                 'quota_preventivo'=>$quotaPreventivo ,
+                
         
                 //quoteAllegatoPreventivo TOFO tabella allegato
                
@@ -137,6 +140,22 @@ class ProgettoController extends Controller
                 $file =base64_decode($i->Base64AllegatoTitoloAutorizzativo);
                 mkdir($path."/".$idProgetto);
                 file_put_contents($path."/".$idProgetto."/". $i->AllegatoTitoloAutorizzativo, $file);
+            }
+            if ($i->quoteAllegatoPreventivo != ''){
+                $nomefile = $this->generaNomeFile($i->quoteAllegatoPreventivo);
+                
+                DB::table('allegati_progetto')->insertGetId([
+                     'id_progetto' =>$idProgetto,
+                     'id_legame' =>0,
+                     'nome_file' =>$nomefile,
+                     'note_allegato' =>'',
+                     'tipo_allegato' =>$tipoAllegati::$preventivoFirmato,
+                 ]);
+                $file =base64_decode($i->base64AllegatoPreventivo);
+                if (!file_exists($path."/".$idProgetto)){
+                    mkdir($path."/".$idProgetto);}
+                
+                file_put_contents($path."/".$idProgetto."/". $nomefile, $file);
             }
             if ($idProgetto > 0){
                 $this->cancellaElementiDaAggiornare("clienti_progetto",$idProgetto);
@@ -274,9 +293,8 @@ class ProgettoController extends Controller
                                 'id_progetto' =>$idProgetto,
                                 'anno_intervento' =>$value['anno'],
                             ]);
-                           
-                            $nomefile=explode(".",$value['allegato']);
-                            $nomefile= $nomefile[0].'_'.date("YmdHis").".".$nomefile[1];
+                            $nomefile = $this->generaNomeFile($value['allegato']);
+                          
                            DB::table('allegati_progetto')->insertGetId([
                                 'id_progetto' =>$idProgetto,
                                 'id_legame' =>$idIntervento,
@@ -311,9 +329,8 @@ class ProgettoController extends Controller
                                 'sub' =>$value['sub'],
                                 'descrizione' =>$value['descrizione'],
                             ]);
-                           
-                            $nomefile=explode(".",$value['nomeAllegato']);
-                            $nomefile= $nomefile[0].'_'.date("YmdHis").".".$nomefile[1];
+                            $nomefile = $this->generaNomeFile($value['nomeAllegato']);
+                          
                          
                            DB::table('allegati_progetto')->insertGetId([
                                 'id_progetto' =>$idProgetto,
@@ -411,13 +428,7 @@ class ProgettoController extends Controller
 
                         }
                     }
-            /*
-            
-                 //Allegati
-                    
-                 
-        
-                    
+                    $this->cancellaElementiDaAggiornare('centrale_termica_autonoma',$idProgetto);
                     if (count($i->centraleTermicaDiFAtto) > 0){
                         foreach ($i->centraleTermicaDiFAtto as $value) {
                               
@@ -436,7 +447,7 @@ class ProgettoController extends Controller
                      
                         }
                     }
-                
+                  
                     if (count($i->centraleTermicaDiProgetto) > 0){
                         foreach ($i->centraleTermicaDiProgetto as $value) {
                               
@@ -455,11 +466,7 @@ class ProgettoController extends Controller
                      
                         }
                     }
-        
-                    /*Informazione sul tipo di edificio*/
-        
-               /* 
-                } */
+     
                    $stringRitorno=["response"=>"ok","message"=> $i->titoloProgetto];
        
         } catch (\Throwable $th) {
@@ -468,24 +475,7 @@ class ProgettoController extends Controller
         
         return response()->json($stringRitorno);
         }
-        /* switch ($tabella) {
-                case 'clienti_progetto':
-                    DB::table('clienti_progetto')->where('id_progetto',$idProgetto)->delete();
-                    break;
-                case 'collaboratori_esterni_progetto':
-                    DB::table('collaboratori_esterni_progetto')->where('id_progetto',$idProgetto)->delete();
-                    break;
-                case 'collaboratori_interni_progetto':
-                    DB::table('collaboratori_interni_progetto')->where('id_progetto',$idProgetto)->delete();
-                    break;
-                case 'proprietari_immobilief_progetto':
-                    DB::table('proprietari_immobilief_progetto')->where('id_progetto',$idProgetto)->delete();
-                    break;
-                
-                default:
-                    # code...
-                    break;
-            }*/
+
 
         public function cancellaElementiDaAggiornare(string $tabella, int $idProgetto,int $idIntervento = 0){
 
@@ -512,6 +502,13 @@ class ProgettoController extends Controller
         public function cancellaFile(string $path){
 
             unlink($path);
+        }
+
+        public function  generaNomeFile($nomeFile){
+            $nomefile=str_replace(" ","",$nomeFile);
+            $nomefile=explode(".",$nomeFile);
+            $nomefile= $nomefile[0].'_'.date("YmdHis").".".$nomefile[1];
+            return $nomefile;
         }
    
     }
