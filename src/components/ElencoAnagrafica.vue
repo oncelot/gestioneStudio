@@ -1,10 +1,19 @@
 <template>
-<div>
-    <span class="text-h5">Elenco Anagragrafica</span><br>
+<div class="justify-center">
+  <div class="row justify-center">
+
+    <div class="col-3" style="text-align:center">
+      <span class="text-h5 text-primary" >Anagrafica Utenti</span><br>
+    </div>
+    </div>
+
+ <div class="row justify-center">
+  <div class="col-3">
     <label for=""><strong>Cerca</strong></label>
-
-
- <q-input v-model="cercaAnagrafica" type="text" :dense="true" outlined placeholder="nome, cognome, codice fiscale, partita iva, ragione sociale" style="padding-bottom:10px"  />
+    <q-input v-model="cercaAnagrafica" type="text" :dense="true" outlined placeholder="nome, cognome, codice fiscale, partita iva, ragione sociale" style="padding-bottom:10px"  />
+    </div>
+  </div>
+    
  <div class="row">
   <div class="col">Nome</div>
   <div class="col">Cognome</div>

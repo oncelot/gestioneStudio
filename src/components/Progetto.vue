@@ -5,12 +5,13 @@
 <div class=" " style="color:grey; background-color:#f2f4f8; width:100%">
   
   <q-tabs  v-model="tab" inline-label style="background-color:#fdfdfd"  >
-      <q-tab name="progetto"  icon="account_box" label="Progetto"  />
+      <q-tab name="progetto"  icon="home_work" label="Progetto"  />
       <q-tab name="anagraficaIntervento"  icon="alarm" label="Anagrafica intervento" /> 
       <q-tab name="screening"  icon="movie" label="Screening" />
       <q-tab name="datiStrutturali"  icon="build" label="Dati Strutturali" />
       <q-tab name="allegati"  icon="attach_file" label="Allegati" />
       <q-tab name="quote"  icon="euro_symbol" label="Quote" />
+      <q-tab name="associaUtenti"  icon="engineering" label="Permessi" />
      
     </q-tabs> 
 
@@ -1497,8 +1498,16 @@ Specificare le modalità e i tempi di sanatoria.
 
 <q-btn color="primary" v-if="nuovoProgetto" icon="check" label="Crea progetto" @click="aggiungiProgetto()" />
 <q-btn color="positive" v-if="!nuovoProgetto" icon="check" label="Aggiorna progetto" @click="aggiungiProgetto()" />
+
+
 </div>
 
+<!-- #region Associa Utenti-->
+<div v-if="tab == 'associaUtenti'">
+permessi utenti
+
+</div>
+<!-- #endregion-->
 <!-- #region MODAL-->
 <!-- MODAL -->
  <q-dialog v-model="modalNuovaAnagraficaClienti" persistent>
@@ -2120,6 +2129,7 @@ this.elencoAllegati.push({
   data () {
     return {
       pathAllegatoTitoloAutorizzativo:'',
+      listaUsers:[],
         text:'',data:'',date:'',auxFile:null,nameAuxFile:'',nameAuxFilePreventivo:'',
         nuovoProgetto:true,
         cercaAnagraficaClienti:'',cercaCollaboratoriInterni:'',cercaCollaboratoriEsterni:'',
@@ -2349,6 +2359,11 @@ this.elencoAllegati.push({
   components: {
      
     formNuovaanagrafica,message
+  },
+  computed:{
+    usersFilter(){
+
+    }
   },
   props:['idprogetto'],
 

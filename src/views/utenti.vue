@@ -1,5 +1,5 @@
 <template>
- <div class="q-pa-md">
+ <div class="q-pa-md" style="color:grey">
     
   
   <q-tabs  v-model="menu" inline-label style="background-color:#fdfdfd"  >
@@ -12,7 +12,19 @@
         <nuovoutente iduser=''></nuovoutente>
     </div>
     <div v-if="menu =='listautenti' ">
-    
+    <div class="row justify-center">
+
+    <div class="col-3" style="text-align:center">
+      <span class="text-h5 text-primary" >Lista Utenti</span><br>
+    </div>
+    </div>
+
+ <div class="row justify-center">
+  <div class="col-3">
+    <label for=""><strong>Cerca</strong></label>
+    <q-input v-model="cercaUtenti" type="text" :dense="true" outlined placeholder="nome, email,ruolo" style="padding-bottom:10px"  />
+    </div>
+  </div>
     <div class="row justify-center "  style="justify-center" >
       <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Nome</b> </div> 
       <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Email</b> </div>
@@ -21,7 +33,7 @@
      
   </div>
 
-  <div  class="row justify-center " v-for="item in elencoUsers" :key="item.message" >
+  <div  class="row justify-center " v-for="item in utentiFilter" :key="item.message" >
     <div class="col-4 col-md-2 bgAree"> <a href="#" @click="dettagliUser(item.id)" >{{ item.nome }}</a></div>
     <div class="col-4 col-md-2 bgAree"> {{ item.email }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.ruolo }}</div>
@@ -50,7 +62,8 @@ export default {
         elencoUsers:[],
         menu:'listautenti',
         idUser:null,
-        datiUser:{nome:'',email:'',ruolo:'' }
+        datiUser:{nome:'',email:'',ruolo:'' },
+        cercaUtenti:'',
     }},
     methods:{
         dettagliUser(idUsers){
@@ -77,6 +90,15 @@ export default {
        this.listaUtenti();
   
     },
-    components:{nuovoutente}
+    components:{nuovoutente},
+    computed:{
+        utentiFilter:function(){
+      return  this.elencoUsers.filter(post=>{
+            return post.email.toLowerCase().includes(this.cercaUtenti.toLowerCase())
+            || post.ruolo.toLowerCase().includes(this.cercaUtenti.toLowerCase())
+            || post.nome.toLowerCase().includes(this.cercaUtenti.toLowerCase())
+        })
+        }
+    }
 }
 </script>

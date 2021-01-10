@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh Lpr lff">
+  <q-layout view="hHh Lpr lff" style=" background-color:#f2f4f8;">
     <q-header >
       <q-toolbar>
         <q-btn
@@ -14,26 +14,23 @@
         <q-toolbar-title>
          Gestionale Cantiere
         </q-toolbar-title>
-{{isAuth}}
-        <div v-if="!isAuth"><a href="/login"> Login</a></div>
-        <div v-if="isAuth"><li>{{user.name}}</li> <a href="#" @click="logout()">logout</a></div>
+        <div v-if="!isAuth"><a style="font-weight:bold" href="/login"> Login</a></div>
+        <div v-if="isAuth"><li>{{user.email}}</li> <span style="font-weight:bold" @click="logout()">logout</span></div>
       </q-toolbar>
     </q-header>
 
     <q-drawer
       v-model="leftDrawerOpen"
- show-if-above
+      show-if-above
 
         :mini="miniState"
         @mouseover="miniState = false"
         @mouseout="miniState = true"
-
+        :content-style="{backgroundColor: '#d4e2e9'}"
         :width="200"
         :breakpoint="500"
         bordered
-        
-        
-        style="background-color:#d4e2e9"
+    
     >
       <q-list  style="background-color:#d4e2e9; " class="text-secondary"> 
         <q-item clickable   to="/nuovo-progetto" exact>
