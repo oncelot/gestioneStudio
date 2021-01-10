@@ -14,7 +14,7 @@
         <q-toolbar-title>
          Gestionale Cantiere
         </q-toolbar-title>
-        <div v-if="!isAuth"><a style="font-weight:bold" href="/login"> Login</a></div>
+        <div v-if="!isAuth"><span style="font-weight:bold; cursor:pointer"  @click="paginaLogin()"> Login</span></div>
         <div v-if="isAuth"><li>{{user.email}}</li> <span style="font-weight:bold" @click="logout()">logout</span></div>
       </q-toolbar>
     </q-header>
@@ -132,6 +132,9 @@ export default {
   },
   methods:{logout(){
     auth.LogOut(this.cred,'/');
+  },
+  paginaLogin(){
+  this.$router.push({ path:'login'});
   }
 }
 }
