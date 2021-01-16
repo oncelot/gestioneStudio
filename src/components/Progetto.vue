@@ -1543,18 +1543,26 @@ Specificare le modalità e i tempi di sanatoria.
     <q-btn   size="sm" round icon="delete" @click="elencoUtentiDaAutorizzare.splice(index, 1)" />
   
   </div>
+
+  </div>
+
+
+  <div class="row justify-center"  style="color:grey; " v-if="elencoUtentiDaAutorizzare.length > 0">
+      <div class="col-12 col-md-7 bgAree"><q-btn color="primary" icon="check" label="Autorizza" @click="autorizzaUtenti()" /></div>
+      
+    </div>
  
-  </div>
-  <div class="row  justify-center">
-    <div class="col"><q-btn color="primary" icon="check" label="Autorizza" @click="autorizzaUtenti()" /></div>
-  </div>
-  <div class="row"><div class="col">Utenti Autorizzati</div></div>
- <div  class="row justify-center " v-for="(item,index) in elencoUtentiAutorizzati" :key="item.message" >
-    <div class="col-4 col-md-2 bgAree"> {{ item.nome }} {{ item.id }}</div>
+  <div class="row justify-center"  style="color:grey; padding-top:30px" >
+      <div class="col-12 col-md-7 bgAree"><b>Utenti Autorizzati</b></div>
+      
+    </div>
+ 
+ <div  class="row justify-center " v-for="item in elencoUtentiAutorizzati" :key="item.message" >
+    <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.email }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.ruolo }}</div>
     <div class="col-1 col-md-1 bgAree"> 
-    <q-btn   size="sm" round icon="delete" @click="elencoUtentiAutorizzati.splice(index, 1)" /></div>
+    <q-btn   size="sm" round icon="delete" @click="cancellaUtente(item.idRiga)" /></div>
     </div>
 
 </div>
@@ -1743,7 +1751,34 @@ import Axios from 'axios';
 import nuovoProgettoVue from '../views/nuovo-progetto.vue';
 export default {
 
+
     methods: {
+      cancellaUtente(id){
+        Axios.delete(this.linkApi+'/cancellaAutorizzazione/'+id).then(response=>{
+          if(response.data.response=='ok'){
+             this.elencoUtentiAutorizzati=[];
+           Axios.get(this.linkApi+'/getUtentiAutorizzati/'+this.idprogetto).then(ResponseAutorizzati=>
+            {
+              ResponseAutorizzati.data['listaUsersAssociatiAlProgetto'].forEach(element => {
+                this.elencoUtentiAutorizzati.push({
+                  nome:element.name,
+                  email:element.email, 
+                  ruolo:element.role,
+                  id:element.id_user,
+                  idRiga:element.id
+                  });
+                  });
+              });
+              this.elencoUtentiDaAutorizzare=[];
+            this.messaggioDaVisualizzare='Utente Cancellato';
+            this.visualizzamessaggio=true;
+          }else{
+              this.messaggioDaVisualizzare=Response.data.message;
+              this.visualizzamessaggio=true;
+          }
+        });
+
+      },
       autorizzaUtenti()
       {
         const sendDaAutorizzare={
@@ -1760,7 +1795,8 @@ export default {
                   nome:element.name,
                   email:element.email, 
                   ruolo:element.role,
-                  id:element.id_user
+                  id:element.id_user,
+                   idRiga:element.id
                   });
                   });
               });
@@ -1768,7 +1804,7 @@ export default {
             this.messaggioDaVisualizzare='Utenti Autorizzati';
             this.visualizzamessaggio=true;
             }else{
-              console.log(Response.data);
+              
               this.messaggioDaVisualizzare=Response.data.message;
               this.visualizzamessaggio=true;
               }
@@ -2143,7 +2179,7 @@ this.elencoAllegati.push({
     },
     elencoCercaUsersFunction(){
       if (this.CercaUtentiDaAutorizzare.length > 1){
-      Axios.get(this.linkApi+'/getCercaUsers/'+this.CercaUtentiDaAutorizzare).then(Response=>{console.log(Response.data);this.elencoCercaUtentiDaAutorizzare= Response.data})
+      Axios.get(this.linkApi+'/getCercaUsersDaAutorizzare/'+this.idprogetto+'/'+this.CercaUtentiDaAutorizzare).then(Response=>{console.log(Response.data);this.elencoCercaUtentiDaAutorizzare= Response.data})
       }
       },
     elencoCercaAnagraficaClientiFunction(){
@@ -2650,8 +2686,10 @@ if (response.data['listaUsersAssociatiAlProgetto'][0] != null){
      nome:element.name,
      email:element.email, 
      ruolo:element.role,
-     id:element.id_user
+     id:element.id_user,
+     idRiga:element.id
      });
+ 
    });
 }
 

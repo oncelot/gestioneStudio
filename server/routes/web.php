@@ -644,10 +644,25 @@ $dettagliutente=DB::table('anagrafica')->select('nome','cognome','denominazione'
    return  response()
             ->json($dettagliutente);
 });
-$router->get('/getCercaUsers/{varie}',function (Request $request,$varie){
-$listaUsers=DB::table('users')->select('name','email','role','id')->where('name','like',"%$varie%")->orwhere('email','like',"%$varie%")->orwhere('role','like',"%$varie%")->get();
+$router->get('/getCercaUsersDaAutorizzare/{idprogetto}/{varie}',function (Request $request,$idprogetto,$varie){
+$listaNotIn=DB::table('user-associato-progetto')->where('id_progetto',$idprogetto)->select('id_user');
+
+$listaUsers=DB::table('users')->select('name','email','role','id')->whereNotIn('id', $listaNotIn)->where('name','like',"%$varie%")->orwhere('email','like',"%$varie%")->orwhere('role','like',"%$varie%")->get();
    return  response()
             ->json($listaUsers);
+});
+$router->delete('/cancellaAutorizzazione/{idriga}', function(Request $request,$idriga){
+$output='';
+    try {
+    DB::table('user-associato-progetto')->where('id',$idriga)->delete();
+    $output=['response'=>'ok','message'=>'utente cancellato'];
+
+} catch (\Throwable $th) {
+    //throw $th;
+    $output=['response'=>'errore','message'=>$th->getMessage()];
+}
+  
+    return response()->json($output);
 });
 
 $router->get('/getUtentiAutorizzati/{idprogetto}',function(Request $request,$idprogetto){
@@ -673,8 +688,7 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
     $allegatiProgetto= DB::table('allegati_progetto')->where('id_progetto',$idprogetto)->get();
     $quoteAcconti= DB::table('quote_progetto')->where('id_progetto',$idprogetto)->where('tipo_quota','entrata')->get();
     $quoteSpese= DB::table('quote_progetto')->where('id_progetto',$idprogetto)->where('tipo_quota','uscita')->get();
-    $listaUsers=DB::table('users')->select('*')->get();
-    $listaUsersAssociatiAlProgetto=DB::table('user-associato-progetto')->join('users','id_user','users.id')->where('id_progetto',$idprogetto)->select('*')->get();
+    $listaUsersAssociatiAlProgetto=DB::table('user-associato-progetto')->join('users','id_user','users.id')->where('id_progetto',$idprogetto)->select('user-associato-progetto.id','name','email','role','id_user')->get();
 
     $progetto=[
         'progetto'=>$dettagliProgetto,
@@ -692,7 +706,6 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
         'allegatiProgetto'=>$allegatiProgetto,
         'quoteAcconti'=>$quoteAcconti,
         'quoteSpese'=>$quoteSpese,
-        'listaUsers'=>$listaUsers,
         'listaUsersAssociatiAlProgetto'=>$listaUsersAssociatiAlProgetto,
         ];
        return  response()->json($progetto);
