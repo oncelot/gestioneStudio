@@ -109,6 +109,7 @@ $router->get('/download',function(Request $request){
    
 });
 $router->post('/aggiorna-progetto','ProgettoController@aggiornaProgetto');
+$router->post('/SetAutorizzaUtenti','ProgettoController@SetAutorizzaUtenti');
 
 
 
@@ -637,11 +638,24 @@ $router->get('/getAnagrafica/{idutente}',function (Request $request,$idutente){
 
    
 });
+
 $router->get('/getCercaAnagrafica/{tipo}/{varie}',function (Request $request,$tipo,$varie){
 $dettagliutente=DB::table('anagrafica')->select('nome','cognome','denominazione','codice_fiscale','partita_iva','id')->where('tipo_anagrafica',$tipo)->where('nome','like',"%$varie%")->orwhere('cognome','like',"%$varie%")->get();
    return  response()
             ->json($dettagliutente);
 });
+$router->get('/getCercaUsers/{varie}',function (Request $request,$varie){
+$listaUsers=DB::table('users')->select('name','email','role','id')->where('name','like',"%$varie%")->orwhere('email','like',"%$varie%")->orwhere('role','like',"%$varie%")->get();
+   return  response()
+            ->json($listaUsers);
+});
+
+$router->get('/getUtentiAutorizzati/{idprogetto}',function(Request $request,$idprogetto){
+    $listaUsersAssociatiAlProgetto=DB::table('user-associato-progetto')->join('users','id_user','users.id')->where('id_progetto',$idprogetto)->select('*')->get();
+    $progetto=['listaUsersAssociatiAlProgetto'=>$listaUsersAssociatiAlProgetto ];
+    return  response()->json($progetto);
+});
+
 $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto){
     $dettagliutente=DB::table('progetti')->leftJoin('clienti_progetto','progetti.id','=','clienti_progetto.id_progetto')->where('progetti.id',$idprogetto)->select('*')->get();
     $dettagliProgetto= DB::table('progetti')->where('progetti.id',$idprogetto)->select('*')->get();
@@ -659,6 +673,8 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
     $allegatiProgetto= DB::table('allegati_progetto')->where('id_progetto',$idprogetto)->get();
     $quoteAcconti= DB::table('quote_progetto')->where('id_progetto',$idprogetto)->where('tipo_quota','entrata')->get();
     $quoteSpese= DB::table('quote_progetto')->where('id_progetto',$idprogetto)->where('tipo_quota','uscita')->get();
+    $listaUsers=DB::table('users')->select('*')->get();
+    $listaUsersAssociatiAlProgetto=DB::table('user-associato-progetto')->join('users','id_user','users.id')->where('id_progetto',$idprogetto)->select('*')->get();
 
     $progetto=[
         'progetto'=>$dettagliProgetto,
@@ -676,6 +692,8 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
         'allegatiProgetto'=>$allegatiProgetto,
         'quoteAcconti'=>$quoteAcconti,
         'quoteSpese'=>$quoteSpese,
+        'listaUsers'=>$listaUsers,
+        'listaUsersAssociatiAlProgetto'=>$listaUsersAssociatiAlProgetto,
         ];
        return  response()->json($progetto);
     });

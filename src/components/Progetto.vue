@@ -1504,7 +1504,58 @@ Specificare le modalità e i tempi di sanatoria.
 
 <!-- #region Associa Utenti-->
 <div v-if="tab == 'associaUtenti'">
-permessi utenti
+
+ <div class="row justify-center"  style="color:grey; ">
+      <div class="col-12 col-md-7 bgAree"><b>Autorizza Utenti</b></div>
+      
+    </div>
+    <div class="row justify-center">
+      <div class="col-12 col-md-7 bgAree">
+        <q-input v-model="CercaUtentiDaAutorizzare" debounce="1"  outlined :dense=true  placeholder="Cerca Utente da Autorizzare - Inserire 4 caratteri per avviare la ricerca" @keypress=" elencoCercaUsersFunction()">
+          <div class="autocomplete-items" v-if="CercaUtentiDaAutorizzare.length > 2">
+            <div class="row"  v-for="item in elencoCercaUtentiDaAutorizzare" :key="item.message">
+              <div class="col">
+                <a href="#" @click="autorizzaUtente(item)">  {{ item.nome }} {{item.email}} {{item.ruolo}}</a></div>
+
+            </div>
+          </div>
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+         
+        </q-input>
+        </div>
+        <!-- <div class="col-2"> <q-btn   label="Crea"   :dense='true' icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" /></div> -->
+    </div>
+      <div class="row justify-center "  style="justify-center" >
+      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Nome</b> </div> 
+      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Email</b> </div>
+      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black ">  <b>Ruolo</b> </div>  
+      <div class="col-1 col-md-1 bgAree" style="border-bottom:1px solid black ">  <b></b> </div>  
+     
+  </div>
+
+  <div  class="row justify-center " v-for="(item,index) in elencoUtentiDaAutorizzare" :key="item.message" >
+    <div class="col-4 col-md-2 bgAree"> {{ item.nome }} - {{ item.id }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.email }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.ruolo }}</div>
+    <div class="col-1 col-md-1 bgAree"> 
+    <q-btn   size="sm" round icon="delete" @click="elencoUtentiDaAutorizzare.splice(index, 1)" />
+  
+  </div>
+ 
+  </div>
+  <div class="row  justify-center">
+    <div class="col"><q-btn color="primary" icon="check" label="Autorizza" @click="autorizzaUtenti()" /></div>
+  </div>
+  <div class="row"><div class="col">Utenti Autorizzati</div></div>
+ <div  class="row justify-center " v-for="(item,index) in elencoUtentiAutorizzati" :key="item.message" >
+    <div class="col-4 col-md-2 bgAree"> {{ item.nome }} {{ item.id }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.email }}</div>
+    <div class="col-4 col-md-2 bgAree"> {{ item.ruolo }}</div>
+    <div class="col-1 col-md-1 bgAree"> 
+    <q-btn   size="sm" round icon="delete" @click="elencoUtentiAutorizzati.splice(index, 1)" /></div>
+    </div>
 
 </div>
 <!-- #endregion-->
@@ -1693,7 +1744,37 @@ import nuovoProgettoVue from '../views/nuovo-progetto.vue';
 export default {
 
     methods: {
-      downloadFile(path,titoloFile){
+      autorizzaUtenti()
+      {
+        const sendDaAutorizzare={
+          listaDaAutorizzare:this.elencoUtentiDaAutorizzare,
+          idprogetto:this.idprogetto
+        };
+        Axios.post(this.linkApi+'/SetAutorizzaUtenti',sendDaAutorizzare).then(Response =>{
+          if(Response.data.response=='ok'){
+            this.elencoUtentiAutorizzati=[];
+            Axios.get(this.linkApi+'/getUtentiAutorizzati/'+this.idprogetto).then(ResponseAutorizzati=>
+            {
+              ResponseAutorizzati.data['listaUsersAssociatiAlProgetto'].forEach(element => {
+                this.elencoUtentiAutorizzati.push({
+                  nome:element.name,
+                  email:element.email, 
+                  ruolo:element.role,
+                  id:element.id_user
+                  });
+                  });
+              });
+              this.elencoUtentiDaAutorizzare=[];
+            this.messaggioDaVisualizzare='Utenti Autorizzati';
+            this.visualizzamessaggio=true;
+            }else{
+              console.log(Response.data);
+              this.messaggioDaVisualizzare=Response.data.message;
+              this.visualizzamessaggio=true;
+              }
+            });
+      },
+    downloadFile(path,titoloFile){
         Axios({
           url: 'http://localhost:8000/download/?pp='+path,
           method:'get',
@@ -1713,8 +1794,8 @@ export default {
 
             }
             });
-        },
-      aggiungiProgetto(){
+      },
+    aggiungiProgetto(){
       const  sendForm={
         idprogetto:this.idprogetto,
           titoloProgetto:this.titoloProgetto,
@@ -2060,6 +2141,11 @@ this.elencoAllegati.push({
     removeRow(index){
    this.elencoAnagraficaClienti.splice(index, 1)
     },
+    elencoCercaUsersFunction(){
+      if (this.CercaUtentiDaAutorizzare.length > 1){
+      Axios.get(this.linkApi+'/getCercaUsers/'+this.CercaUtentiDaAutorizzare).then(Response=>{console.log(Response.data);this.elencoCercaUtentiDaAutorizzare= Response.data})
+      }
+      },
     elencoCercaAnagraficaClientiFunction(){
       if (this.cercaAnagraficaClienti.length > 1){
       Axios.get(this.linkApi+'/getCercaAnagrafica/cliente/'+this.cercaAnagraficaClienti).then(Response=>{console.log(Response.data);this.elencoCercaAnagraficaClienti= Response.data})
@@ -2089,6 +2175,16 @@ this.elencoAllegati.push({
       });
        this.cercaAnagraficaClienti='';
        this.elencoCercaAnagraficaClienti=null;
+  },
+  autorizzaUtente(datiUtente){
+    this.elencoUtentiDaAutorizzare.push({
+        nome:datiUtente.name,
+       email:datiUtente.email,
+       ruolo:datiUtente.role,
+       id:datiUtente.id,
+      });
+       this.CercaUtentiDaAutorizzare='';
+       this.elencoCercaUtentiDaAutorizzare=null;
   },
   aggiungiElencoCollaboratoreInterno(datiUtente){
     this.elencoCollaboratoriInterno.push({
@@ -2132,7 +2228,10 @@ this.elencoAllegati.push({
       listaUsers:[],
         text:'',data:'',date:'',auxFile:null,nameAuxFile:'',nameAuxFilePreventivo:'',
         nuovoProgetto:true,
-        cercaAnagraficaClienti:'',cercaCollaboratoriInterni:'',cercaCollaboratoriEsterni:'',
+        CercaUtentiDaAutorizzare:'',
+        cercaAnagraficaClienti:'',
+        cercaCollaboratoriInterni:'',
+        cercaCollaboratoriEsterni:'',
          tab: "progetto",
          modalNuovaAnagraficaClienti: false,
          modalNuovoNome:'',modalNuovoCognome:'',modalNuovoCodiceFiscale:'',
@@ -2218,11 +2317,14 @@ this.elencoAllegati.push({
        
            ],
 
+      elencoCercaUtentiDaAutorizzare: [],
       elencoCercaAnagraficaClienti: [],
       elencoCercaCollaboratoreEsterno: [],
       elencoCercaCollaboratoreInterno: [],
       elencoCercaAnagraficaProgettisti: [],
 
+      elencoUtentiDaAutorizzare: [],
+      elencoUtentiAutorizzati: [],
       elencoAnagraficaClienti: [],
       elencoCollaboratoriEnterno: [],
       elencoCollaboratoriInterno: [],
@@ -2541,6 +2643,17 @@ if (response.data['quoteSpese'][0] != null){
      });
    });
 }
+if (response.data['listaUsersAssociatiAlProgetto'][0] != null){
+
+ response.data['listaUsersAssociatiAlProgetto'].forEach(element => {
+   this.elencoUtentiAutorizzati.push({
+     nome:element.name,
+     email:element.email, 
+     ruolo:element.role,
+     id:element.id_user
+     });
+   });
+}
 
 if (response.data['infoEdificioProgetto'][0]!= null){
 var dettagliEdificio=response.data['infoEdificioProgetto'][0];
@@ -2637,7 +2750,7 @@ if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
   this.riferimentiAutorizzativi= response.data['progetto'][0].riferimentiAutorizzativi;
   this.dateAutorizzativi= response.data['progetto'][0].dateAutorizzativi;
   this.AllegatoTitoloAutorizzativo=response.data['progetto'][0].AllegatoTitoloAutorizzativo;
-  this.pathAllegatoTitoloAutorizzativo= 'http://localhost:8000/public/'+this.idprogetto+'/'+this.AllegatoTitoloAutorizzativo;
+  this.pathAllegatoTitoloAutorizzativo= this.linkApi+'/'+this.idprogetto+'/'+this.AllegatoTitoloAutorizzativo;
   this.abusiEdilizi= response.data['progetto'][0].abusiEdilizi;
   this.TipologiaAbusiEdilizi = response.data['progetto'][0].TipologiaAbusiEdilizi;
   this.comuneStatoDiFatto = response.data['progetto'][0].comuneStatoDiFatto;

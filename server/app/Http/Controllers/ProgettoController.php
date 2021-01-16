@@ -510,8 +510,31 @@ class ProgettoController extends Controller
             $nomefile= $nomefile[0].'_'.date("YmdHis").".".$nomefile[1];
             return $nomefile;
         }
-   
+
+
+        public function SetAutorizzaUtenti(Request $i){
+            try {
+                $idprogetto=$i->idprogetto;
+              
+                foreach ($i->listaDaAutorizzare as $daAutorizzare) {
+                    DB::table('user-associato-progetto')->insert([
+                        'id_user' =>$daAutorizzare['id'],
+                        'id_progetto' => $idprogetto
+                    ]);
+                }
+                $stringRitorno=["response"=>"ok","message"=>"Utenti Autorizzati"];
+            } catch (\Throwable $th) {
+                $stringRitorno=["response"=>"Error","message"=>$th->getMessage()];
+    
+            }
+         
+            return $stringRitorno;
+        }
     }
+
+ 
+    
+    
     class tipologiaEdificio{
         public $condominio = "condominio";
         public $edificiioResidenziale = "edificioFamiliare";
