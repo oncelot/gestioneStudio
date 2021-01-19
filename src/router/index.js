@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import NuovoProgetto from '@/views/nuovo-progetto'
+import NuovoProgetto from '@/views/crea-progetto'
 import ListaProgetti from '@/views/lista-progetti'
 import anagrafica from '@/views/anagrafica'
 import dettaglioProgetto from '@/views/dettaglioProgetto'

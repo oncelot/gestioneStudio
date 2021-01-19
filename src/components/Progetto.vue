@@ -16,7 +16,14 @@
     </q-tabs> 
 
 <!-- #region progetto -->
+  
+ <div v-if="tab == 'progetto3'">
+   <step1 v-model="nomeProgettoStep1" ></step1>
+ 
+ {{nomeProgettoStep1}}
+ </div>
     <div  v-if="tab == 'progetto'">
+      
           <div class="row justify-center">
               <div class=" text-h4 text-center text-secondary"><span class="text-secondary"> Dettagli Progetto</span></div>
           </div>
@@ -170,6 +177,9 @@
 
 </div>
   </div>
+
+
+
 <!-- #endregion -->
 
 <!-- #region Anagrafica intervento -->
@@ -1749,11 +1759,16 @@ import formNuovaanagrafica from '@/components/NuovaAnagrafica'
 import message from '@/components/messaggio'
 import Axios from 'axios';
 import nuovoProgettoVue from '../views/nuovo-progetto.vue';
+import step1 from '@/components/step1Progetto.vue';
+
 export default {
 
 
     methods: {
-      cancellaUtente(id){
+      checkboxValue: function(params) {
+      this.check = params;
+    },
+    cancellaUtente(id){
         Axios.delete(this.linkApi+'/cancellaAutorizzazione/'+id).then(response=>{
           if(response.data.response=='ok'){
              this.elencoUtentiAutorizzati=[];
@@ -1812,7 +1827,7 @@ export default {
       },
     downloadFile(path,titoloFile){
         Axios({
-          url: 'http://localhost:8000/download/?pp='+path,
+          url: this.linkApi+'/download/?pp='+path,
           method:'get',
           responseType: 'arraybuffer',
           }).then(response=>{
@@ -2260,6 +2275,8 @@ this.elencoAllegati.push({
      
   data () {
     return {
+     
+      nomeProgettoStep1:'prova',
       pathAllegatoTitoloAutorizzativo:'',
       listaUsers:[],
         text:'',data:'',date:'',auxFile:null,nameAuxFile:'',nameAuxFilePreventivo:'',
@@ -2285,7 +2302,7 @@ this.elencoAllegati.push({
          modalDatiCatastaliTitoliAutorizzativiNuovoFoglio:'',
         
 
-         titoloProgetto:'',search:'',tipologiaEdificio:[],
+         titoloProgetto:'',search:'',tipologiaEdificio:'',
          TipologiainterventoDPR3802001:[],
         /* TipologiainterventoDPR3802001Ordinaria:false,TipologiainterventoDPR3802001Straordinaria:false,TipologiainterventoDPR3802001RisanamentoConcervativo:false,TipologiainterventoDPR3802001RistrutturazioneEdilizia:false,TipologiainterventoDPR3802001NuovaCostruzione:false,TipologiainterventoDPR3802001InterventiUrbanistici:false,*/
          zonaClimatica:[],
@@ -2496,7 +2513,7 @@ this.elencoAllegati.push({
 
   components: {
      
-    formNuovaanagrafica,message
+    formNuovaanagrafica,message,step1
   },
   computed:{
     usersFilter(){

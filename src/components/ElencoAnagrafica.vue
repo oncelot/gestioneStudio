@@ -56,7 +56,13 @@
 import Axios from 'axios'
 import dettaglioAnagrafica from  '@/components/NuovaAnagrafica';
 export default {
-    data(){return{elencoAnagrafica:[{nome:'',cognome:''}],modalNuovaAnagraficaClienti:false,nomePassaggio:'',cercaAnagrafica:''}},
+    data(){return{
+      elencoAnagrafica:[{nome:'',cognome:''}],
+      modalNuovaAnagraficaClienti:false,
+      nomePassaggio:'',
+      cercaAnagrafica:''}
+      
+      },
     computed:{
       elencoAnagraficaFilter:function(){
         return this.elencoAnagrafica.filter(post => {
