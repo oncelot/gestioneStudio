@@ -15,1004 +15,17 @@
      
     </q-tabs> 
 
-<!-- #region progetto -->
-  
- <div v-if="tab == 'progetto3'">
-   <step1 v-model="nomeProgettoStep1" ></step1>
- 
- {{nomeProgettoStep1}}
+ <div v-if="tab == 'progetto'">
+   <step1 v-model="Progetto" ></step1>
  </div>
-    <div  v-if="tab == 'progetto'">
-      
-          <div class="row justify-center">
-              <div class=" text-h4 text-center text-secondary"><span class="text-secondary"> Dettagli Progetto</span></div>
-          </div>
-    <div class="row  justify-center"  >
-        <div class=" col-12 col-md-7 bgmargintop">
-            <q-input outlined v-model="titoloProgetto" label="Titolo del progetto" />
-        </div>
-    </div>
-
-
-
-    <!-- #region ANAGRAFICA CLIENTI -->
-    <div style="padding-top:20px">
-    <div class="row justify-center"  style="color:grey; ">
-      <div class="col-12 col-md-7 bgAree"><b>Aggiungi i Clienti</b></div>
-      
-    </div>
-    <div class="row justify-center">
-      <div class="col-12 col-md-7 bgAree">
-        <q-input v-model="cercaAnagraficaClienti" debounce="500"  outlined :dense=true  placeholder="Cerca Cliente da aggiungere - Inserire 4 caratteri per avviare la ricerca" @keypress=" elencoCercaAnagraficaClientiFunction()">
-          <div class="autocomplete-items" v-if="cercaAnagraficaClienti.length > 2">
-            <div class="row"  v-for="item in elencoCercaAnagraficaClienti" :key="item.message">
-              <div class="col">
-                <a href="#" @click="aggiungiElencoClienti(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
-
-            </div>
-          </div>
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-         
-        </q-input>
-        </div>
-        <!-- <div class="col-2"> <q-btn   label="Crea"   :dense='true' icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" /></div> -->
-    </div>
-    
-    
-        
-    <div class="row justify-center "  style="justify-center" >
-      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Nome</b> </div> 
-      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Cognome</b> </div>
-      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black ">  <b>Codice Fiscale</b> </div>  
-      <div class="col-1 col-md-1 bgAree" style="border-bottom:1px solid black ">  <b></b> </div>  
-     
-  </div>
-
-  <div  class="row justify-center " v-for="(item,index) in elencoAnagraficaClienti" :key="item.message" >
-    <div class="col-4 col-md-2 bgAree"> {{ item.nome }} {{ item.id }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
-    <div class="col-1 col-md-1 bgAree"> 
-    <q-btn   size="sm" round icon="delete" @click="elencoAnagraficaClienti.splice(index, 1)" />
-  
-  </div>
  
-  </div>
-  </div>
-   <!-- #endregion -->
-
-    <!-- collaboratori interni -->
-    <div style="padding-top:20px">
-    <div class="row justify-center">
-      <div class="col-12 col-md-7 bgAree"><b>Collaboratori interni</b></div>
-        
-    </div>
-    <div class="row justify-center">
-      <div class="col-12 col-md-7 bgAree">
-         <q-input v-model="cercaCollaboratoriInterni" debounce="500"  outlined :dense=true  placeholder="Inserire 4 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreInternoFunction()">
-          <div class="autocomplete-items" v-if="cercaCollaboratoriInterni.length > 2">
-            <div class="row"  v-for="item in elencoCercaCollaboratoreInterno" :key="item.message">
-              <div class="col">
-                <a href="#" @click="aggiungiElencoCollaboratoreInterno(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
-
-            </div>
-          </div>  
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-         
-        </q-input>
-        </div>
-       <!--  <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true"  :dense="true" /></div> -->
-    </div>
-    
-    <div class="row justify-center"  style="">
-      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Nome</b> </div> 
-      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black ">  <b>Cognome</b> </div>
-      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Codice Fiscale</b> </div>  
-      <div class="col-1 col-md-1 bgAree" style="border-bottom:1px solid black "></div>  
+ <div v-if="tab == 'anagraficaIntervento'">
+   <step2 v-model="Progetto" ></step2>
   </div>
 
-  <div  class="row justify-center" v-for="item in elencoCollaboratoriInterno" :key="item.message" style="">
-    <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
-    <div class="col-1 col-md-1 bgAree"> 
-    <q-btn   size="sm" round icon="delete" @click="elencoCollaboratoriInterno.splice(index, 1)" />
-  
+  <div v-if="tab=='screening'" style="color:grey">
+    <step3 v-model="Progetto" ></step3>
   </div>
-  </div>
-</div>
-
-   <!-- FINE collaboratori interni -->
-
-    <!-- collaboratori esterni -->
-    <div style=padding-top:20px>
-    <div class="row justify-center">
-      <div class="col-12 col-md-7 bgAree"><b>Collaboratori Esterni</b></div>
-        
-    </div>
-    <div class="row  justify-center">
-      <div class="col-12 col-md-7 bgAree">
-       <q-input v-model="cercaCollaboratoriEsterni" debounce="500"  outlined :dense=true  placeholder="Inserire 4 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreEsternoFunction()">
-          <div class="autocomplete-items" v-if="cercaCollaboratoriEsterni.length > 2">
-            <div class="row"  v-for="item in elencoCercaCollaboratoreEsterno" :key="item.message">
-              <div class="col">
-                <a href="#" @click="aggiungiElencoClientiCollaboratoreEsterno(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
-
-            </div>
-          </div>  
-        <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-         
-        </q-input>
-        </div>
-       <!-- <div class="col-2"> <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" :dense="true" /></div> -->
-    </div>
-    
-    
-    <div class="row justify-center" >
-      <div class="col-4 col-md-2 bgAree"  style="border-bottom:1px solid black"><b>Nome</b> </div> 
-      <div class="col-4 col-md-2 bgAree"  style="border-bottom:1px solid black"><b>Cognome</b> </div>
-      <div class="col-4 col-md-2 bgAree"  style="border-bottom:1px solid black"><b>Codice Fiscale</b> </div>  
-      <div class="col-1 col-md-1 bgAree"  style="border-bottom:1px solid black"></div>  
-  </div>
-
-  <div  class="row justify-center" v-for="item in elencoCollaboratoriEnterno" :key="item.message">
-    <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.cognome }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.codiceFiscale }}</div>
-     <div class="col-1 col-md-1 bgAree"> 
-    <q-btn   size="sm" round icon="delete" @click="elencoCollaboratoriEnterno.splice(index, 1)" />
-  
-  </div>
-  </div>
-  </div>
-   <!-- FINE collaboratori esterni -->
-<div class="">
-<div class="row"><div class="col"><div class="col-2"> <q-btn   label="Aggiungi Nuova Anagrafica" color="secondary"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" :dense="true" /></div></div></div>
-
-</div>
-  </div>
-
-
-
-<!-- #endregion -->
-
-<!-- #region Anagrafica intervento -->
-    <div v-if="tab =='anagraficaIntervento'"  style="color:grey; ">
-
-        <div class="row" style="background-color: white;">
-            <div class="col">
-                <b>Tipologia Edificio</b>
-                <div class="q-gutter-sm">
-      <q-radio v-model="tipologiaEdificio" val="condominio" label="Condominio" />
-      <q-radio v-model="tipologiaEdificio" val="edificioFamiliare" label="Edificio Residenziale" />
-      <q-radio v-model="tipologiaEdificio" val="commerciale" label="Commerciale" />
-      <q-radio v-model="tipologiaEdificio" val="altro" label="altro" />
-      
-    </div>
-            </div>
-        </div>
-          <!--***** Edificio Familiare **** -->
-        <div v-if="tipologiaEdificio =='edificioFamiliare' || tipologiaEdificio =='commerciale'  || tipologiaEdificio =='altro' " class="bgmargintop"  >
-          <span class="text-h6"><b>Edificio</b></span>
-          <div class="row">
-            <div class="col">
-              <q-radio v-model="edificioUnifamiliareTipo" val="unifimaliare" label="Edificio residenziale unifamiliare" /> 
-              
-              <q-radio v-model="edificioUnifamiliareTipo" val="plurifimiliare" label="Unità immobiliare sita all’interno di edifici plurifamiliari" /> 
-              <q-radio v-model="edificioUnifamiliareTipo" val="commeciale" label="Commerciale" /> 
-              <q-radio v-model="edificioUnifamiliareTipo" val="altro" label="Altro" /> 
-              <q-input v-model="text" type="text" label="Altro" :dense="true" outlined  v-if="edificioUnifamiliareTipo == 'altro' "/>
-
-            </div>
-          </div>
-          <div class="row q-gutter-xs" style="padding-top:20px">
-            <div class="col-12"><b> Dati proprietario dell'immobile </b></div>
-            <!--<div class="col-12">
-              <q-btn   label="Aggiungi"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" />
-            </div> -->
-            <div class="col-2">
-              <label>Nome</label>
-              <q-input v-model="NuovoProprietarioImmobileNome" type="text" :dense="true"  outlined/>
-              </div>
-            <div class="col-2">
-               <label>Cognome</label>
-              <q-input v-model="NuovoProprietarioImmobileCognome" type="text" :dense="true"  outlined/>
-           </div> 
-            <div class="col-2">
-               <label>Codice Fiscale</label>
-              <q-input v-model="NuovoProprietarioImmobileCodiceFiscale" type="text" maxlength="15" :dense="true"  outlined/>
-          
-            </div>
-            <div class="col-2">
-               <label>Telefono</label>
-              <q-input v-model="NuovoProprietarioImmobileTelefono" type="text" :dense="true" outlined  />
-          </div>
-          <div class="col-2">
-            <q-btn color="primary"  style="margin-top:23px" icon="add" :dense="true"  outline @click="addRowProprietariImmobile()" /></div>
-
-
-          </div>
-          <div class="row"  style="border-bottom:1px solid black">
-            <div class="col-2"><b>Nome</b> </div>  
-            <div class="col-2"><b>Cognome</b> </div>  
-            <div class="col-2"><b>Codice Fiscale</b></div>  
-            <div class="col-2"><b>Telefono</b></div>  
-            <div class="col-2"><b></b></div>  
-          </div>
-          
-          <div  class="row" v-for="(item,index) in elencoProprietariImmobile" :key="item.message" style="border-bottom:1px solid black">
-            <div class="col"> {{ item.nome }}</div>
-            <div class="col"> {{ item.cognome }}</div>
-            <div class="col"> {{ item.codiceFiscale }}</div>
-            <div class="col"> {{ item.telefono }}</div>
-            <div class="col">   <q-btn   size="sm" round icon="delete" @click="elencoProprietariImmobile.splice(index, 1)" />
-            </div>
-   
-          </div>
-
-           <div class="row" style="padding-top:20px">
-             <div class="col">
-               <label><b>Dati dell'immobile </b></label>
-             </div>
-           </div>
-          <div class="row">
-            
-            <div class="col"><q-input v-model="edificioUnifamiliareIndirizzo"  outlined :dense=true type="text" label="Indirizzo" style="padding:5px" /></div>
-            <div class="col"><q-input v-model="edificioUnifamiliarecitta"   outlined :dense=true  type="text" label="Città" style="padding:5px" /></div>
-            <div class="col"><q-input v-model="edificioUnifamiliareProvincia"   outlined :dense=true  type="text" label="Provincia" style="padding:5px" /></div>
-            <div class="col"><q-input v-model="edificioUnifamiliareAnnocostruzione"    outlined :dense=true  type="text" label="Anno di costruzione" style="padding:5px" /></div>
-          </div>
-          
-          <div class="row" style="padding-top:20px;">
-            <div class="col">
-              <label><b>Piano immobile</b></label>
-              <q-input v-model="edificioUnifamiliarePianoImmobile" type="text"  outlined :dense="true" />
-            </div>
-          </div>
-
- <q-space />
-
-
-        </div>
-
-                <!--***** Edificio Condominio********-->
-        <div v-if="tipologiaEdificio == 'condominio'"   class="bgmargintop"  >
-        <span class="text-h6"><b>Condominio</b></span>  
-          <div class="row">
-            <div class="col">
-              <q-input v-model="condominioNome"  outlined :dense=true   type="text"  style="padding:5px" label="Nome Condominio" /><!-- Riportare nel mandato per la redazione dello studio di fattibilità-->
-
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <q-input v-model="condominioIndirizzo"  outlined :dense=true  type="text"  style="padding:5px" label="Indirizzo" />
-            </div>
-            <div class="col">
-              <q-input v-model="condominioCitta"   outlined :dense=true type="text"  style="padding:5px" label="Citta" />
-            </div>
-            <div class="col">
-              <q-input v-model="condominioProvincia"  outlined :dense=true type="text"  style="padding:5px" label="Provincia " />
-           </div>
-           
-           </div>
-
-          <div class="row">
-            <div class="col-2">
-              <q-input v-model="condominioAnnodicotruzione" type="number"  outlined :dense=true   style="padding:5px" label="Anno di costruzione " />
-            </div>
-            <div class="col-2">
-              <q-input v-model="condominioPianoimmboile"  outlined :dense=true type="text"  style="padding:5px" label="Piano Immobile " />
-            </div>
-          </div>
-
-          <div class="row" style="padding-top:20px">
-            <div class="col-4">
-              <label><b>Numero u. i. accatastate (escluse pertinenze)</b>
-             <q-icon name="info" >
-               <q-tooltip anchor="top middle" self="bottom middle">
-                Riportare il n. di unità abitative accatastate (comprese A1, A8, A9, uffici) ad eccezione delle pertinenze
-                </q-tooltip> 
-              </q-icon>
-              </label>
-               <q-input v-model="condominioNumeroUnitaAccatastate" outlined :dense=true  type="number"  style="padding:5px;max-width:150px" />
-               </div> 
-               
-            <div class="col-3">
-              <label> <b> Numero u.i. attualmente riscaldate</b>
-              <q-icon name="info" >
-                <q-tooltip anchor="top middle" self="bottom middle">
-                  Nel caso di impianto centralizzato, riportare il n. di unità abitative riscaldate.<br>
-                  Nel caso di impianto autonomo, riportare il n. di unità abitative dotate di impianto di riscaldamento.
-                </q-tooltip> 
-              </q-icon>
-            </label>
-              <q-input v-model="condominioNumerounitariscaldate" type="text"   style="padding:5px;max-width:150px" outlined :dense=true />
-            </div>
-          </div>
-
-
-          <div class="row" style="padding-top:20px">
-            <div class="col-12">
-            <b> Numero pertinenze autonomamente accatastate </b>
-              
-              <q-icon name="info" >
-                <q-tooltip anchor="top middle" self="bottom middle">
-                  Riportare il n. di pertinenze autonomamente accatastate. <br>Si considerano pertinenze le seguenti categorie catastali:
-                </q-tooltip> 
-              </q-icon>
-              
-            </div>
-            <div class="col-12">
-              <q-checkbox right-label v-model="condominioPertinenzaC2C6C7" val="C/2" label="C/2 magazzini e locali di deposito" />
-              <q-checkbox right-label v-model="condominioPertinenzaC2C6C7" val="C/6" label="C/6 stalle, scuderie, rimesse, autorimesse" />
-              <q-checkbox right-label v-model="condominioPertinenzaC2C6C7" val="C/7" label="C/7 tettoie chiuse o aperte" />
-            </div>
-
-          </div>
-          <div class="row" style="padding-top:20px">
-           
-          </div>
-
-
-          <div class="row">
-            <div class="col-12">
-              <b>Il condominio è formalmente costituito?</b>
-              <q-icon name="info" >
-                <q-tooltip anchor="top middle" self="bottom middle">
-                - Barrare la casella “SI” se l’edificio oggetto di intervento è costituito da oltre 8 unità immobiliari. In tal caso vi è l’obbligo di costituire formalmente il condominio e nominare l’amministratore.
-                - Barrare la casella “NO” in caso di condominio minimo ovvero quando l’edificio oggetto di intervento è costituito da un n. di condomìni inferiore a 8. 
-                </q-tooltip> 
-              </q-icon>
-            </div>
-            <div class="col-12">
-              <q-radio v-model="condominioformalmenteCostituito" val="SI" label="SI" />
-              <q-radio v-model="condominioformalmenteCostituito" val="NO" label="NO" />
-            </div>
-          </div>
-          <div class="row" v-if="condominioformalmenteCostituito == 'SI'">
-            <div class="col-3">
-              <q-input v-model="condominioFormalmenteCostituitoCodiceFsicale" outlined :dense=true type="text" label="Codice Fiscale Condominio"  style="padding:5px;max-width:250px" maxlength="16" />
-              </div>
-            <div class="col"> 
-               <q-input v-model="condominioFormalmenteCostituitoRiferimentoAmministatore" outlined :dense=true type="text" style="padding:5px;" label="Riportare Nome e Cognome, email (no pec) e num. di telefono" />
-               </div>
-          </div>
-          
-          <div class="row" v-if="condominioformalmenteCostituito == 'NO'">
-            <div class="col-4">
-              <q-input v-model="condominioNOformalmenteCostituitoReferente" outlined :dense=true type="text" label="Riferimento Referente" style="padding:5px;" />
-              </div>
-              
-            <div class="col-4">
-              <q-input v-model="condominioNOformalmenteCostituitoCodiceFiscaleReferente" outlined :dense=true type="text" label="Codice Fsicale Referente"  style="padding:5px;max-width:250px" maxlength="16"  />
-            </div>
-          </div>
-
-          
- <q-space />
-
-<div class="row"><div class="col"><hr/></div></div>
-        </div>
-
-
-
-        <div :v-if="tipologiaEdificio == 'condominio' || tipologiaEdificio=='edificioFamiliare'"  class="bgmargintop" >
-
-          <div class="row " style="padding-top:20px;">
-              <div class="col-12">
-                
-                <label class=""><b>Zona climatica</b> <q-icon name="info" > 
-                <q-tooltip anchor="top middle" self="bottom middle">
-              Riportare la zona climatica secondo la Tabella A del DPR 412/1993 e s.m.i:
-                </q-tooltip> 
-                </q-icon> 
-
-                </label>
-              </div>
-          <div class="col-12">
-                  <q-checkbox v-model="zonaClimatica" label="Zona A: GG<600" val="zonaA" /> 
-                  <q-checkbox v-model="zonaClimatica" label="Zona B: 601<GG<900" val="zonaB"  /> 
-                  <q-checkbox v-model="zonaClimatica" label="Zona C: 901<GG>1400" val="zonaC"  /> 
-                  <q-checkbox v-model="zonaClimatica" label="Zona D: 1401<GG>2100" val="zonaD"  /> 
-                  <q-checkbox v-model="zonaClimatica" label="Zona E: 2101<GG>3000" val="zonaE"  /> 
-                  <q-checkbox v-model="zonaClimatica" label="Zona F: GG>3000" val="zonaF"  /> 
-
-                </div>
-          </div>
-
-          <div class="row" style="padding-top:20px; ">
-            <div class="col-5">
-           
-              <label>
-              <b>Gradi giorno </b>
-              <q-icon name="info" > 
-                <q-tooltip anchor="top middle" self="bottom middle">
-                Riportare i Gradi Giorno della località oggetto di intervento:
-                </q-tooltip> 
-                </q-icon> 
-                </label>
-
-                <q-input outlined :dense=true style="max-width:200px"   v-model="gradigiornoText" type="text" label="Gradi" />
-               
-             </div>
-          </div>
-
-
-        <div class="row" style="padding-top:20px">
-          <div class="col">
-            <b>L’immobile è in area vincolata (Decreto Legislativo 22 gennaio 2004, n. 42):</b>
-            <div class="q-gutter-sm">
-            <q-radio v-model="areavincolata42" val="SI" label="SI" /> 
-            <q-radio v-model="areavincolata42" val="NO" label="NO" /> 
-            <q-input  type="text" v-if="areavincolata42 == 'SI'" label="Specificare il tipo di vincolo" v-model="areaVicnolata42TipoVincolo" />
-          </div>
-          </div>
-        </div>
-
-        <div class="row" style="padding-top:20px">
-          <div class="col"><b>L’immobile il quale zona sismica ricade</b>
-           <div class="q-gutter-sm">
-          <q-radio v-model="zonasismisca4" val="1" label="Zona 1" /> 
-          <q-radio v-model="zonasismisca4" val="2" label="Zona 2" /> 
-          <q-radio v-model="zonasismisca4" val="3" label="Zona 3" /> 
-          <q-radio v-model="zonasismisca4" val="4" label="Zona 4" /> 
-          <q-input  type="text"  v-model="zonasismisca4Interventiantisismici" v-if="zonasismisca4 != ''" label="Compilare solo nel caso in cui siano previsti interventi antisismici" />
-          <q-input  type="text"  v-model="zonasismisca4InterventiantisismiciAltriVincoli" v-if="zonasismisca4 != ''" label="Altri vincoli" />
-          </div>
-          </div>
-        </div>
-        <div class="row" style="padding-top:20px">
-            <div class="col-12">
-              <b>Tipologia intervento proposto</b>
-
-            </div>
-            <div class="col4">
-              <q-checkbox right-label  v-model="TipoInterventoProposto" label="Energetico" val="energetico" />
-              <q-checkbox right-label v-model="TipoInterventoProposto" label="Sismico"  val="sismico"/>
-              <q-checkbox right-label v-model="TipoInterventoProposto" label="Combinato" val="combinato" />
-            </div>
-          </div>
-        <div class="row" style="padding-top:20px">
-            <div class="col-12">
-              <b>Tipologia intervento DPR 380/2001</b>
-
-            </div>
-            <div class="col4">
-              <q-checkbox right-label  v-model="TipologiainterventoDPR3802001" val="ordinaria" label="Manutenzione Ordinaria" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="straordinaria" label="Manutenzione straordinaria" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="risanamentoConservativo"  label="Restauro e risanamento conservativo" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="ristrutturazioneEdilizia"  label="Ristrutturazione Edilizia" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="nuovaCostruzione"  label="Nuova Costruzione" />
-              <q-checkbox right-label v-model="TipologiainterventoDPR3802001" val="ristrutturazioneUrbanistica"  label="Interventi di ristrutturazione urbanistica" />
-            </div>
-          </div>
-
-        <div class="row">
-          <div class="col">
-            <hr>
-            </div>
-        </div>
-        </div>
-
-       
-        
-
-
-        <!--*** Progettisti *** -->
-        <div class="bgAree">
-        <div class="row " >
-          <div class="col">
-            <div class="col-12"><b>Progettisti</b></div>
-           
-          </div>
-        </div>
-        <div class="row q-gutter-sm "  style="padding-top:20px">
-            <div class="col-7">
-               <q-input v-model="cercaProgettista" @keypress=" elencoCercaAnagraficaProgettistiFunction()" outlined :dense=true type="text" label="Cerca" >
-               <div class="autocomplete-items" v-if="cercaProgettista.length > 2">
-            <div class="row"  v-for="item in elencoCercaAnagraficaProgettisti" :key="item.message">
-              
-              <div class="col">
-                <a  @click="aggiungiElencoProgettisti(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a>
-              </div>
-                
-            
-
-            </div>
-             
-          </div>
-           <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-         
-        </q-input>
-               </div>
-            <div class="col-2">
-              <q-btn   label="Crea"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" />
-            </div>
-        </div>
-        <div class="row"  style="border-bottom:1px solid black">
-            <div class="col"><b>Nome</b> </div>  
-            <div class="col"><b>Cognome</b> </div>  
-            <div class="col"><b>Codice Fiscale</b> </div>  
-            <div class="col"> </div>  
-        </div>
-        <div  class="row" v-for="(item ,index) in elencoAnagraficaProgettisti" :key="item.message" >
-        <div class="col"> {{ item.nome }}</div>
-        <div class="col"> {{ item.cognome }}</div>
-        <div class="col"> {{ item.codiceFiscale }}</div>
-          <div class=""> 
-                <q-btn   size="sm" round icon="delete" @click="elencoAnagraficaProgettisti.splice(index, 1)" />
-              </div>
-   </div>
-
-
-            </div>
-
-
-
-
-    </div><!--Anagrafica intervento -->
-<!-- #endregion -->
-
-
-<!-- #region  ******SCREENING********-->
-<div v-if="tab=='screening'" style="color:grey">
-
-  <div v-if="tipologiaEdificio == 'edificioFamiliare'" class="bgmargintop">
-  <div class="row " >
-    <div class="col-12">
-      <b>L’unità immobiliare è funzionalmente indipendente?</b>
-      <q-icon name="info" >
-        <q-tooltip anchor="top middle" self="bottom middle" >
-          N.B. L’U.I. è funzionalmente indipendente se è dotata di installazioni o manufatti <br>
-          di qualunque genere, quali impianti per l’acqua, per il gas, per l’energia elettrica, <br>
-          per il riscaldamento di proprietà esclusiva.
-        </q-tooltip>
-      </q-icon>
-    </div>
-    <div class="col-12">
-      <q-radio v-model="screeningUnifamiliareIndipendente" val="SI" label="SI" />
-      <q-radio v-model="screeningUnifamiliareIndipendente" val="NO" label="NO" />
-      
-      </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <b>L’unità immobiliare è dotata di accesso autonomo?</b>
-      <q-icon name="info" >
-        <q-tooltip anchor="top middle" self="bottom middle" >
-         N.B. L’U.I. è dotata di accesso autonomo se dispone di un accesso indipendente non comune ad <br>
-altre unità immobiliari chiuso da cancello o portone di ingresso che consenta l’accesso <br>
-dalla strada o dal cortile o giardino anche di proprietà non esclusiva.  
-        </q-tooltip>
-      </q-icon>
-    </div>
-    <div class="col-12">
-      <q-radio v-model="screeningUnifamiliareIAcessoAutonomo" val="SI" label="SI" />
-      <q-radio v-model="screeningUnifamiliareIAcessoAutonomo" val="NO" label="NO" />
-      
-      </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <b>Il proprietario dell’immobile ha già usufruito o
-ha intenzione di usufruire della detrazione
-al 110% per altre unità immobiliari?</b>
-     
-    </div>
-    <div class="col-12">
-      <q-radio v-model="screeningUnifamiliareUsufruito110" val="SI" label="SI" />
-      <q-radio v-model="screeningUnifamiliareUsufruito110" val="NO" label="NO" />
-      
-      </div>
-  </div>
-<div class="row">
-    <div class="col-12">
-      <b>Sono previste opere di riqualificazione dei balconi?</b>
-      <q-icon name="info" >
-        <q-tooltip anchor="top middle" self="bottom middle" >
-ad es. rifacimento della pavimentazione, ringhiere, frontalini, ecc….  
-        </q-tooltip>
-      </q-icon>
-    </div>
-    <div class="col-12">
-      <q-radio v-model="screeningUnifamiliareRiqualificazioneBalconi" val="SI" label="SI" />
-      <q-radio v-model="screeningUnifamiliareRiqualificazioneBalconi" val="NO" label="NO" />
-      
-      </div>
-  </div>
-
-
-
-
-  </div>
-  <div v-if="tipologiaEdificio == 'condominio'" class="bgmargintop">
-
- <div class="row">
-    <div class="col-12">
-      <b>E' presente un unico proprietario
- o comproprietari di tutte le u.i. del condominio?</b>
-      <q-icon name="info" >
-        <q-tooltip anchor="top middle" self="bottom middle" >
-In caso di risposta affermativa, interrompere la compilazione del questionario e verificare la fattibilità dell’operazione con EHUB.
-        </q-tooltip>
-      </q-icon>
-    </div>
-    <div class="col-12">
-      <q-radio v-model="screeningCondominioUnicoProprietario" val="SI" label="SI" />
-      <q-radio v-model="screeningCondominioUnicoProprietario" val="NO" label="NO" />
-      
-      </div>
-  </div>
-
- <div class="row">
-    <div class="col-12">
-      <b>Ci sono unità immobiliari di proprietà di 
-soggetti IRES?</b>
-      <q-icon name="info" >
-        <q-tooltip anchor="top middle" self="bottom middle" >
-I soggetti passivi IRES sono:
-- le società di capitali ed enti equiparati
--enti pubblici/privati diversi dalle società che hanno come oggetto principale o esclusivo l’esercizio dell’attività commerciale
--  enti pubblici/privati diversi dalle società che non hanno come oggetto principale o esclusivo l’esercizio dell’attività commerciale
-- società ed enti di ogni tipo con o senza personalità giuridica
-        </q-tooltip>
-      </q-icon>
-    </div>
-    <div class="col-12">
-      <q-radio v-model="screeningCondominioSoggettiIRES" val="SI" label="SI" />
-      <q-radio v-model="screeningCondominioSoggettiIRES" val="NO" label="NO" />
-      
-      </div>
-  </div>
-
- <div class="row">
-    <div class="col-12">
-      <b>Ci sono condòmini che possiedono più di due unità immobiliari all'interno del condominio?</b>
-      <q-icon name="info" >
-        <q-tooltip anchor="top middle" self="bottom middle" >
-In caso di risposta affermativa, relativamente agli interventi realizzati sulle singole unità immobiliari, il condomìno potrà fruire della detrazione 110% su max 2 U.I.
-Tale limitazione non si applica alle spese sostenute per interventi realizzati sulle parti comuni degli edifici in condominio.        </q-tooltip>
-      </q-icon>
-    </div>
-    <div class="col-12">
-      <q-radio v-model="screeningCondominioPossiedonoMultiProprieta" val="SI" label="SI" />
-      <q-radio v-model="screeningCondominioPossiedonoMultiProprieta" val="NO" label="NO" />
-      
-      </div>
-  </div>
-
-
- <div class="row">
-    <div class="col-12">
-      <b>Sono presenti u.i. con categoria catastale A1, A8 o A9?</b>
-      <q-icon name="info" >
-        <q-tooltip anchor="top middle" self="bottom middle" >
-          A1- Abitazione di tipo signorile
-          A8- Abitazione in villa
-          A9- Castelli, palazzi di eminenti pregi artistici o storici 
-          </q-tooltip>
-      </q-icon>
-    </div>
-    <div class="col-12">
-      <q-radio v-model="screeningCondominioA1A8A9" val="SI" label="SI" />
-      <q-radio v-model="screeningCondominioA1A8A9" val="NO" label="NO" />
-      
-      </div>
-  </div>
-
- <div class="row">
-    <div class="col-12">
-      <b>Ci sono condòmini che hanno già usufruito o che hanno intenzione di usufruire della detrazione al 110% per altre u. i. esterne al condominio??</b>
-      
-    </div>
-    <div class="col-12">
-      <q-radio v-model="screeningCondominioUsufruito110" val="SI" label="SI" />
-      <q-radio v-model="screeningCondominioUsufruito110" val="NO" label="NO" />
-      
-      </div>
-  </div>
-
-</div>
-
-
-
-  <div class="row">
-      <div class="col">
-         <b style="color:red">Riportare di seguito la % per ciascuna categoria catastale DA RIVEDERE</b>
-        
-      </div>
-    </div>
-
-      <!-- Titolo autorizzativi-->
-
- <div class=" bgmargintop q-pa-md q-gutter-sm row" >
-   <div class="col-12"><span class="text-h6 text-secondary">Titoli autorizzativi</span></div>
-   
-    <div class="col-12">
-      <b>Tipologia Titolo</b>
-      <q-icon name="info" >
-        <q-tooltip anchor="top middle" self="bottom middle" >
-        Riportare il titolo con il quale è stato edificato l’edificio
-          </q-tooltip>
-      </q-icon> <q-input v-model="tipologiaTitoloAutorizzativi" type="text" outlined :dense="true"  />
-    </div>
-    <div class="col-3">
-      <label for="">Riferimenti</label>
-      <q-input v-model="riferimentiAutorizzativi" type="text" outlined :dense="true"  />
- </div>
- <div class="col-3">
-      <label>Data</label>
-     <q-input  outlined :dense="true"  v-model="dateAutorizzativi" mask="date" :rules="['date']">
-      <template v-slot:append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="date">
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
-    </div>
-    <div class="col-3">
-      <label>Allegato</label><br>
-      <input  type="file" @change="handleFileTitoliAutorizzativi">
-      <a href="#"  v-if="!nuovoProgetto" @click="downloadFile(idprogetto+'/'+AllegatoTitoloAutorizzativo,AllegatoTitoloAutorizzativo)" >{{AllegatoTitoloAutorizzativo}}</a>
-      <!--<q-file v-model="AllegatoTitoloAutorizzativo" label="Carica file"  :dense="true" outlined multiple style="max-width: 300px"    />-->
-  </div>
-  
-<div class="col-12">
- <div class="row q-gutter-sm ">
-    <div class="col-12 col-md-12">
-      <b>Successivi interventi di manutenzione straordinaria 
-(con SCIA, CILA, ecc..)</b>
-      <q-icon name="info" >
-        <q-tooltip anchor="top middle" self="bottom middle" >
-     Riportare eventuali interventi successivi relativi all’edificio nel suo complesso
-          </q-tooltip>
-      </q-icon>
-    </div>
-    <div class="col-3">
-      <label for="">Anno di intervento</label>
-      <q-input v-model="annoIntervento" outlined :dense="true" type="number" maxlength="4"/>
-    </div>
-
-    <div class="col-3"> 
-      <label for="">Allegato</label><br>
-      <input type="file" @change="handleFile" >
-    <!--  <q-file  v-model="allegatoIntervento"  label="Carica filedddd"  outlined :dense="true"     style="max-width: 300px"  />-->
-    </div>
-      
-    
-    <div class="col-3"> 
-      <q-btn icon="add"  color="primary" @click="addrowInterventiManutenzioneSuccessivi(); " outline :dense="true" />
-    </div>
-   
-  </div>
-   <div class="row" style="background-color:white">
-    <div class="col"><b>Anno di intervento</b></div>
-    <div class="col"><b>Allegato</b></div>
-    
-    <div class="col-1 col-md-1 "></div>
-    
-    </div>
-
-<!--  --> 
-    <div   v-for="(item,index) in elencoInterventiManutenzioneStraordinariaSCIACILAltro" :key="item.message"  style="border-bottom:1px solid black background-color:white; ">
-    <div class="row" v-if="item.cancellare != '1'">
-    <div class="col"> {{ item.anno }}</div>
-    <div class="col"><span  @click="downloadFile(idprogetto+'/'+item.allegato, item.allegato)" style=" cursor: pointer; text-decoration:underline"> {{ item.allegato }}</span></div>
- 
-    <div class="col-1 col-md-1 "> 
-    <q-btn v-if="nuovoProgetto"  size="sm" round icon="delete" @click="elencoInterventiManutenzioneStraordinariaSCIACILAltro.splice(index, 1)" />
-    <q-btn v-if="!nuovoProgetto"  size="sm" round icon="delete" @click="elencoInterventiManutenzioneStraordinariaSCIACILAltro[index].cancellare='1'" />
-
-  </div>
-  </div>
-  </div>
-
-</div>
-</div>
-
-
-
-<div class="row"><hr></div>
-<!-- ALLEGATI INTERVENTI SUCCESSIVI ALLA COSTRUZIONE -->
-<div  style="background-color:white">
-  <div class="row " >
-    <div class="col-6"><label for=""><b>Titoli autorizzativi relativi ad interventi successivi alla costruzione – area allegato -</b></label></div>
-    <div class="col-2">
-      </div>
-
-  </div>
-  <div class="row  q-gutter-sm" style="background-color:white">
-    <div class="col"><b><q-input v-model="modalInterventiSuccessiviNuovoSub" :dense="true"  type="text" label="Sub" /></b></div>
-    <div class="col"><b><q-input v-model="modalInterventiSuccessiviNuovaDecrizione" :dense="true"  type="text" label="Successivi interventi" /></b></div>
-    <div class="col">
-      <label>Allegato</label><br>
-      <input type="file" @change="handleFile">
-   <!--   <q-file
-      v-model="modalInterventiSuccessiviNuovoAllegato"
-      label="Carica file"
-      :dense="true"
-      filled
-      style="max-width: 300px" />
-      -->
-      </div>
-    <div class="col">
-       <q-btn icon="add" color="primary" @click="addrowInterventiSuccessivi(); " outline :dense="true" />
-    </div>
-    
-    </div>
-  <div class="row" style="background-color:white">
-    <div class="col"><b>Sub</b></div>
-    <div class="col"><b>Successivi interventi</b></div>
-    <div class="col"><b>Allegato</b></div>
-    <div class="col-1 col-md-1 "></div>
-    
-    </div>
-  
-
-
- <div v-for="(item,index) in elencoTitoliAutorizzatiInterventiSuccessivi" :key="item.message" style="border-bottom:1px solid black background-color:white; ">
-   <div  class="row"  v-if="item.cancellare == '0'">
-
-    <div class="col"> {{ item.sub }}</div>
-    <div class="col"> {{ item.descrizione }}</div>
-    <div class="col"><span  @click="downloadFile(idprogetto+'/'+item.allegato, item.allegato)" style=" cursor: pointer; text-decoration:underline"> {{ item.nomeAllegato }}</span></div>
-    <div class="col-1 col-md-1 "> 
-    <q-btn v-if="nuovoProgetto"  size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi.splice(index, 1)" />
-    <q-btn v-if="!nuovoProgetto"  size="sm" round icon="delete" @click="elencoTitoliAutorizzatiInterventiSuccessivi[index].cancellare='1'" />
-   
-</div>
-  </div>
-  </div>
-</div>
-<div  style="background-color:white">
-<!-- DATI CATASTALI -->
-  <div class="row " style="padding-top:10px" >
-    <div class="col-12"><label for="" class="text-h6">
-      <b>Dati catastali</b></label>  </div>
-   
-  </div>
- 
-   
-  <div class="row">
-    <div class="col"><b>foglio</b></div>
-    <div class="col"><b>Particella</b></div>
-    <div class="col"><b>Sub</b></div>
-    <div class="col"></div>
-
-    </div>
-      <div class="row  q-gutter-sm" style="background-color:white; border-bottom:1px solid black">
-    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoFoglio" :dense="true" outlined  type="text" /></b></div>
-    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoParticella" :dense="true" outlined  type="text"  /></b></div>
-    <div class="col"><b><q-input v-model="modalDatiCatastaliTitoliAutorizzativiNuovoSub" :dense="true" outlined  type="text" /></b></div>
-
-    <div class="col"> <q-btn icon="add"  color="primary" @click="addrowDatiCatastaliTitoliAutorizzativi(); " outline :dense="true" /></div>
-    
-    </div>
- <div  class="row  q-gutter-sm" v-for="(item,index) in elencoTitoliAutorizzatiDatiCatastali" :key="item.message" >
-    <div class="col"> {{ item.foglio }}</div>
-    <div class="col"> {{ item.particella }}</div>
-    <div class="col"> {{ item.sub }}</div>
-   <div class="col-1 col-md-1 "> 
-    <q-btn   size="sm" round icon="delete" @click="elencoTitoliAutorizzatiDatiCatastali.splice(index, 1)" />
-  
-  </div>
-
-  </div>
-  </div>
-
-<div class="bgmargintop">
-  <div class="row "  style="padding-top:10px" >
-    <div class="col-12">
-      <strong class="text-h6  text-secondary" >Verifica di conformità</strong>
-      </div>
-  </div>
-   
-  <div class="row"  style="padding-top:10px" >  
-    <div class="col-12">
-      <strong>Nell’edificio sono presenti abusi edilizi? </strong>
-    </div>
-
-    <div class="col-12">
-      <q-radio v-model="abusiEdilizi" val="SI" label="SI" />
-      <q-radio v-model="abusiEdilizi" val="NO" label="NO" />
-    </div>
-    
-    <div class="col-12" v-if="abusiEdilizi =='SI'  ">
-      <label for="">Specificare la tipologia</label>
-      <q-input v-model="TipologiaAbusiEdilizi" type="text" :dense='true' outlined  />
-    </div>
-
-  </div>
-  <div class="row"  style="padding-top:10px" >  
-    <div class="col-12">
-      <strong>Il progetto in atto al comune risulta corrispondente allo stato di fatto:</strong>
-    </div>
-
-    <div class="col-12">
-      <q-radio v-model="comuneStatoDiFatto" val="SI" label="SI" />
-      <q-radio v-model="comuneStatoDiFatto" val="NO" label="NO" />
-    </div>
-
-  </div>
-  <div class="row"  style="padding-top:10px" >  
-    <div class="col-12">
-      <strong>La planimetria censita al NCEU risulta corrispondente allo stato di fatto:</strong>
-    </div>
-
-    <div class="col-12">
-      <q-radio v-model="NCEUStatoDiFatto" val="SI" label="SI" />
-      <q-radio v-model="NCEUStatoDiFatto" val="NO" label="NO" />
-    </div>
-
-  </div>
-  <div class="row"  style="padding-top:10px" >  
-    <div class="col-12">
-      <strong>L’immobile presenta difformità urbanistiche*:</strong>
-    </div>
-
-    <div class="col-12">
-      <q-radio v-model="difformitaUrbanistiche" val="SI" label="SI" />
-      <q-radio v-model="difformitaUrbanistiche" val="NO" label="NO" />
-    </div>
-    <div class="col-12" v-if="difformitaUrbanistiche == 'SI'">
-      <q-input v-model="noteDifformitaUrbanistiche" outlined  type="textarea" label="Note Difformità urbanistiche" />
-    </div>
-
-  </div>
-  <div class="row"  style="padding-top:10px" >  
-    <div class="col-12">
-      <strong>L’immobile presenta difformità catastali**:</strong>
-    </div>
-
-    <div class="col-12">
-      <q-radio v-model="difformitaCatastali" val="SI" label="SI" />
-      <q-radio v-model="difformitaCatastali" val="NO" label="NO" />
-    </div>
-<div class="col-12" v-if="difformitaCatastali == 'SI'">
-      <q-input v-model="noteDifformitaCatastali" outlined  type="textarea" label="Note Difformità Catastali" />
-    </div>
-
-  </div>
-  <div class="row"  style="padding-top:10px" >  
-    <div class="col-12">
-      <strong>Le eventuali irregolarità riscontrate sono sanabili***:</strong><q-icon name="info" ><q-tooltip>
-        Specificare che le attività di sanatoria sono a carico del condominio.
-Specificare che gli abusi verranno sanati prima della data di inizio lavori. 
-Specificare le modalità e i tempi di sanatoria.
-      </q-tooltip></q-icon>
-    </div>
-
-    <div class="col-12">
-      <q-radio v-model="irregolaritaSanabili" val="SI" label="SI" />
-      <q-radio v-model="irregolaritaSanabili" val="NO" label="NO" />
-    </div>
-<div class="col-12" v-if="irregolaritaSanabili == 'SI'">  
-      <q-input v-model="noteIrregolaritaSanabili" outlined  type="textarea" label="Note Irregolarità Sanabili" />
-    </div>
-
-  </div>
-</div>
-
-
- </div><!-- DIV TAB Screening -->
-<!-- #endregion -->
  
 
  <!-- #region Dati Strutturati-->
@@ -1579,33 +592,6 @@ Specificare le modalità e i tempi di sanatoria.
 <!-- #endregion-->
 <!-- #region MODAL-->
 <!-- MODAL -->
- <q-dialog v-model="modalNuovaAnagraficaClienti" persistent>
-      <q-card>
-         <q-bar>
-          <q-space />
-          <q-btn dense="true" flat icon="close" v-close-popup>
-            <q-tooltip content-class="bg-white text-primary">Close</q-tooltip>
-          </q-btn>
-           </q-bar>
-        <q-card-section>
-          <div class="text-h6">Crea Nuova Anagrafica</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <q-input v-model="NuovoProprietarioImmobileNome" type="text" label="Nome" />
-          <q-input v-model="NuovoProprietarioImmobileCognome" type="text" label="Cognome" />
-          <q-input v-model="NuovoProprietarioImmobileCodiceFiscale" type="text" label="Codice Fiscale" />
-          <q-input v-model="NuovoProprietarioImmobileTelefono" type="text" label="Telefono" />
-     
-         </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn  label="Chiudi" color="secondary" v-close-popup />
-          <q-btn  label="Aggiungi" color="primary" v-close-popup />
-        </q-card-actions>
-        
-      </q-card>
-    </q-dialog>
 
 <q-dialog v-model="modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione" persistent>
   <q-card>
@@ -1751,15 +737,15 @@ Specificare le modalità e i tempi di sanatoria.
   color: #ffffff;
 }
 </style>
-<script>
 
-</script>
 <script>
-import formNuovaanagrafica from '@/components/NuovaAnagrafica'
-import message from '@/components/messaggio'
+//import formNuovaanagrafica from '@/components/NuovaAnagrafica'
+//import message from '@/components/messaggio'
 import Axios from 'axios';
-import nuovoProgettoVue from '../views/nuovo-progetto.vue';
+
 import step1 from '@/components/step1Progetto.vue';
+import step2 from '@/components/step2AnagraficaIntervento.vue';
+import step3 from '@/components/step3Screening.vue';
 
 export default {
 
@@ -1849,7 +835,7 @@ export default {
     aggiungiProgetto(){
       const  sendForm={
         idprogetto:this.idprogetto,
-          titoloProgetto:this.titoloProgetto,
+          titoloProgetto:this.Progetto.titoloProgetto,
          tipologiaEdificio:this.tipologiaEdificio,
          zonaClimatica:this.zonaClimatica,
          gradigiornoText:this.gradigiornoText ,
@@ -2002,38 +988,14 @@ export default {
     redirectlistaprogetti(){
 this.$router.push({ path:'lista-progetti'});
     },
-    addRowProprietariImmobile(){
-       this.elencoProprietariImmobile.push(
-         {nome:this.NuovoProprietarioImmobileNome, 
-         cognome:this.NuovoProprietarioImmobileCognome,
-        codiceFiscale:this.NuovoProprietarioImmobileCodiceFiscale,
-        telefono:this.NuovoProprietarioImmobileTelefono,
-          });
-    
-    },
+ 
     handleFilePreventivo(e){
       this.nameAuxFilePreventivo=e.target.files[0].name;
       const selectImage= e.target.files[0];
       this.createBase64(selectImage);
 
     },
-    handleFileTitoliAutorizzativi(e){
-      this.AllegatoTitoloAutorizzativo=e.target.files[0].name;
-      const selectImage= e.target.files[0];
-      this.createBase64TitoliAutorizzativi(selectImage);
 
-    },
-     createBase64TitoliAutorizzativi(fileObject){
-      const reader = new FileReader();
-      reader.onload = (e)=>{
-       var aux= e.target.result;
-       var base64string = window.btoa(aux);
-       this.Base64AllegatoTitoloAutorizzativo=base64string;
-      };
-      this.Base64AllegatoTitoloAutorizzativo= reader.readAsBinaryString(fileObject);
-
-//return output;
-    },
       createBase64Preventivo(fileObject){
       const reader = new FileReader();
       reader.onload = (e)=>{
@@ -2045,52 +1007,8 @@ this.$router.push({ path:'lista-progetti'});
 
 //return output;
     },
-    handleFile(e){
-      this.nameAuxFile=e.target.files[0].name;
-      const selectImage= e.target.files[0];
-      this.createBase64(selectImage);
 
-    },
-  
-     
-    createBase64(fileObject){
-      const reader = new FileReader();
-      reader.onload = (e)=>{
-       var aux= e.target.result;
-       var base64string = window.btoa(aux);
-       this.auxFile=base64string;
-      };
-      this.auxFile= reader.readAsBinaryString(fileObject);
 
-//return output;
-    },
-     
-    addrowInterventiManutenzioneSuccessivi(){
-  
-      this.elencoInterventiManutenzioneStraordinariaSCIACILAltro.push(
-        {
-          anno:this.annoIntervento,
-          allegato:this.nameAuxFile,
-          allegatoBase64:this.auxFile,
-          new:1,
-          cancellare:0
-
-        });
-
-        },
-    addrowInterventiSuccessivi(){
-      this.elencoTitoliAutorizzatiInterventiSuccessivi.push(
-        {
-          sub:this.modalInterventiSuccessiviNuovoSub,
-          descrizione:this.modalInterventiSuccessiviNuovaDecrizione,
-          nomeAllegato:this.nameAuxFile,
-          allegatoBase64:this.auxFile,
-          new:1,
-          cancellare:0,
-        });
-
-      this.modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione= false;
-    },
     addrowDatiCatastaliTitoliAutorizzativi(){
       this.elencoTitoliAutorizzatiDatiCatastali.push(
         {sub:this.modalDatiCatastaliTitoliAutorizzativiNuovoSub,
@@ -2197,36 +1115,9 @@ this.elencoAllegati.push({
       Axios.get(this.linkApi+'/getCercaUsersDaAutorizzare/'+this.idprogetto+'/'+this.CercaUtentiDaAutorizzare).then(Response=>{console.log(Response.data);this.elencoCercaUtentiDaAutorizzare= Response.data})
       }
       },
-    elencoCercaAnagraficaClientiFunction(){
-      if (this.cercaAnagraficaClienti.length > 1){
-      Axios.get(this.linkApi+'/getCercaAnagrafica/cliente/'+this.cercaAnagraficaClienti).then(Response=>{console.log(Response.data);this.elencoCercaAnagraficaClienti= Response.data})
-      }
-      },
-    elencoCercaCollaboratoreInternoFunction(){
-      if (this.cercaCollaboratoriInterni.length>1){
-      Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreInterno/'+this.cercaCollaboratoriInterni).then(Response=>{console.log(Response.data);this.elencoCercaCollaboratoreInterno= Response.data})
-      }
-      },
-    elencoCercaCollaboratoreEsternoFunction(){
-      if (this.cercaCollaboratoriEsterni.length >1){
-      Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreEsterno/'+this.cercaCollaboratoriEsterni).then(Response=>{console.log(Response.data);this.elencoCercaCollaboratoreEsterno= Response.data})
-    }},
-    elencoCercaAnagraficaProgettistiFunction(){
-      if (this.cercaProgettista.length >1){
-      Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreInterno/'+this.cercaProgettista).then(Response=>{console.log(Response.data);this.elencoCercaAnagraficaProgettisti= Response.data})
-    }},
-  aggiungiElencoClienti(datiUtente){
-    this.elencoAnagraficaClienti.push({
-        nome:datiUtente.nome,
-       cognome:datiUtente.cognome,
-       denominazione:datiUtente.denominazione,
-       codiceFiscale:datiUtente.codice_fiscale,
-       partitaIva:datiUtente.partita_iva,
-       id:datiUtente.id,
-      });
-       this.cercaAnagraficaClienti='';
-       this.elencoCercaAnagraficaClienti=null;
-  },
+  
+  
+
   autorizzaUtente(datiUtente){
     this.elencoUtentiDaAutorizzare.push({
         nome:datiUtente.name,
@@ -2237,46 +1128,105 @@ this.elencoAllegati.push({
        this.CercaUtentiDaAutorizzare='';
        this.elencoCercaUtentiDaAutorizzare=null;
   },
-  aggiungiElencoCollaboratoreInterno(datiUtente){
-    this.elencoCollaboratoriInterno.push({
-      nome:datiUtente.nome,
-       cognome:datiUtente.cognome,
-       denominazione:datiUtente.denominazione,
-       codiceFiscale:datiUtente.codice_fiscale,
-       partitaIva:datiUtente.partita_iva,
-       id:datiUtente.id});
-       this.cercaCollaboratoriInterni='';
-       this.elencoCercaCollaboratoreInterno=null;
-  },
-  aggiungiElencoClientiCollaboratoreEsterno(datiUtente){
-    this.elencoCollaboratoriEnterno.push({
-      nome:datiUtente.nome,
-       cognome:datiUtente.cognome,
-       denominazione:datiUtente.denominazione,
-       codiceFiscale:datiUtente.codice_fiscale,
-       partitaIva:datiUtente.partita_iva,
-       id:datiUtente.id});
-       this.cercaCollaboratoriEsterni='';
-       this.elencoCercaCollaboratoreEsterno=null;
-  },
-     
-  aggiungiElencoProgettisti(datiUtente){
-    this.elencoAnagraficaProgettisti.push({
-      nome:datiUtente.nome,
-       cognome:datiUtente.cognome,
-       denominazione:datiUtente.denominazione,
-       codiceFiscale:datiUtente.codice_fiscale,
-       partitaIva:datiUtente.partita_iva,
-       id:datiUtente.id});
-       this.cercaProgettista='';
-       this.elencoCercaAnagraficaProgettisti=null;
-  }
+ 
+ 
     },
      
   data () {
     return {
      
-      nomeProgettoStep1:'prova',
+      Progetto:{
+        titoloProgetto:'',
+
+        cercaAnagraficaClienti:'',
+        elencoAnagraficaClienti:[],
+
+        cercaCollaboratoriInterni:'',
+        elencoCercaCollaboratoreInterno:'',
+        elencoCollaboratoriInterno:'',
+
+        cercaCollaboratoriEsterni:'',
+        elencoCercaCollaboratoreEsterno:'',
+        elencoCollaboratoriEnterno:[],
+        //step2
+        tipologiaEdificio:'',
+        edificioUnifamiliareTipo:'',
+        NuovoProprietarioImmobileNome:'',
+        NuovoProprietarioImmobileCognome:'',
+        NuovoProprietarioImmobileCodiceFiscale:'',
+        NuovoProprietarioImmobileTelefono:'',
+        elencoProprietariImmobile:[],
+        
+        edificioUnifamiliareIndirizzo:'',
+        edificioUnifamiliarecitta:'',
+        edificioUnifamiliareProvincia:'',
+        edificioUnifamiliareAnnocostruzione:'',
+        edificioUnifamiliarePianoImmobile:'',
+        condominioNome:'',
+        condominioIndirizzo:'',
+        condominioCitta:'',
+        condominioProvincia:'',
+        condominioAnnodicotruzione:'',
+        condominioPianoimmboile:'',
+        condominioNumeroUnitaAccatastate:'',
+        condominioNumerounitariscaldate:'',
+        condominioPertinenzaC2C6C7:[],
+        condominioformalmenteCostituito:'',
+        condominioFormalmenteCostituitoCodiceFsicale:'',
+        condominioFormalmenteCostituitoRiferimentoAmministatore:'',
+        condominioNOformalmenteCostituitoReferente:'',
+        condominioNOformalmenteCostituitoCodiceFiscaleReferente:'',
+        zonaClimatica:[],
+        gradigiornoText:'',
+        areavincolata42:'',
+        areaVicnolata42TipoVincolo:'',
+        zonasismisca4:[],
+        zonasismisca4Interventiantisismici:'',
+        zonasismisca4InterventiantisismiciAltriVincoli:'',
+        TipoInterventoProposto:[],
+        TipologiainterventoDPR3802001:[],
+        cercaProgettista:'',
+        elencoCercaAnagraficaProgettisti:[],
+        elencoAnagraficaProgettisti:[],
+        screeningUnifamiliareIndipendente:'',
+        screeningUnifamiliareIAcessoAutonomo:'',
+        screeningUnifamiliareUsufruito110:'',
+        screeningUnifamiliareRiqualificazioneBalconi:'',
+        screeningCondominioUnicoProprietario:'',
+        screeningCondominioSoggettiIRES:'',
+        screeningCondominioPossiedonoMultiProprieta:'',
+        screeningCondominioA1A8A9:'',
+        screeningCondominioUsufruito110:'',
+        tipologiaTitoloAutorizzativi:'',
+        riferimentiAutorizzativi:'',
+        dateAutorizzativi:'',
+        data:'',
+        AllegatoTitoloAutorizzativo:'',
+        annoIntervento:'',
+        elencoInterventiManutenzioneStraordinariaSCIACILAltro:[],
+        modalInterventiSuccessiviNuovoSub:'',
+        modalInterventiSuccessiviNuovaDecrizione:'',
+        elencoTitoliAutorizzatiInterventiSuccessivi:[],
+        modalDatiCatastaliTitoliAutorizzativiNuovoFoglio:'',
+        modalDatiCatastaliTitoliAutorizzativiNuovoParticella:'',
+        modalDatiCatastaliTitoliAutorizzativiNuovoSub:'',
+        elencoTitoliAutorizzatiDatiCatastali:[],
+        abusiEdilizi:'',
+        TipologiaAbusiEdilizi:'',
+        comuneStatoDiFatto:'',
+        NCEUStatoDiFatto:'',
+        difformitaUrbanistiche:'',
+        noteDifformitaUrbanistiche:'',
+        difformitaCatastali:'',
+        noteDifformitaCatastali:'',
+        irregolaritaSanabili:'',
+        noteIrregolaritaSanabili:'',
+
+
+
+
+
+      },
       pathAllegatoTitoloAutorizzativo:'',
       listaUsers:[],
         text:'',data:'',date:'',auxFile:null,nameAuxFile:'',nameAuxFilePreventivo:'',
@@ -2289,7 +1239,8 @@ this.elencoAllegati.push({
          modalNuovaAnagraficaClienti: false,
          modalNuovoNome:'',modalNuovoCognome:'',modalNuovoCodiceFiscale:'',
          
-         screeningCondominioPossiedonoMultiProprieta:'',screeningCondominioPossiedonoMultiProprieta:'',
+         screeningCondominioPossiedonoMultiProprieta:'',
+         
 
          modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione:false,
          modalInterventiSuccessiviNuovoSub:'',
@@ -2456,7 +1407,7 @@ this.elencoAllegati.push({
         },
         {
         value:'AgibilitaAbitabilita',
-        label:'Agibilità\abitabilità',
+        label:'Agibilità abitabilità',
         },
         {
         value:'SCA',
@@ -2513,13 +1464,9 @@ this.elencoAllegati.push({
 
   components: {
      
-    formNuovaanagrafica,message,step1
+    /*formNuovaanagrafica, message,*/step1,step2,step3,
   },
-  computed:{
-    usersFilter(){
-
-    }
-  },
+ 
   props:['idprogetto'],
 
   beforeMount:function(){
@@ -2781,7 +1728,7 @@ this.screeningUnifamiliareRiqualificazioneBalconi=dettagliEdificio.ef_riqualific
   this.titoloProgetto=response.data['progetto'][0].titolo_progetto;
  this.tipologiaEdificio = response.data['progetto'][0].tipologia_edificio;
 
-   var outputsplit= response.data['progetto'][0].zona_climatica.split(";");
+    outputsplit= response.data['progetto'][0].zona_climatica.split(";");
    if (outputsplit!= null){
   outputsplit.forEach(element => {this.zonaClimatica.push(element); });}
   //this.zonaClimatica = response.data['progetto'][0].zona_climatica;
