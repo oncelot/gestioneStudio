@@ -30,287 +30,32 @@
     <step4 v-model="Progetto" ></step4>
   </div>
 
-
-
-<div v-if="tab == 'allegati'">
-
-<span class="text-h5">Allegati</span>
-
-  
-<div class="row">
-  <div class="col-3">
-     <label class="text-bold"> Allegato</label><br>
-     <input type="file" @change="handleFile"  >
-  <!--<q-file v-model="allegatoDiAllegati"   label="Carica file"  outlined :dense="true"   style="max-width: 300px" /> -->
+  <div v-if="tab=='allegati'" style="color:grey">
+    <step5 v-model="Progetto" ></step5>
   </div>
-  <div class="col-6">  
-    <label class="text-bold"> Tipo Allegato</label>
-    <q-select v-model="tipoAllegatodiAllegati" :options="tipiDiAllegati" :dense="true" outlined label="Seleziona..."  />
-    <q-input v-if="tipoAllegatodiAllegati.value =='altro'" v-model="tipoAltroAllegato" type="text" label="Altro tipo allegato" :dense=true />
-  </div>
-   <div class="col-12"> 
-    <label for="" class="text-bold"> Note</label>
-    <q-input v-model="noteallegatoDiallegati" outlined :dense="true" type="text"  />  
-  </div>
-  <div class="col-12" style="margin-top:10px;"><q-btn class="white" icon="add" label="Aggiungi" @click="addrowAllegati()" /></div>
-   
-     </div>
-<div class="row" style="margin-top:20px"> 
-  <div class="col">File</div>
-  <div class="col">Note</div>
-  <div class="col">Tipo Documento</div>
-  <div class="col"></div>
-  
-</div>
-<div  v-for="(allegato,index) in elencoAllegati" :key="allegato.nomeFile">
- <div class="row" v-if="allegato.cancellare=='0'">
-  <div class="col">
-    <span v-if="allegato.idprogetto != '0'"  @click="downloadFile(idprogetto+'/'+allegato.nomeFile, allegato.nomeFile)" style=" cursor: pointer; text-decoration:underline">{{allegato.nomeFile}}</span>
-    <span v-if="allegato.idprogetto == '0'" >{{allegato.nomeFile}}</span>
-     </div>
-  <div class="col">{{allegato.noteFile}}</div>
-  <div class="col">{{allegato.tipoAllegato}}</div>
-  <div class="col"> <q-btn   size="sm" round icon="delete" @click="elencoAllegati[index].cancellare='1'" />
-  </div>
-  </div>
-
-</div>
-
-</div>
-
-
-<div v-if="tab == 'quote'">
-
-
-<div class="row  q-gutter-sm bgAree"><div class="col-8 col-md-3">
-  <label for="" class="font-weigth:bold">Quota Preventivo €</label>
-  <q-input v-model="quotaPreventivo" :dense="true" outlined type="number" /></div>
-
-  <div class="col-2 col-md-2"> 
-    <label for="" class="text-bold"> Allega Preventivo Firmato</label>
-    <input type="file" @change="handleFilePreventivo">
-      <a href="#"  v-if="!nuovoProgetto" @click="downloadFile(idprogetto+'/'+quoteAllegatoPreventivo,quoteAllegatoPreventivo)" >{{quoteAllegatoPreventivo}}</a>
-   
-  <!--  <q-file
-      v-model="quoteAllegatoPreventivo"
-      label="Carica file"
-      outlined
-      :dense="true"
-      style="max-width: 300px" /> -->
-      </div>
-  </div>
-
-  <div class="bgAree" style="margin-top:20px" >
-<div class="row">
-  <div class="col">
-    <span class="text-h6 text-secondary">Acconti Ricevuti</span>
-  </div>
-</div>
-  
-  <div class="row  q-gutter-sm " style="padding-top:20px">
-    <div class="col-6 col-md-2 ">
-      <label class="text-bold">Data</label>
-     <q-input  outlined :dense="true"  v-model="dataAcconto" mask="date" :rules="['date']">
-      <template v-slot:append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="dataAcconto">
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
-    </div>
-    <div class="col-6 col-md-2 ">
-      <label for="" class="text-bold">Importo</label>
-      <q-input v-model="quotaImportoAcconto" outlined :dense="true"  type="number" />
-      </div>
-   
-    <div class="col-6 col-md-2 ">
-      <label for="" class="text-bold">Modalità di pagamento</label>
+  <div v-if="tab=='quote'" style="color:grey">
+    <step6 v-model="Progetto" ></step6>
     
-      <q-select v-model="quotaAccontoModalitaPagamento" :options="elencoMetodoPagamenti" outlined :dense="true" /></div>
-    <div class="col-6 col-md-3 ">
-      <label for="" class="text-bold">Chi ha fatturato</label>
-      <q-input v-model="quoteChiFattura" type="text" outlined :dense="true"  />
-    </div>
-    
-    <div class="col-6 col-md-2">
-      <q-btn icon="add" style="margin-top:25px"  color="primary" @click="addrowQuoteAcconti(); " outline :dense="true" />
-    </div>
-   
-    
-    </div>
-
-<div class="row bgAree">
-  <div class="col text-bold">Quota</div>
-  <div class="col text-bold">Importo</div>
-  <div class="col text-bold">Metodo di Pagamento</div>
-  <div class="col text-bold">Chi Fatturato</div>
-   <div class="col text-bold"></div>
-  </div>
-<div class="row bgAree"  v-for="(quota,index) in elencoQuote" :key="quota.quota">
- <div class="col">{{quota.dataPagamento}}</div>
-  <div class="col"> {{quota.importo}}</div>
-   <div class="col">{{quota.metodoPagamento}}</div>
-  <div class="col">{{quota.chiFatturato}}</div>
-  <div class="col"> 
-    <q-btn   size="sm" round icon="delete" @click="elencoQuote.splice(index, 1)" />
-  
-  </div>
- 
-
-</div>
-</div>
-
-
-  <div class="bgAree" style="margin-top:20px" >
-<div class="row">
-  <div class="col">
-    <span class="text-h6 text-secondary">Spese Effettuate</span>
-  </div>
-</div>
-  
-  <div class="row  q-gutter-sm " style="padding-top:20px">
-
-    <div class="col-6 col-md-2 ">
-      <label class="text-bold">Data</label>
-     <q-input  outlined :dense="true"  v-model="dataSpesaEffettuata" mask="date" :rules="['date']">
-      <template v-slot:append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="dataSpesaEffettuata">
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
-    </div>
-
-    <div class="col-6 col-md-2 ">
-      <label for="" class="text-bold">Importo</label>
-      <q-input v-model="importoSpesaEffettuata" outlined :dense="true"  type="number" />
-      </div>
-   
-    <div class="col-6 col-md-2 ">
-      <label for="" class="text-bold">Causale</label>
-      <q-input v-model="causaleSpesaEffettuata" outlined :dense="true"  type="text" />
- </div>
-     <div class="col-6 col-md-3 ">
-      <label for="" class="text-bold">Chi ha Pagato</label>
-      <q-input v-model="chiHafattoSpesa" type="text" outlined :dense="true"  />
-    </div>
-    
-    <div class="col-6 col-md-2">
-      <q-btn icon="add" style="margin-top:25px"  color="primary" @click="addrowQuoteSpese(); " outline :dense="true" />
-    </div>
-   
-    
-    </div>
-
-<div class="row bgAree">
-  <div class="col text-bold">Quota</div>
-  <div class="col text-bold">Importo</div>
-  <div class="col text-bold">Causale</div>
-  <div class="col text-bold">Chi ha pagato</div>
-  <div class="col text-bold"></div>
-  </div>
-<div class="row bgAree" v-for="(quota,index) in elencoSpese" :key="quota.dataPagamento" >
- <div class="col">{{quota.dataPagamento}}</div>
-  <div class="col"> {{quota.importo}}</div>
-   <div class="col">{{quota.causale}}</div>
-  <div class="col">{{quota.chiHapagato}}</div>
-  <div class="col"> 
-    <q-btn   size="sm" round icon="delete" @click="elencoSpese.splice(index, 1)" />
-  
-  </div>
-
-
-</div>
-
-
-</div>
-
 <q-btn color="primary" v-if="nuovoProgetto" icon="check" label="Crea progetto" @click="aggiungiProgetto()" />
 <q-btn color="positive" v-if="!nuovoProgetto" icon="check" label="Aggiorna progetto" @click="aggiungiProgetto()" />
 
+  </div>
 
-</div>
 
 <!-- #region Associa Utenti-->
 <div v-if="tab == 'associaUtenti'">
-
- <div class="row justify-center"  style="color:grey; ">
-      <div class="col-12 col-md-7 bgAree"><b>Autorizza Utenti</b></div>
-      
-    </div>
-    <div class="row justify-center">
-      <div class="col-12 col-md-7 bgAree">
-        <q-input v-model="CercaUtentiDaAutorizzare" debounce="1"  outlined :dense=true  placeholder="Cerca Utente da Autorizzare - Inserire 4 caratteri per avviare la ricerca" @keypress=" elencoCercaUsersFunction()">
-          <div class="autocomplete-items" v-if="CercaUtentiDaAutorizzare.length > 2">
-            <div class="row"  v-for="item in elencoCercaUtentiDaAutorizzare" :key="item.message">
-              <div class="col">
-                <a href="#" @click="autorizzaUtente(item)">  {{ item.nome }} {{item.email}} {{item.ruolo}}</a></div>
-
-            </div>
-          </div>
-          <template v-slot:append>
-            <q-icon name="search" />
-          </template>
-         
-        </q-input>
-        </div>
-        <!-- <div class="col-2"> <q-btn   label="Crea"   :dense='true' icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" /></div> -->
-    </div>
-      <div class="row justify-center "  style="justify-center" >
-      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Nome</b> </div> 
-      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black "><b>Email</b> </div>
-      <div class="col-4 col-md-2 bgAree" style="border-bottom:1px solid black ">  <b>Ruolo</b> </div>  
-      <div class="col-1 col-md-1 bgAree" style="border-bottom:1px solid black ">  <b></b> </div>  
-     
-  </div>
-
-  <div  class="row justify-center " v-for="(item,index) in elencoUtentiDaAutorizzare" :key="item.message" >
-    <div class="col-4 col-md-2 bgAree"> {{ item.nome }} - {{ item.id }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.email }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.ruolo }}</div>
-    <div class="col-1 col-md-1 bgAree"> 
-    <q-btn   size="sm" round icon="delete" @click="elencoUtentiDaAutorizzare.splice(index, 1)" />
-  
-  </div>
-
-  </div>
-
-
-  <div class="row justify-center"  style="color:grey; " v-if="elencoUtentiDaAutorizzare.length > 0">
-      <div class="col-12 col-md-7 bgAree"><q-btn color="primary" icon="check" label="Autorizza" @click="autorizzaUtenti()" /></div>
-      
-    </div>
- 
-  <div class="row justify-center"  style="color:grey; padding-top:30px" >
-      <div class="col-12 col-md-7 bgAree"><b>Utenti Autorizzati</b></div>
-      
-    </div>
- 
- <div  class="row justify-center " v-for="item in elencoUtentiAutorizzati" :key="item.message" >
-    <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.email }}</div>
-    <div class="col-4 col-md-2 bgAree"> {{ item.ruolo }}</div>
-    <div class="col-1 col-md-1 bgAree"> 
-    <q-btn   size="sm" round icon="delete" @click="cancellaUtente(item.idRiga)" /></div>
-    </div>
+<autorizzaUtenti v-model="Progetto"></autorizzaUtenti>
 
 </div>
 <!-- #endregion-->
+
+
+
+
+
 <!-- #region MODAL-->
 <!-- MODAL -->
-
+<!--
 <q-dialog v-model="modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione" persistent>
   <q-card>
     <q-card-section class="row items-center">
@@ -336,7 +81,7 @@
     </q-card-actions>
   </q-card>
 </q-dialog>
-
+-->
 
 
 
@@ -407,6 +152,9 @@ import step1 from '@/components/step1Progetto.vue';
 import step2 from '@/components/step2AnagraficaIntervento.vue';
 import step3 from '@/components/step3Screening.vue';
 import step4 from '@/components/step4DatiStrutturali.vue';
+import step5 from '@/components/step5Allegati.vue';
+import step6 from '@/components/step6Quote.vue';
+import autorizzaUtenti from '@/components/autorizzaUtenti.vue';
 
 export default {
 
@@ -415,63 +163,8 @@ export default {
       checkboxValue: function(params) {
       this.check = params;
     },
-    cancellaUtente(id){
-        Axios.delete(this.linkApi+'/cancellaAutorizzazione/'+id).then(response=>{
-          if(response.data.response=='ok'){
-             this.elencoUtentiAutorizzati=[];
-           Axios.get(this.linkApi+'/getUtentiAutorizzati/'+this.idprogetto).then(ResponseAutorizzati=>
-            {
-              ResponseAutorizzati.data['listaUsersAssociatiAlProgetto'].forEach(element => {
-                this.elencoUtentiAutorizzati.push({
-                  nome:element.name,
-                  email:element.email, 
-                  ruolo:element.role,
-                  id:element.id_user,
-                  idRiga:element.id
-                  });
-                  });
-              });
-              this.elencoUtentiDaAutorizzare=[];
-            this.messaggioDaVisualizzare='Utente Cancellato';
-            this.visualizzamessaggio=true;
-          }else{
-              this.messaggioDaVisualizzare=Response.data.message;
-              this.visualizzamessaggio=true;
-          }
-        });
 
-      },
-      autorizzaUtenti()
-      {
-        const sendDaAutorizzare={
-          listaDaAutorizzare:this.elencoUtentiDaAutorizzare,
-          idprogetto:this.idprogetto
-        };
-        Axios.post(this.linkApi+'/SetAutorizzaUtenti',sendDaAutorizzare).then(Response =>{
-          if(Response.data.response=='ok'){
-            this.elencoUtentiAutorizzati=[];
-            Axios.get(this.linkApi+'/getUtentiAutorizzati/'+this.idprogetto).then(ResponseAutorizzati=>
-            {
-              ResponseAutorizzati.data['listaUsersAssociatiAlProgetto'].forEach(element => {
-                this.elencoUtentiAutorizzati.push({
-                  nome:element.name,
-                  email:element.email, 
-                  ruolo:element.role,
-                  id:element.id_user,
-                   idRiga:element.id
-                  });
-                  });
-              });
-              this.elencoUtentiDaAutorizzare=[];
-            this.messaggioDaVisualizzare='Utenti Autorizzati';
-            this.visualizzamessaggio=true;
-            }else{
-              
-              this.messaggioDaVisualizzare=Response.data.message;
-              this.visualizzamessaggio=true;
-              }
-            });
-      },
+
     downloadFile(path,titoloFile){
         Axios({
           url: this.linkApi+'/download/?pp='+path,
@@ -495,116 +188,116 @@ export default {
       },
     aggiungiProgetto(){
       const  sendForm={
-        idprogetto:this.idprogetto,
+        idprogetto:this.Progetto.idprogetto,
           titoloProgetto:this.Progetto.titoloProgetto,
-         tipologiaEdificio:this.tipologiaEdificio,
-         zonaClimatica:this.zonaClimatica,
-         gradigiornoText:this.gradigiornoText ,
-          areavincolata42:this.areavincolata42 ,
-          tipoVincolo42:this.areaVicnolata42TipoVincolo,
-          zonasismisca4:this.zonasismisca4 ,
-          zonasismisca4Interventiantisismici:this.zonasismisca4Interventiantisismici ,
-          zonasismisca4InterventiantisismiciAltriVincoli:this.zonasismisca4InterventiantisismiciAltriVincoli ,
-          TipoInterventoProposto:this.TipoInterventoProposto ,
-          TipologiainterventoDPR3802001:this.TipologiainterventoDPR3802001 ,
+         tipologiaEdificio:this.Progetto.tipologiaEdificio,
+         zonaClimatica:this.Progetto.zonaClimatica,
+         gradigiornoText:this.Progetto.gradigiornoText ,
+          areavincolata42:this.Progetto.areavincolata42 ,
+          tipoVincolo42:this.Progetto.areaVicnolata42TipoVincolo,
+          zonasismisca4:this.Progetto.zonasismisca4 ,
+          zonasismisca4Interventiantisismici:this.Progetto.zonasismisca4Interventiantisismici ,
+          zonasismisca4InterventiantisismiciAltriVincoli:this.Progetto.zonasismisca4InterventiantisismiciAltriVincoli ,
+          TipoInterventoProposto:this.Progetto.TipoInterventoProposto ,
+          TipologiainterventoDPR3802001:this.Progetto.TipologiainterventoDPR3802001 ,
 
-          tipologiaTitoloAutorizzativi:this.tipologiaTitoloAutorizzativi ,
-          riferimentiAutorizzativi:this.riferimentiAutorizzativi,
-          dateAutorizzativi:this.dateAutorizzativi,
-          AllegatoTitoloAutorizzativo:this.AllegatoTitoloAutorizzativo,
-          Base64AllegatoTitoloAutorizzativo:this.Base64AllegatoTitoloAutorizzativo,
+          tipologiaTitoloAutorizzativi:this.Progetto.tipologiaTitoloAutorizzativi ,
+          riferimentiAutorizzativi:this.Progetto.riferimentiAutorizzativi,
+          dateAutorizzativi:this.Progetto.dateAutorizzativi,
+          AllegatoTitoloAutorizzativo:this.Progetto.AllegatoTitoloAutorizzativo,
+          Base64AllegatoTitoloAutorizzativo:this.Progetto.Base64AllegatoTitoloAutorizzativo,
 
-          abusiEdilizi:this.abusiEdilizi,
-          TipologiaAbusiEdilizi:this.TipologiaAbusiEdilizi,
-          comuneStatoDiFatto:this.comuneStatoDiFatto,
-          NCEUStatoDiFatto:this.NCEUStatoDiFatto,
-          difformitaUrbanistiche:this.difformitaUrbanistiche,
-          noteDifformitaUrbanistiche:this.noteDifformitaUrbanistiche,
-          difformitaCatastali:this.difformitaCatastali,
-          noteDifformitaCatastali:this.noteDifformitaCatastali,
-          irregolaritaSanabili:this.irregolaritaSanabili,
-          noteIrregolaritaSanabili:this.noteIrregolaritaSanabili,
+          abusiEdilizi:this.Progetto.abusiEdilizi,
+          TipologiaAbusiEdilizi:this.Progetto.TipologiaAbusiEdilizi,
+          comuneStatoDiFatto:this.Progetto.comuneStatoDiFatto,
+          NCEUStatoDiFatto:this.Progetto.NCEUStatoDiFatto,
+          difformitaUrbanistiche:this.Progetto.difformitaUrbanistiche,
+          noteDifformitaUrbanistiche:this.Progetto.noteDifformitaUrbanistiche,
+          difformitaCatastali:this.Progetto.difformitaCatastali,
+          noteDifformitaCatastali:this.Progetto.noteDifformitaCatastali,
+          irregolaritaSanabili:this.Progetto.irregolaritaSanabili,
+          noteIrregolaritaSanabili:this.Progetto.noteIrregolaritaSanabili,
 
-          datistrutturalichk:this.datistrutturalichk,
-          altroDatiStrutturali:this.altroDatiStrutturali,
+          datistrutturalichk:this.Progetto.datistrutturalichk,
+          altroDatiStrutturali:this.Progetto.altroDatiStrutturali,
 
-          tipologiaParetechk:this.tipologiaParetechk,
-          altroTipologiaParetechk:this.altroTipologiaParetechk,
+          tipologiaParetechk:this.Progetto.tipologiaParetechk,
+          altroTipologiaParetechk:this.Progetto.altroTipologiaParetechk,
 
-          tipologia_doppia_parete:this.tipologia_doppia_parete,
-          SpessoreMuriEsterni:this.SpessoreMuriEsterni,
-          SpessoreCameraDaria:this.SpessoreCameraDaria,
-          SpessoreIsolamento:this.SpessoreIsolamento,
-          TipologiaIsolamentoIncameraDaria:this.TipologiaIsolamentoIncameraDaria,
-          isolamentoEsistentechk:this.isolamentoEsistentechk,
-          altroisolamentoEsistentechk:this.altroisolamentoEsistentechk,
+          tipologia_doppia_parete:this.Progetto.tipologia_doppia_parete,
+          SpessoreMuriEsterni:this.Progetto.SpessoreMuriEsterni,
+          SpessoreCameraDaria:this.Progetto.SpessoreCameraDaria,
+          SpessoreIsolamento:this.Progetto.SpessoreIsolamento,
+          TipologiaIsolamentoIncameraDaria:this.Progetto.TipologiaIsolamentoIncameraDaria,
+          isolamentoEsistentechk:this.Progetto.isolamentoEsistentechk,
+          altroisolamentoEsistentechk:this.Progetto.altroisolamentoEsistentechk,
 
-          tipologiaImpiantoEsistente:this.tipologiaImpiantoEsistente,
-          cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente:this.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente,
-          cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro:this.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro,
-          cetraleTermicaCentralizzatoNumeroUnita:this.cetraleTermicaCentralizzatoNumeroUnita,
-          cetraleTermicaCentralizzatoAnnoInstallazione:this.cetraleTermicaCentralizzatoAnnoInstallazione ,
-          cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente:this.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente ,
-          cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste:this.cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste ,
-          cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente:this.cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente,
-          cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato:this.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato ,
-          cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato:this.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato ,
-          cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate:this.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate ,
-          cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato:this.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato ,
-          cetraleTermicaCentralizzatoCertificatoCPI:this.cetraleTermicaCentralizzatoCertificatoCPI ,
-          cetraleTermicaCentralizzatoCertificatoCPIAllegato:this.cetraleTermicaCentralizzatoCertificatoCPIAllegato ,
-          cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:this.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto ,
-          cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro:this.cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro ,
-          cetraleTermicaCentralizzatoNumeroUnitaProposte:this.cetraleTermicaCentralizzatoNumeroUnitaProposte ,
-          cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:this.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto ,
-          centraleTermivaCentralizzatoVettoreImpianto:this.centraleTermivaCentralizzatoVettoreImpianto ,
-          quotaPreventivo:this.quotaPreventivo,
+          tipologiaImpiantoEsistente:this.Progetto.tipologiaImpiantoEsistente,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro,
+          cetraleTermicaCentralizzatoNumeroUnita:this.Progetto.cetraleTermicaCentralizzatoNumeroUnita,
+          cetraleTermicaCentralizzatoAnnoInstallazione:this.Progetto.cetraleTermicaCentralizzatoAnnoInstallazione ,
+          cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente:this.Progetto.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente ,
+          cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste:this.Progetto.cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste ,
+          cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente:this.Progetto.cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente,
+          cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato:this.Progetto.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato ,
+          cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato:this.Progetto.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato ,
+          cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate:this.Progetto.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate ,
+          cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato:this.Progetto.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato ,
+          cetraleTermicaCentralizzatoCertificatoCPI:this.Progetto.cetraleTermicaCentralizzatoCertificatoCPI ,
+          cetraleTermicaCentralizzatoCertificatoCPIAllegato:this.Progetto.cetraleTermicaCentralizzatoCertificatoCPIAllegato ,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto ,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro ,
+          cetraleTermicaCentralizzatoNumeroUnitaProposte:this.Progetto.cetraleTermicaCentralizzatoNumeroUnitaProposte ,
+          cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:this.Progetto.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto ,
+          centraleTermivaCentralizzatoVettoreImpianto:this.Progetto.centraleTermivaCentralizzatoVettoreImpianto ,
+          quotaPreventivo:this.Progetto.quotaPreventivo,
 
-          quoteAllegatoPreventivo:this.nameAuxFilePreventivo,
-          base64AllegatoPreventivo:this.quoteAllegatoPreventivo,
-          elencoAcconti:this.elencoQuote,
-          elencoSpese:this.elencoSpese,
+          quoteAllegatoPreventivo:this.Progetto.nameAuxFilePreventivo,
+          base64AllegatoPreventivo:this.Progetto.quoteAllegatoPreventivo,
+          elencoAcconti:this.Progetto.elencoQuote,
+          elencoSpese:this.Progetto.elencoSpese,
 
-          clienti:this.elencoAnagraficaClienti,
-          collaboratoriInterni:this.elencoCollaboratoriInterno,
-          collaboratoriEsterni:this.elencoCollaboratoriEnterno,
-          progettisti:this.elencoAnagraficaProgettisti,
-          successiviInterventiStraordinaria:this.elencoInterventiManutenzioneStraordinariaSCIACILAltro,
-          TitoliAutorizzatiInterventiSuccessivi:this.elencoTitoliAutorizzatiInterventiSuccessivi,
-          datiCatastali:this.elencoTitoliAutorizzatiDatiCatastali,
-          centraleTermicaDiFAtto:this.elencoImpiantoAutonomoEsistente,
-          centraleTermicaDiProgetto:this.elencoImpiantoAutonomoEsistenteStatoDiProgetto,
+          clienti:this.Progetto.elencoAnagraficaClienti,
+          collaboratoriInterni:this.Progetto.elencoCollaboratoriInterno,
+          collaboratoriEsterni:this.Progetto.elencoCollaboratoriEnterno,
+          progettisti:this.Progetto.elencoAnagraficaProgettisti,
+          successiviInterventiStraordinaria:this.Progetto.elencoInterventiManutenzioneStraordinariaSCIACILAltro,
+          TitoliAutorizzatiInterventiSuccessivi:this.Progetto.elencoTitoliAutorizzatiInterventiSuccessivi,
+          datiCatastali:this.Progetto.elencoTitoliAutorizzatiDatiCatastali,
+          centraleTermicaDiFAtto:this.Progetto.elencoImpiantoAutonomoEsistente,
+          centraleTermicaDiProgetto:this.Progetto.elencoImpiantoAutonomoEsistenteStatoDiProgetto,
           
-          tipoEdificioEF:this.edificioUnifamiliareTipo,
-          propietariImmobiliEF:this.elencoProprietariImmobile,
-          indirizzoEF:this.edificioUnifamiliareIndirizzo,
-          cittaEF:this.edificioUnifamiliarecitta,
-          provinciaEF:this.edificioUnifamiliareProvincia,
-          annoCostruzioneEF:this.edificioUnifamiliareAnnocostruzione,
-          indipendenteEF:this.screeningUnifamiliareIndipendente,
-          accessoAutonomiEF:this.screeningUnifamiliareIAcessoAutonomo,
-          usufruito110EF:this.screeningUnifamiliareUsufruito110,
-          riqualificazioneBalconiEF:this.screeningUnifamiliareRiqualificazioneBalconi,
+          tipoEdificioEF:this.Progetto.edificioUnifamiliareTipo,
+          propietariImmobiliEF:this.Progetto.elencoProprietariImmobile,
+          indirizzoEF:this.Progetto.edificioUnifamiliareIndirizzo,
+          cittaEF:this.Progetto.edificioUnifamiliarecitta,
+          provinciaEF:this.Progetto.edificioUnifamiliareProvincia,
+          annoCostruzioneEF:this.Progetto.edificioUnifamiliareAnnocostruzione,
+          indipendenteEF:this.Progetto.screeningUnifamiliareIndipendente,
+          accessoAutonomiEF:this.Progetto.screeningUnifamiliareIAcessoAutonomo,
+          usufruito110EF:this.Progetto.screeningUnifamiliareUsufruito110,
+          riqualificazioneBalconiEF:this.Progetto.screeningUnifamiliareRiqualificazioneBalconi,
 
-          nomeCondominioCD:this.condominioNome,
-          indirizzoCD:this.condominioIndirizzo,
-          cittaCD:this.condominioCitta,
-          provinciaCD:this.condominioProvincia,
-          annoCostruzioneCD:this.condominioAnnodicotruzione,
-          pianoImmobileCD:this.condominioPianoimmboile,
-          numeroUnitaAccatastateCD:this.condominioNumeroUnitaAccatastate,
-          numeroUnitaScaldateCD:this.condominioNumerounitariscaldate,
-          numeroPertinnzeAccatastateCD:this.condominioPertinenzaC2C6C7,
-          condominioFormalmenteCostituitoCD:this.condominioformalmenteCostituito,
-          condominioUnicoProprietarioCD:this.screeningCondominioUnicoProprietario,
-          IRESCD:this.screeningCondominioSoggettiIRES,
-          mutliProprietaCD:this.screeningCondominioPossiedonoMultiProprieta,
-          condominioA1A8A9CD:this.screeningCondominioA1A8A9,
-          usufruito110CD:this.screeningCondominioUsufruito110,
-          cd_codicefiscale_condominio:this.condominioFormalmenteCostituitoCodiceFsicale,
-          cd_info_condominiocostituito:this.condominioFormalmenteCostituitoRiferimentoAmministatore,
+          nomeCondominioCD:this.Progetto.condominioNome,
+          indirizzoCD:this.Progetto.condominioIndirizzo,
+          cittaCD:this.Progetto.condominioCitta,
+          provinciaCD:this.Progetto.condominioProvincia,
+          annoCostruzioneCD:this.Progetto.condominioAnnodicotruzione,
+          pianoImmobileCD:this.Progetto.condominioPianoimmboile,
+          numeroUnitaAccatastateCD:this.Progetto.condominioNumeroUnitaAccatastate,
+          numeroUnitaScaldateCD:this.Progetto.condominioNumerounitariscaldate,
+          numeroPertinnzeAccatastateCD:this.Progetto.condominioPertinenzaC2C6C7,
+          condominioFormalmenteCostituitoCD:this.Progetto.condominioformalmenteCostituito,
+          condominioUnicoProprietarioCD:this.Progetto.screeningCondominioUnicoProprietario,
+          IRESCD:this.Progetto.screeningCondominioSoggettiIRES,
+          mutliProprietaCD:this.Progetto.screeningCondominioPossiedonoMultiProprieta,
+          condominioA1A8A9CD:this.Progetto.screeningCondominioA1A8A9,
+          usufruito110CD:this.Progetto.screeningCondominioUsufruito110,
+          cd_codicefiscale_condominio:this.Progetto.condominioFormalmenteCostituitoCodiceFsicale,
+          cd_info_condominiocostituito:this.Progetto.condominioFormalmenteCostituitoRiferimentoAmministatore,
 
-          elencoFile:this.elencoAllegati,
+          elencoFile:this.Progetto.elencoAllegati,
 
 
           };
@@ -650,26 +343,6 @@ export default {
 this.$router.push({ path:'lista-progetti'});
     },
  
-    handleFilePreventivo(e){
-      this.nameAuxFilePreventivo=e.target.files[0].name;
-      const selectImage= e.target.files[0];
-      this.createBase64(selectImage);
-
-    },
-
-      createBase64Preventivo(fileObject){
-      const reader = new FileReader();
-      reader.onload = (e)=>{
-       var aux= e.target.result;
-       var base64string = window.btoa(aux);
-       this.quoteAllegatoPreventivo=base64string;
-      };
-      this.quoteAllegatoPreventivo= reader.readAsBinaryString(fileObject);
-
-//return output;
-    },
-
-
     addrowDatiCatastaliTitoliAutorizzativi(){
       this.elencoTitoliAutorizzatiDatiCatastali.push(
         {sub:this.modalDatiCatastaliTitoliAutorizzativiNuovoSub,
@@ -693,27 +366,7 @@ this.$router.push({ path:'lista-progetti'});
         
       this.modalAggiungiImpiantoEsistenteAutonomoStatoProgetto= false;
     },*/
-    addrowQuoteAcconti(){
-      this.elencoQuote.push(
-        {
-          dataPagamento:this.dataAcconto,
-          importo:this.quotaImportoAcconto,
-          metodoPagamento:this.quotaAccontoModalitaPagamento.value,
-          chiFatturato:this.quoteChiFattura,
-          tipo_quota:'entrata'
-
-        });
-        },
-    addrowQuoteSpese(){
-      this.elencoSpese.push(
-        {
-          dataPagamento:this.dataSpesaEffettuata,
-          importo:this.importoSpesaEffettuata,
-          causale:this.causaleSpesaEffettuata,
-          chiHapagato:this.chiHafattoSpesa,
-          tipo_quota:'uscita'
-        });
-        },
+   
     addrowAllegati(){
 //TODO prevedere caricaemnto sul database diretto
 this.elencoAllegati.push({
@@ -732,32 +385,26 @@ this.elencoAllegati.push({
     removeRow(index){
    this.elencoAnagraficaClienti.splice(index, 1)
     },
-    elencoCercaUsersFunction(){
-      if (this.CercaUtentiDaAutorizzare.length > 1){
-      Axios.get(this.linkApi+'/getCercaUsersDaAutorizzare/'+this.idprogetto+'/'+this.CercaUtentiDaAutorizzare).then(Response=>{console.log(Response.data);this.elencoCercaUtentiDaAutorizzare= Response.data})
-      }
-      },
-  
+   
   
 
-  autorizzaUtente(datiUtente){
-    this.elencoUtentiDaAutorizzare.push({
-        nome:datiUtente.name,
-       email:datiUtente.email,
-       ruolo:datiUtente.role,
-       id:datiUtente.id,
-      });
-       this.CercaUtentiDaAutorizzare='';
-       this.elencoCercaUtentiDaAutorizzare=null;
-  },
  
  
     },
      
   data () {
     return {
-     
+     nuovoProgetto:true,
+     tab:'',
+     visualizzamessaggio:false,
+     messaggioDaVisualizzare:false,
+      staticTipoAllegato:{
+        preventivoFirmato:'preventivoFirmato'
+
+      },
+     zonaClimatica:[],
       Progetto:{
+        idprogetto:'',
         titoloProgetto:'',
 
         cercaAnagraficaClienti:'',
@@ -783,7 +430,7 @@ this.elencoAllegati.push({
         edificioUnifamiliarecitta:'',
         edificioUnifamiliareProvincia:'',
         edificioUnifamiliareAnnocostruzione:'',
-        edificioUnifamiliarePianoImmobile:'',
+        edificioUnifamiliarePianoImmobile:' di cui fuori terra n° ',
         condominioNome:'',
         condominioIndirizzo:'',
         condominioCitta:'',
@@ -876,11 +523,29 @@ this.elencoAllegati.push({
         elencoImpiantoAutonomoEsistente:[],
         elencoImpiantoAutonomoEsistenteStatoDiProgetto:[],
 
+        tipoAllegatodiAllegati:'',
+        tipoAltroAllegato:'',
+        noteallegatoDiallegati:'',
+        nameAuxFile:'',
+        auxFile:'',
+        elencoAllegati:[],
+        
+        quoteAllegatoPreventivo:'',
+        quotaPreventivo:'',
+        elencoQuote:[],
+        elencoSpese:[],
+
+        nuovoProgetto:true,
+        elencoUtentiDaAutorizzare:[],
+        elencoUtentiAutorizzati:[],
+
+
+
       },
-      pathAllegatoTitoloAutorizzativo:'',
+    /*  pathAllegatoTitoloAutorizzativo:'',
       listaUsers:[],
         text:'',data:'',date:'',auxFile:null,nameAuxFile:'',nameAuxFilePreventivo:'',
-        nuovoProgetto:true,
+        
         CercaUtentiDaAutorizzare:'',
         cercaAnagraficaClienti:'',
         cercaCollaboratoriInterni:'',
@@ -905,10 +570,8 @@ this.elencoAllegati.push({
 
          titoloProgetto:'',search:'',tipologiaEdificio:'',
          TipologiainterventoDPR3802001:[],
-        /* TipologiainterventoDPR3802001Ordinaria:false,TipologiainterventoDPR3802001Straordinaria:false,TipologiainterventoDPR3802001RisanamentoConcervativo:false,TipologiainterventoDPR3802001RistrutturazioneEdilizia:false,TipologiainterventoDPR3802001NuovaCostruzione:false,TipologiainterventoDPR3802001InterventiUrbanistici:false,*/
          zonaClimatica:[],
-        /* zonaclimaticaA:false,zonaclimaticaB:false,zonaclimaticaC:false,zonaclimaticaD:false,zonaclimaticaE:false,zonaclimaticaF:false,*/
-         
+          
          gradigiornoText:'',areavincolata42:'',
          areaVicnolata42TipoVincolo:'',zonasismisca4:'',zonasismisca4Interventiantisismici:'',zonasismisca4InterventiantisismiciAltriVincoli:'',edificioUnifamiliareTipo:false,edificioUnifamiliareIndirizzo:'',
          allegatoIntervento:null,annoIntervento:'',
@@ -924,8 +587,7 @@ this.elencoAllegati.push({
          
          
          TipoInterventoProposto:[],
-         /*TipoInterventoPropostoEnergetico:false,TipoInterventoPropostoSismico:false,TipoInterventoPropostoCombinato:false,*/
-         
+           
          condominioNumeroUnitaAccatastate:'',condominioNumerounitariscaldate:'',cercaProgettista:'',screeningUnifamiliareIndipendente:'',screeningUnifamiliareIAcessoAutonomo:'',
          screeningUnifamiliareRiqualificazioneBalconi:'',screeningUnifamiliareUsufruito110:'',
          screeningCondominioUnicoProprietario:'',screeningCondominioSoggettiIRES:'',PossiedonoMultiProprieta:'',screeningCondominioUsufruito110:'',screeningCondominioA1A8A9:'', 
@@ -991,12 +653,7 @@ this.elencoAllegati.push({
       elencoImpiantoAutonomoProposto:[],
       
       elencoAllegati:[],
-     elencoMetodoPagamenti:[
-       {value:'c/c',label:'Conto corrente'},
-       {value:'carta',label:'Carta'},
-       {value:'carta2',label:'Carta C'}
-       
-       ],
+     
      tipiDiAllegati:[
         {
         value:'ModelloPrivacy',
@@ -1087,13 +744,13 @@ this.elencoAllegati.push({
 
       },
       elencoQuote:[],
-      elencoSpese:[]
+      elencoSpese:[]*/
     }
   },
 
   components: {
-     
-    /*formNuovaanagrafica, message,*/step1,step2,step3,step4,
+    /*formNuovaanagrafica, message,*/
+    step1,step2,step3,step4,step5,step6,autorizzaUtenti,
   },
  
   props:['idprogetto'],
@@ -1111,7 +768,7 @@ Axios.get(this.linkApi+'/getProgetto/'+this.idprogetto).then(response =>{
 if (response.data['clienti'][0] != null){
 
  response.data['clienti'].forEach(element => {
-   this.elencoAnagraficaClienti.push({
+   this.Progetto.elencoAnagraficaClienti.push({
      nome:element.nome,
      cognome:element.cognome,
      codiceFiscale:element.codice_fiscale,
@@ -1125,7 +782,7 @@ if (response.data['clienti'][0] != null){
 if (response.data['collaboratoriEsterni'][0] != null){
 
  response.data['collaboratoriEsterni'].forEach(element => {
-   this.elencoCollaboratoriEnterno.push({
+   this.Progetto.elencoCollaboratoriEnterno.push({
      nome:element.nome,
      cognome:element.cognome,
      codiceFiscale:element.codice_fiscale,
@@ -1138,7 +795,7 @@ if (response.data['collaboratoriEsterni'][0] != null){
 if (response.data['collaboratoriInterni'][0] != null){
 
  response.data['collaboratoriInterni'].forEach(element => {
-   this.elencoCollaboratoriInterno.push({
+   this.Progetto.elencoCollaboratoriInterno.push({
      nome:element.nome,
      cognome:element.cognome,
      codiceFiscale:element.codice_fiscale,
@@ -1152,7 +809,7 @@ if (response.data['collaboratoriInterni'][0] != null){
 if (response.data['progettistiProgetto'][0] != null){
 
  response.data['progettistiProgetto'].forEach(element => {
-   this.elencoAnagraficaProgettisti.push({
+   this.Progetto.elencoAnagraficaProgettisti.push({
      nome:element.nome,
      cognome:element.cognome,
      codiceFiscale:element.codice_fiscale,
@@ -1162,7 +819,7 @@ if (response.data['progettistiProgetto'][0] != null){
 if (response.data['interventiSuccessivi'][0] != null){
 
  response.data['interventiSuccessivi'].forEach(element => {
-   this.elencoInterventiManutenzioneStraordinariaSCIACILAltro.push({
+   this.Progetto.elencoInterventiManutenzioneStraordinariaSCIACILAltro.push({
      id:element.id,
      id_legame:element.id_legame,
      id_progetto:element.id_progetto,
@@ -1177,7 +834,7 @@ if (response.data['interventiSuccessivi'][0] != null){
 if (response.data['titoliAutorizzativiInterventiSuccessici'][0] != null){
 
  response.data['titoliAutorizzativiInterventiSuccessici'].forEach(element => {
-   this.elencoTitoliAutorizzatiInterventiSuccessivi.push({
+   this.Progetto.elencoTitoliAutorizzatiInterventiSuccessivi.push({
      sub:element.sub,
      descrizione:element.descrizione, 
      nomeAllegato:element.nome_file,
@@ -1190,7 +847,7 @@ if (response.data['titoliAutorizzativiInterventiSuccessici'][0] != null){
 if (response.data['dataCatastali'][0] != null){
 
  response.data['dataCatastali'].forEach(element => {
-   this.elencoTitoliAutorizzatiDatiCatastali.push({
+   this.Progetto.elencoTitoliAutorizzatiDatiCatastali.push({
      sub:element.sub,
      foglio:element.foglio, 
      particella:element.particella,
@@ -1200,7 +857,7 @@ if (response.data['dataCatastali'][0] != null){
 if (response.data['impiantoAutonomoDiFatto'][0] != null){
 
  response.data['impiantoAutonomoDiFatto'].forEach(element => {
-   this.elencoImpiantoAutonomoEsistente.push({
+   this.Progetto.elencoImpiantoAutonomoEsistente.push({
      sub:element.sub,
      tecnologiaImpianto:element.tecnologia_impianto, 
      numeronUnitaGenerazione:element.numero_unita,
@@ -1216,7 +873,7 @@ if (response.data['impiantoAutonomoDiFatto'][0] != null){
 if (response.data['impiantoAutonomoDiProgetto'][0] != null){
 
  response.data['impiantoAutonomoDiProgetto'].forEach(element => {
-   this.elencoImpiantoAutonomoEsistenteStatoDiProgetto.push({
+   this.Progetto.elencoImpiantoAutonomoEsistenteStatoDiProgetto.push({
      sub:element.sub,
      tecnologiaImpianto:element.tecnologia_impianto, 
      numeronUnitaGenerazione:element.numero_unita,
@@ -1231,7 +888,7 @@ if (response.data['impiantoAutonomoDiProgetto'][0] != null){
 if (response.data['allegatiProgetto'][0] != null){
 
  response.data['allegatiProgetto'].forEach(element => {
-   this.elencoAllegati.push({
+   this.Progetto.elencoAllegati.push({
      id:element.id,
      nomeFile:element.nome_file,
      noteFile:element.note_allegato, 
@@ -1242,14 +899,14 @@ if (response.data['allegatiProgetto'][0] != null){
      });
      if (element.tipo_allegato == this.staticTipoAllegato.preventivoFirmato){
      
-     this.quoteAllegatoPreventivo=element.nome_file;
+     this.Progetto.quoteAllegatoPreventivo=element.nome_file;
      }
    });
 }
 if (response.data['quoteAcconti'][0] != null){
 
  response.data['quoteAcconti'].forEach(element => {
-   this.elencoQuote.push({
+   this.Progetto.elencoQuote.push({
      dataPagamento:element.data,
      importo:element.importo, 
      metodoPagamento:element.modalita_pagamento,
@@ -1262,7 +919,7 @@ if (response.data['quoteAcconti'][0] != null){
 if (response.data['quoteSpese'][0] != null){
 
  response.data['quoteSpese'].forEach(element => {
-   this.elencoSpese.push({
+   this.Progetto.elencoSpese.push({
      dataPagamento:element.data,
      importo:element.importo, 
      causale:element.modalita_pagamento,
@@ -1275,7 +932,7 @@ if (response.data['quoteSpese'][0] != null){
 if (response.data['listaUsersAssociatiAlProgetto'][0] != null){
 
  response.data['listaUsersAssociatiAlProgetto'].forEach(element => {
-   this.elencoUtentiAutorizzati.push({
+   this.Progetto.elencoUtentiAutorizzati.push({
      nome:element.name,
      email:element.email, 
      ruolo:element.role,
@@ -1288,34 +945,34 @@ if (response.data['listaUsersAssociatiAlProgetto'][0] != null){
 
 if (response.data['infoEdificioProgetto'][0]!= null){
 var dettagliEdificio=response.data['infoEdificioProgetto'][0];
-this.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
+this.Progetto.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
 /* CONDOMINIO */
-this.condominioNome=dettagliEdificio.cd_nome_condominio;
-this.condominioIndirizzo=dettagliEdificio.cd_indirizzo;
-this.condominioCitta=dettagliEdificio.cd_citta;
-this.condominioProvincia=dettagliEdificio.cd_citta;
-this.condominioAnnodicotruzione=dettagliEdificio.cd_annocostruzione;
-this.condominioPianoimmboile=dettagliEdificio.cd_piano_immobile;
-this.condominioNumeroUnitaAccatastate=dettagliEdificio.cd_numero_ui_accatastate;
-this.condominioNumerounitariscaldate= dettagliEdificio.cd_numero_ui_riscaldate;
+this.Progetto.condominioNome=dettagliEdificio.cd_nome_condominio;
+this.Progetto.condominioIndirizzo=dettagliEdificio.cd_indirizzo;
+this.Progetto.condominioCitta=dettagliEdificio.cd_citta;
+this.Progetto.condominioProvincia=dettagliEdificio.cd_citta;
+this.Progetto.condominioAnnodicotruzione=dettagliEdificio.cd_annocostruzione;
+this.Progetto.condominioPianoimmboile=dettagliEdificio.cd_piano_immobile;
+this.Progetto.condominioNumeroUnitaAccatastate=dettagliEdificio.cd_numero_ui_accatastate;
+this.Progetto.condominioNumerounitariscaldate= dettagliEdificio.cd_numero_ui_riscaldate;
 if (dettagliEdificio.cd_numero_pertinnze_accatastate != null){
 var outputsplit = dettagliEdificio.cd_numero_pertinnze_accatastate.split(';');
 if (outputsplit!=null){
-   outputsplit.forEach(element=>{this.condominioPertinenzaC2C6C7.push(element)});
+   outputsplit.forEach(element=>{this.Progetto.condominioPertinenzaC2C6C7.push(element)});
 }}
-this.condominioformalmenteCostituito=dettagliEdificio.cd_condominio_costituito;
+this.Progetto.condominioformalmenteCostituito=dettagliEdificio.cd_condominio_costituito;
 if(dettagliEdificio.cd_condominio_costituito=='SI'){
-this.condominioFormalmenteCostituitoCodiceFsicale=dettagliEdificio.cd_codicefiscale_condominio;
-this.condominioFormalmenteCostituitoRiferimentoAmministatore=dettagliEdificio.cd_info_condominiocostituito;}
+this.Progetto.condominioFormalmenteCostituitoCodiceFsicale=dettagliEdificio.cd_codicefiscale_condominio;
+this.Progetto.condominioFormalmenteCostituitoRiferimentoAmministatore=dettagliEdificio.cd_info_condominiocostituito;}
 if(dettagliEdificio.cd_condominio_costituito=='NO'){
-this.condominioNOformalmenteCostituitoCodiceFiscaleReferente=dettagliEdificio.cd_codicefiscale_condominio;
-this.condominioNOformalmenteCostituitoReferente=dettagliEdificio.cd_info_condominiocostituito;}
+this.Progetto.condominioNOformalmenteCostituitoCodiceFiscaleReferente=dettagliEdificio.cd_codicefiscale_condominio;
+this.Progetto.condominioNOformalmenteCostituitoReferente=dettagliEdificio.cd_info_condominiocostituito;}
 /* SCREENIN CONDOMINIO */
-this.screeningCondominioUnicoProprietario=dettagliEdificio.cd_unico_proprietario ;
-this.screeningCondominioSoggettiIRES=dettagliEdificio.cd_ires;
-this.screeningCondominioPossiedonoMultiProprieta=dettagliEdificio.cd_condomini_altri_unita;
-this.screeningCondominioA1A8A9=dettagliEdificio.cd_a1a8a9;
-this.screeningCondominioUsufruito110= dettagliEdificio.cd_usufruito110;
+this.Progetto.screeningCondominioUnicoProprietario=dettagliEdificio.cd_unico_proprietario ;
+this.Progetto.screeningCondominioSoggettiIRES=dettagliEdificio.cd_ires;
+this.Progetto.screeningCondominioPossiedonoMultiProprieta=dettagliEdificio.cd_condomini_altri_unita;
+this.Progetto.screeningCondominioA1A8A9=dettagliEdificio.cd_a1a8a9;
+this.Progetto.screeningCondominioUsufruito110= dettagliEdificio.cd_usufruito110;
 
 
 /*FINE CONDOMINIO */
@@ -1325,25 +982,25 @@ this.screeningCondominioUsufruito110= dettagliEdificio.cd_usufruito110;
 /* familiare */
 if (response.data['infoelencoProprietariImmobile'][0] != null){
   var listaProprietari=response.data['infoelencoProprietariImmobile'];
-listaProprietari.forEach(element =>{ this.elencoProprietariImmobile.push(
+listaProprietari.forEach(element =>{ this.Progetto.elencoProprietariImmobile.push(
          {nome:element.nome, 
          cognome:element.cognome,
         codiceFiscale:element.codicefiscale,
         telefono:element.telefono,
           });});
 }
-this.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
-this.edificioUnifamiliareIndirizzo=dettagliEdificio.ef_indirizzo;
-this.edificioUnifamiliarecitta=dettagliEdificio.ef_citta;
-this.edificioUnifamiliareProvincia=dettagliEdificio.ef_provincia;
-this.edificioUnifamiliareAnnocostruzione=dettagliEdificio.ef_annocostruzione;
-this.edificioUnifamiliarePianoImmobile=dettagliEdificio.ef_pianoImmobili;
+this.Progetto.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
+this.Progetto.edificioUnifamiliareIndirizzo=dettagliEdificio.ef_indirizzo;
+this.Progetto.edificioUnifamiliarecitta=dettagliEdificio.ef_citta;
+this.Progetto.edificioUnifamiliareProvincia=dettagliEdificio.ef_provincia;
+this.Progetto.edificioUnifamiliareAnnocostruzione=dettagliEdificio.ef_annocostruzione;
+this.Progetto.edificioUnifamiliarePianoImmobile=dettagliEdificio.ef_pianoImmobili;
 
 /*screening familiare */
-this.screeningUnifamiliareIndipendente=dettagliEdificio.ef_indipendente;
-this.screeningUnifamiliareIAcessoAutonomo=dettagliEdificio.ef_accesso_autonomo;
-this.screeningUnifamiliareUsufruito110=dettagliEdificio.ef_usufruito_110;
-this.screeningUnifamiliareRiqualificazioneBalconi=dettagliEdificio.ef_riqualificazioni_balconi;
+this.Progetto.screeningUnifamiliareIndipendente=dettagliEdificio.ef_indipendente;
+this.Progetto.screeningUnifamiliareIAcessoAutonomo=dettagliEdificio.ef_accesso_autonomo;
+this.Progetto.screeningUnifamiliareUsufruito110=dettagliEdificio.ef_usufruito_110;
+this.Progetto.screeningUnifamiliareRiqualificazioneBalconi=dettagliEdificio.ef_riqualificazioni_balconi;
 
 
 
@@ -1354,91 +1011,91 @@ this.screeningUnifamiliareRiqualificazioneBalconi=dettagliEdificio.ef_riqualific
 
 
 /*DATI GENERICI PROGETTO */
-  this.titoloProgetto=response.data['progetto'][0].titolo_progetto;
- this.tipologiaEdificio = response.data['progetto'][0].tipologia_edificio;
+  this.Progetto.titoloProgetto=response.data['progetto'][0].titolo_progetto;
+ this.Progetto.tipologiaEdificio = response.data['progetto'][0].tipologia_edificio;
 
     outputsplit= response.data['progetto'][0].zona_climatica.split(";");
    if (outputsplit!= null){
-  outputsplit.forEach(element => {this.zonaClimatica.push(element); });}
+  outputsplit.forEach(element => {this.Progetto.zonaClimatica.push(element); });}
   //this.zonaClimatica = response.data['progetto'][0].zona_climatica;
-  this.gradigiornoText = response.data['progetto'][0].gradi_giorno ;
-  this.areavincolata42 = response.data['progetto'][0].areavincolata; 
-  this.areaVicnolata42TipoVincolo = response.data['progetto'][0].tipo_vincolo; 
-  this.zonasismisca4 = response.data['progetto'][0].zonasismisca ;
-  this.zonasismisca4Interventiantisismici = response.data['progetto'][0].interventi_antisismici ;
-  this.zonasismisca4InterventiantisismiciAltriVincoli = response.data['progetto'][0].interventi_sismici_altri_vincoli ;
+  this.Progetto.gradigiornoText = response.data['progetto'][0].gradi_giorno ;
+  this.Progetto.areavincolata42 = response.data['progetto'][0].areavincolata; 
+  this.Progetto.areaVicnolata42TipoVincolo = response.data['progetto'][0].tipo_vincolo; 
+  this.Progetto.zonasismisca4 = response.data['progetto'][0].zonasismisca ;
+  this.Progetto.zonasismisca4Interventiantisismici = response.data['progetto'][0].interventi_antisismici ;
+  this.Progetto.zonasismisca4InterventiantisismiciAltriVincoli = response.data['progetto'][0].interventi_sismici_altri_vincoli ;
   if (response.data['progetto'][0].TipoInterventoProposto != null){
   outputsplit= response.data['progetto'][0].TipoInterventoProposto.split(";");
   if (outputsplit!= null){
-  outputsplit.forEach(element => {this.TipoInterventoProposto.push(element); });}}
+  outputsplit.forEach(element => {this.Progetto.TipoInterventoProposto.push(element); });}}
 if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
   outputsplit= response.data['progetto'][0].TipologiainterventoDPR3802001.split(";");
   if (outputsplit != null){
-   outputsplit.forEach(element => {this.TipologiainterventoDPR3802001.push(element); });
+   outputsplit.forEach(element => {this.Progetto.TipologiainterventoDPR3802001.push(element); });
   }
   }
-  this.tipologiaTitoloAutorizzativi= response.data['progetto'][0].tipologiaTitoloAutorizzativi;
-  this.riferimentiAutorizzativi= response.data['progetto'][0].riferimentiAutorizzativi;
-  this.dateAutorizzativi= response.data['progetto'][0].dateAutorizzativi;
-  this.AllegatoTitoloAutorizzativo=response.data['progetto'][0].AllegatoTitoloAutorizzativo;
-  this.pathAllegatoTitoloAutorizzativo= this.linkApi+'/'+this.idprogetto+'/'+this.AllegatoTitoloAutorizzativo;
-  this.abusiEdilizi= response.data['progetto'][0].abusiEdilizi;
-  this.TipologiaAbusiEdilizi = response.data['progetto'][0].TipologiaAbusiEdilizi;
-  this.comuneStatoDiFatto = response.data['progetto'][0].comuneStatoDiFatto;
-  this.NCEUStatoDiFatto = response.data['progetto'][0].NCEUStatoDiFatto;
-  this.difformitaUrbanistiche = response.data['progetto'][0].difformitaUrbanistiche;
-  this.noteDifformitaUrbanistiche = response.data['progetto'][0].noteDifformitaUrbanistiche;
-  this.difformitaCatastali = response.data['progetto'][0].difformitaCatastali;
-  this.noteDifformitaCatastali= response.data['progetto'][0].noteDifformitaCatastali;
-  this.irregolaritaSanabili= response.data['progetto'][0].irregolaritaSanabili;
-  this.noteIrregolaritaSanabili= response.data['progetto'][0].noteIrregolaritaSanabili;
+  this.Progetto.tipologiaTitoloAutorizzativi= response.data['progetto'][0].tipologiaTitoloAutorizzativi;
+  this.Progetto.riferimentiAutorizzativi= response.data['progetto'][0].riferimentiAutorizzativi;
+  this.Progetto.dateAutorizzativi= response.data['progetto'][0].dateAutorizzativi;
+  this.Progetto.AllegatoTitoloAutorizzativo=response.data['progetto'][0].AllegatoTitoloAutorizzativo;
+  this.Progetto.pathAllegatoTitoloAutorizzativo= this.linkApi+'/'+this.idprogetto+'/'+this.Progetto.AllegatoTitoloAutorizzativo;
+  this.Progetto.abusiEdilizi= response.data['progetto'][0].abusiEdilizi;
+  this.Progetto.TipologiaAbusiEdilizi = response.data['progetto'][0].TipologiaAbusiEdilizi;
+  this.Progetto.comuneStatoDiFatto = response.data['progetto'][0].comuneStatoDiFatto;
+  this.Progetto.NCEUStatoDiFatto = response.data['progetto'][0].NCEUStatoDiFatto;
+  this.Progetto.difformitaUrbanistiche = response.data['progetto'][0].difformitaUrbanistiche;
+  this.Progetto.noteDifformitaUrbanistiche = response.data['progetto'][0].noteDifformitaUrbanistiche;
+  this.Progetto.difformitaCatastali = response.data['progetto'][0].difformitaCatastali;
+  this.Progetto.noteDifformitaCatastali= response.data['progetto'][0].noteDifformitaCatastali;
+  this.Progetto.irregolaritaSanabili= response.data['progetto'][0].irregolaritaSanabili;
+  this.Progetto.noteIrregolaritaSanabili= response.data['progetto'][0].noteIrregolaritaSanabili;
 
   if (response.data['progetto'][0].tipologia_struttura_edificiio != null){
    outputsplit= response.data['progetto'][0].tipologia_struttura_edificiio.split(";");
   
-   outputsplit.forEach(element => {this.datistrutturalichk.push(element); });
+   outputsplit.forEach(element => {this.Progetto.datistrutturalichk.push(element); });
   }
-  this.altroDatiStrutturali = response.data['progetto'][0].altroDatiStrutturali;
+  this.Progetto.altroDatiStrutturali = response.data['progetto'][0].altroDatiStrutturali;
   
   if (response.data['progetto'][0].tipologia_parete != null){
    outputsplit= response.data['progetto'][0].tipologia_parete.split(";");
-   outputsplit.forEach(element => {this.tipologiaParetechk.push(element); });
+   outputsplit.forEach(element => {this.Progetto.tipologiaParetechk.push(element); });
   }
 
-  this.altroTipologiaParetechk = response.data['progetto'][0].altroTipologiaParetechk;
+  this.Progetto.altroTipologiaParetechk = response.data['progetto'][0].altroTipologiaParetechk;
  if ( response.data['progetto'][0].tipologia_doppia_parete  != null){
    outputsplit= response.data['progetto'][0].tipologia_doppia_parete.split(";");
-   outputsplit.forEach(element => {this.tipologia_doppia_parete.push(element); });
+   outputsplit.forEach(element => {this.Progetto.tipologia_doppia_parete.push(element); });
   }
-  this.SpessoreMuriEsterni = response.data['progetto'][0].spessori_muri_esternicm;
-  this.SpessoreCameraDaria = response.data['progetto'][0].spessori_camera_ariacm;
-  this.SpessoreIsolamento = response.data['progetto'][0].spessore_isolamentocm;
-  this.TipologiaIsolamentoIncameraDaria = response.data['progetto'][0].tipo_isolamento_camera_aria;
+  this.Progetto.SpessoreMuriEsterni = response.data['progetto'][0].spessori_muri_esternicm;
+  this.Progetto.SpessoreCameraDaria = response.data['progetto'][0].spessori_camera_ariacm;
+  this.Progetto.SpessoreIsolamento = response.data['progetto'][0].spessore_isolamentocm;
+  this.Progetto.TipologiaIsolamentoIncameraDaria = response.data['progetto'][0].tipo_isolamento_camera_aria;
   if (response.data['progetto'][0].cappotto != null){
   outputsplit= response.data['progetto'][0].cappotto.split(";");
   
-   outputsplit.forEach(element => {this.isolamentoEsistentechk.push(element); });
+   outputsplit.forEach(element => {this.Progetto.isolamentoEsistentechk.push(element); });
   }
-  this.altroisolamentoEsistentechk= response.data['progetto'][0].altroisolamentoEsistente;
-  this.tipologiaImpiantoEsistente = response.data['progetto'][0].centraletermicaesistente_tipo_impianto;
+  this.Progetto.altroisolamentoEsistentechk= response.data['progetto'][0].altroisolamentoEsistente;
+  this.Progetto.tipologiaImpiantoEsistente = response.data['progetto'][0].centraletermicaesistente_tipo_impianto;
   /* centrale termina centralizzato */
 
-  this.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente= response.data['progetto'][0].centraletermicaesistente_tecnologia_impianto;
-  this.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro= response.data['progetto'][0].cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro;
-  this.cetraleTermicaCentralizzatoNumeroUnita= response.data['progetto'][0].centraletermicaesistente_numero_unita_generazione;
-  this.cetraleTermicaCentralizzatoAnnoInstallazione= response.data['progetto'][0].centraletermicaesistente_anno_installazione;
-  this.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente= response.data['progetto'][0].centraletermicaesistente_potenza_termica;
-  this.cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste= response.data['progetto'][0].centraletermicaesistente_tipologia_distribuzione;
-  this.cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente= response.data['progetto'][0].centraletermicaesistente_tipologia_termoregolazione;
-  this.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato=response.data['progetto'][0].centraletermicaesistente_libretto_impianto_aggiornato;
-  this.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate= response.data['progetto'][0].centraletermicaesistente_provefumi;
-  this.cetraleTermicaCentralizzatoCertificatoCPI=response.data['progetto'][0].centraletermicaesistente_cpi;
-  this.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto=response.data['progetto'][0].centraletermicaprogetto_tecnologia_esistente;
-  this.cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro=response.data['progetto'][0].centraletermicaprogetto_tecnologia_esistente_altro;
-  this.cetraleTermicaCentralizzatoNumeroUnitaProposte=response.data['progetto'][0].centraletermicaprogetto_numero_unita;
-  this.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto=response.data['progetto'][0].centraletermicaprogetto_potenza_termica;
-  this.centraleTermivaCentralizzatoVettoreImpianto=response.data['progetto'][0].centraletermicaprogetto_vettore_energetico;
-  this.quotaImportoAcconto= response.data['progetto'][0].quota_preventivo;
+  this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente= response.data['progetto'][0].centraletermicaesistente_tecnologia_impianto;
+  this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro= response.data['progetto'][0].cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro;
+  this.Progetto.cetraleTermicaCentralizzatoNumeroUnita= response.data['progetto'][0].centraletermicaesistente_numero_unita_generazione;
+  this.Progetto.cetraleTermicaCentralizzatoAnnoInstallazione= response.data['progetto'][0].centraletermicaesistente_anno_installazione;
+  this.Progetto.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente= response.data['progetto'][0].centraletermicaesistente_potenza_termica;
+  this.Progetto.cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste= response.data['progetto'][0].centraletermicaesistente_tipologia_distribuzione;
+  this.Progetto.cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente= response.data['progetto'][0].centraletermicaesistente_tipologia_termoregolazione;
+  this.Progetto.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato=response.data['progetto'][0].centraletermicaesistente_libretto_impianto_aggiornato;
+  this.Progetto.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate= response.data['progetto'][0].centraletermicaesistente_provefumi;
+  this.Progetto.cetraleTermicaCentralizzatoCertificatoCPI=response.data['progetto'][0].centraletermicaesistente_cpi;
+  this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto=response.data['progetto'][0].centraletermicaprogetto_tecnologia_esistente;
+  this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro=response.data['progetto'][0].centraletermicaprogetto_tecnologia_esistente_altro;
+  this.Progetto.cetraleTermicaCentralizzatoNumeroUnitaProposte=response.data['progetto'][0].centraletermicaprogetto_numero_unita;
+  this.Progetto.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto=response.data['progetto'][0].centraletermicaprogetto_potenza_termica;
+  this.Progetto.centraleTermivaCentralizzatoVettoreImpianto=response.data['progetto'][0].centraletermicaprogetto_vettore_energetico;
+  this.Progetto.quotaImportoAcconto= response.data['progetto'][0].quota_preventivo;
   
 })
 
