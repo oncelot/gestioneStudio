@@ -34,20 +34,20 @@
             </div> -->
             <div class="col-2">
               <label>Nome</label>
-              <q-input v-model="value.NuovoProprietarioImmobileNome" type="text" :dense="true"  outlined/>
+              <q-input v-model="NuovoProprietarioImmobileNome" type="text" :dense="true"  outlined/>
               </div>
             <div class="col-2">
                <label>Cognome</label>
-              <q-input v-model="value.NuovoProprietarioImmobileCognome" type="text" :dense="true"  outlined/>
+              <q-input v-model="NuovoProprietarioImmobileCognome" type="text" :dense="true"  outlined/>
            </div> 
             <div class="col-2">
                <label>Codice Fiscale</label>
-              <q-input v-model="value.NuovoProprietarioImmobileCodiceFiscale" type="text" maxlength="15" :dense="true"  outlined/>
+              <q-input v-model="NuovoProprietarioImmobileCodiceFiscale" type="text" maxlength="15" :dense="true"  outlined/>
           
             </div>
             <div class="col-2">
                <label>Telefono</label>
-              <q-input v-model="value.NuovoProprietarioImmobileTelefono" type="text" :dense="true" outlined  />
+              <q-input v-model="NuovoProprietarioImmobileTelefono" type="text" :dense="true" outlined  />
           </div>
           <div class="col-2">
             <q-btn color="primary"  style="margin-top:23px" icon="add" :dense="true"  outline @click="addRowProprietariImmobile()" /></div>
@@ -372,6 +372,55 @@
             </div>
     </div>
 </template>
+<script>
+import Axios from 'axios';
+export default {
+    props:['value'],
+    data(){return{
+        NuovoProprietarioImmobileNome:'',
+        NuovoProprietarioImmobileCognome:'',
+        NuovoProprietarioImmobileCodiceFiscale:'',
+        NuovoProprietarioImmobileTelefono:'',
+    }},
+    methods:{   
+        addRowProprietariImmobile()
+        {
+            this.value.elencoProprietariImmobile.push({
+                nome:this.NuovoProprietarioImmobileNome, 
+                cognome:this.NuovoProprietarioImmobileCognome,
+                codiceFiscale:this.NuovoProprietarioImmobileCodiceFiscale,
+                telefono:this.NuovoProprietarioImmobileTelefono,
+                });
+                this.NuovoProprietarioImmobileNome='';
+                this.NuovoProprietarioImmobileCognome='';
+                this.NuovoProprietarioImmobileCodiceFiscale='';
+                this.NuovoProprietarioImmobileTelefono='';
+
+                },
+                 
+    elencoCercaAnagraficaProgettistiFunction()
+    {
+        if (this.value.cercaProgettista.length >1)
+        {
+            Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreInterno/'+this.value.cercaProgettista).then(Response=>{console.log(Response.data);this.value.elencoCercaAnagraficaProgettisti= Response.data})
+        }
+    },   
+    aggiungiElencoProgettisti(datiUtente)
+    {
+        this.value.elencoAnagraficaProgettisti.push({
+            nome:datiUtente.nome,
+            cognome:datiUtente.cognome,
+            denominazione:datiUtente.denominazione,
+            codiceFiscale:datiUtente.codice_fiscale,
+            partitaIva:datiUtente.partita_iva,
+            id:datiUtente.id});
+            this.value.cercaProgettista='';
+            this.value.elencoCercaAnagraficaProgettisti=null;
+    },
+    }
+}
+</script>
+
 <style scoped>
 .bgmargintop{
   background-color: white; margin-top:20px;
@@ -409,43 +458,3 @@
   color: #ffffff;
 }
 </style>
-<script>
-import Axios from 'axios';
-export default {
-    props:['value'],
-    data(){return{
-        
-    }},
-    methods:{   
-        addRowProprietariImmobile()
-        {
-            this.elencoProprietariImmobile.push({
-                nome:this.NuovoProprietarioImmobileNome, 
-                cognome:this.NuovoProprietarioImmobileCognome,
-                codiceFiscale:this.NuovoProprietarioImmobileCodiceFiscale,
-                telefono:this.NuovoProprietarioImmobileTelefono,
-                });
-                },
-                 
-    elencoCercaAnagraficaProgettistiFunction()
-    {
-        if (this.value.cercaProgettista.length >1)
-        {
-            Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreInterno/'+this.value.cercaProgettista).then(Response=>{console.log(Response.data);this.value.elencoCercaAnagraficaProgettisti= Response.data})
-        }
-    },   
-    aggiungiElencoProgettisti(datiUtente)
-    {
-        this.value.elencoAnagraficaProgettisti.push({
-            nome:datiUtente.nome,
-            cognome:datiUtente.cognome,
-            denominazione:datiUtente.denominazione,
-            codiceFiscale:datiUtente.codice_fiscale,
-            partitaIva:datiUtente.partita_iva,
-            id:datiUtente.id});
-            this.value.cercaProgettista='';
-            this.value.elencoCercaAnagraficaProgettisti=null;
-    },
-    }
-}
-</script>

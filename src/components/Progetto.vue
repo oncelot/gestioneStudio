@@ -274,6 +274,7 @@ export default {
           cittaEF:this.Progetto.edificioUnifamiliarecitta,
           provinciaEF:this.Progetto.edificioUnifamiliareProvincia,
           annoCostruzioneEF:this.Progetto.edificioUnifamiliareAnnocostruzione,
+          pianoImmobileEF:this.Progetto.edificioUnifamiliarePianoImmobile,
           indipendenteEF:this.Progetto.screeningUnifamiliareIndipendente,
           accessoAutonomiEF:this.Progetto.screeningUnifamiliareIAcessoAutonomo,
           usufruito110EF:this.Progetto.screeningUnifamiliareUsufruito110,
