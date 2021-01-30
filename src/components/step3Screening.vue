@@ -305,7 +305,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
     <div class="col"> {{ item.sub }}</div>
     <div class="col"> {{ item.descrizione }}</div>
-    <div class="col"><span  @click="downloadFile(value.idprogetto+'/'+item.allegato, item.allegato)" style=" cursor: pointer; text-decoration:underline"> {{ item.nomeAllegato }}</span></div>
+    <div class="col"><span  @click="downloadFile(value.idprogetto+'/'+item.nomeAllegato, item.nomeAllegato)" style=" cursor: pointer; text-decoration:underline"> {{ item.nomeAllegato }}</span></div>
     <div class="col-1 col-md-1 "> 
     <q-btn v-if="value.nuovoProgetto"  size="sm" round icon="delete" @click="value.elencoTitoliAutorizzatiInterventiSuccessivi.splice(index, 1)" />
     <q-btn v-if="!value.nuovoProgetto"  size="sm" round icon="delete" @click="value.elencoTitoliAutorizzatiInterventiSuccessivi[index].cancellare='1'" />
@@ -544,6 +544,9 @@ DatiCatastaliTitoliAutorizzativiNuovoFoglio:'',
           new:1,
           cancellare:0,
         });
+        this.InterventiSuccessiviNuovoSub='';
+        this.InterventiSuccessiviNuovaDecrizione='';
+        this.nameAuxFile='';
 
   
     },
