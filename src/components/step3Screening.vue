@@ -190,7 +190,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
       <template v-slot:append>
         <q-icon name="event" class="cursor-pointer">
           <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="value.data">
+            <q-date v-model="value.dateAutorizzativi">
               <div class="row items-center justify-end">
                 <q-btn v-close-popup label="Close" color="primary" flat />
               </div>
@@ -220,7 +220,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     </div>
     <div class="col-3">
       <label for="">Anno di intervento</label>
-      <q-input v-model="value.annoIntervento" outlined :dense="true" type="number" maxlength="4"/>
+      <q-input v-model="annoIntervento" outlined :dense="true" type="number" maxlength="4"/>
     </div>
 
     <div class="col-3"> 
@@ -250,8 +250,8 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     <div class="col"><span  @click="downloadFile(value.idprogetto+'/'+item.allegato, item.allegato)" style=" cursor: pointer; text-decoration:underline"> {{ item.allegato }}</span></div>
  
     <div class="col-1 col-md-1 "> 
-    <q-btn v-if="nuovoProgetto"  size="sm" round icon="delete" @click="value.elencoInterventiManutenzioneStraordinariaSCIACILAltro.splice(index, 1)" />
-    <q-btn v-if="!nuovoProgetto"  size="sm" round icon="delete" @click="value.elencoInterventiManutenzioneStraordinariaSCIACILAltro[index].cancellare='1'" />
+    <q-btn v-if="value.nuovoProgetto"  size="sm" round icon="delete" @click="value.elencoInterventiManutenzioneStraordinariaSCIACILAltro.splice(index, 1)" />
+    <q-btn v-if="!value.nuovoProgetto"  size="sm" round icon="delete" @click="value.elencoInterventiManutenzioneStraordinariaSCIACILAltro[index].cancellare='1'" />
 
   </div>
   </div>
@@ -272,8 +272,8 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
   </div>
   <div class="row  q-gutter-sm" style="background-color:white">
-    <div class="col"><b><q-input v-model="value.modalInterventiSuccessiviNuovoSub" :dense="true"  type="text" label="Sub" /></b></div>
-    <div class="col"><b><q-input v-model="value.modalInterventiSuccessiviNuovaDecrizione" :dense="true"  type="text" label="Successivi interventi" /></b></div>
+    <div class="col"><b><q-input v-model="InterventiSuccessiviNuovoSub" :dense="true"  type="text" label="Sub" /></b></div>
+    <div class="col"><b><q-input v-model="InterventiSuccessiviNuovaDecrizione" :dense="true"  type="text" label="Successivi interventi" /></b></div>
     <div class="col">
       <label>Allegato</label><br>
       <input type="file" @change="handleFile">
@@ -331,9 +331,9 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
     </div>
       <div class="row  q-gutter-sm" style="background-color:white; border-bottom:1px solid black">
-    <div class="col"><b><q-input v-model="value.modalDatiCatastaliTitoliAutorizzativiNuovoFoglio" :dense="true" outlined  type="text" /></b></div>
-    <div class="col"><b><q-input v-model="value.modalDatiCatastaliTitoliAutorizzativiNuovoParticella" :dense="true" outlined  type="text"  /></b></div>
-    <div class="col"><b><q-input v-model="value.modalDatiCatastaliTitoliAutorizzativiNuovoSub" :dense="true" outlined  type="text" /></b></div>
+    <div class="col"><b><q-input v-model="DatiCatastaliTitoliAutorizzativiNuovoFoglio" :dense="true" outlined  type="text" /></b></div>
+    <div class="col"><b><q-input v-model="DatiCatastaliTitoliAutorizzativiNuovoParticella" :dense="true" outlined  type="text"  /></b></div>
+    <div class="col"><b><q-input v-model="DatiCatastaliTitoliAutorizzativiNuovoSub" :dense="true" outlined  type="text" /></b></div>
 
     <div class="col"> <q-btn icon="add"  color="primary" @click="addrowDatiCatastaliTitoliAutorizzativi(); " outline :dense="true" /></div>
     
@@ -451,11 +451,20 @@ Specificare le modalità e i tempi di sanatoria.
 import Axios from 'axios';
 export default {
     data(){return {
+annoIntervento:'',
+
+nameAuxFile:null,
+auxFile:null,
+InterventiSuccessiviNuovoSub:'',
+InterventiSuccessiviNuovaDecrizione:'',
+DatiCatastaliTitoliAutorizzativiNuovoSub:'',
+DatiCatastaliTitoliAutorizzativiNuovoParticella:'',
+DatiCatastaliTitoliAutorizzativiNuovoFoglio:'',
 
     }},
     methods:{
     handleFileTitoliAutorizzativi(e){
-      this.AllegatoTitoloAutorizzativo=e.target.files[0].name;
+      this.value.AllegatoTitoloAutorizzativo=e.target.files[0].name;
       const selectImage= e.target.files[0];
       this.createBase64TitoliAutorizzativi(selectImage);
 
@@ -465,9 +474,9 @@ export default {
       reader.onload = (e)=>{
        var aux= e.target.result;
        var base64string = window.btoa(aux);
-       this.Base64AllegatoTitoloAutorizzativo=base64string;
+       this.value.Base64AllegatoTitoloAutorizzativo=base64string;
       };
-      this.Base64AllegatoTitoloAutorizzativo= reader.readAsBinaryString(fileObject);
+      this.value.Base64AllegatoTitoloAutorizzativo= reader.readAsBinaryString(fileObject);
 
 //return output;
     },
@@ -493,7 +502,7 @@ export default {
      
     addrowInterventiManutenzioneSuccessivi(){
   
-      this.elencoInterventiManutenzioneStraordinariaSCIACILAltro.push(
+      this.value.elencoInterventiManutenzioneStraordinariaSCIACILAltro.push(
         {
           anno:this.annoIntervento,
           allegato:this.nameAuxFile,
@@ -526,18 +535,25 @@ export default {
             });
       },
           addrowInterventiSuccessivi(){
-      this.elencoTitoliAutorizzatiInterventiSuccessivi.push(
+      this.value.elencoTitoliAutorizzatiInterventiSuccessivi.push(
         {
-          sub:this.modalInterventiSuccessiviNuovoSub,
-          descrizione:this.modalInterventiSuccessiviNuovaDecrizione,
+          sub:this.InterventiSuccessiviNuovoSub,
+          descrizione:this.InterventiSuccessiviNuovaDecrizione,
           nomeAllegato:this.nameAuxFile,
           allegatoBase64:this.auxFile,
           new:1,
           cancellare:0,
         });
 
-      this.modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione= false;
+  
     },
+      addrowDatiCatastaliTitoliAutorizzativi(){
+      this.value.elencoTitoliAutorizzatiDatiCatastali.push(
+        {sub:this.DatiCatastaliTitoliAutorizzativiNuovoSub,
+         particella:this.DatiCatastaliTitoliAutorizzativiNuovoParticella,
+         foglio:this.DatiCatastaliTitoliAutorizzativiNuovoFoglio});
+         },
+
     },
     props:['value'],
 }

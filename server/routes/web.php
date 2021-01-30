@@ -92,12 +92,16 @@ return response()->json($users);
 
 $router->get('/download',function(Request $request){
 
-  //  $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+   // $out = new \Symfony\Component\Console\Output\ConsoleOutput();
 //$out->writeln($request->pp);
-    //$path="C:\\Users\\Fausto\\source\\repos\\oncelot\\gestionestudio\\server\\public\\";
+   // $path="C:\\Users\\Fausto\\source\\repos\\oncelot\\gestionestudio\\server\\public\\";
+    $path="C:/Users/Fausto/Documents/";
    
     $path =  app()->basePath('public/');
     try {
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+        //$file=str_replace("/","\\",$request->pp);
+        $out->writeln($path.$request->pp);
         $response=response()->download($path.$request->pp);
     ob_end_clean();
     return  $response;

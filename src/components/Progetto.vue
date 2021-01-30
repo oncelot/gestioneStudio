@@ -269,6 +269,7 @@ export default {
           centraleTermicaDiProgetto:this.Progetto.elencoImpiantoAutonomoEsistenteStatoDiProgetto,
           
           tipoEdificioEF:this.Progetto.edificioUnifamiliareTipo,
+          altroTipoEdificioFamiliare:this.Progetto.altroTipoEdificioFamiliare,
           propietariImmobiliEF:this.Progetto.elencoProprietariImmobile,
           indirizzoEF:this.Progetto.edificioUnifamiliareIndirizzo,
           cittaEF:this.Progetto.edificioUnifamiliarecitta,
@@ -344,13 +345,7 @@ export default {
 this.$router.push({ path:'lista-progetti'});
     },
  
-    addrowDatiCatastaliTitoliAutorizzativi(){
-      this.elencoTitoliAutorizzatiDatiCatastali.push(
-        {sub:this.modalDatiCatastaliTitoliAutorizzativiNuovoSub,
-         particella:this.modalDatiCatastaliTitoliAutorizzativiNuovoParticella,
-         foglio:this.modalDatiCatastaliTitoliAutorizzativiNuovoFoglio});
-         },
-
+  
   /*  addrowImpiantoAutonomoProposto(){
       this.elencoImpiantoAutonomoProposto.push(
         {
@@ -407,7 +402,7 @@ this.elencoAllegati.push({
       Progetto:{
         idprogetto:'',
         titoloProgetto:'',
-
+       
         cercaAnagraficaClienti:'',
         elencoAnagraficaClienti:[],
 
@@ -421,6 +416,7 @@ this.elencoAllegati.push({
         //step2
         tipologiaEdificio:'',
         edificioUnifamiliareTipo:'',
+        altroTipoEdificioFamiliare:'',
         NuovoProprietarioImmobileNome:'',
         NuovoProprietarioImmobileCognome:'',
         NuovoProprietarioImmobileCodiceFiscale:'',
@@ -472,7 +468,8 @@ this.elencoAllegati.push({
         dateAutorizzativi:'',
         data:'',
         AllegatoTitoloAutorizzativo:'',
-        annoIntervento:'',
+        Base64AllegatoTitoloAutorizzativo:'',
+        //annoIntervento:'',
         elencoInterventiManutenzioneStraordinariaSCIACILAltro:[],
         modalInterventiSuccessiviNuovoSub:'',
         modalInterventiSuccessiviNuovaDecrizione:'',
@@ -763,6 +760,7 @@ this.elencoAllegati.push({
 /********** DETTAGLI PROGETTO **********/
 
     this.nuovoProgetto=false;
+    this.Progetto.idprogetto=this.idprogetto;
 Axios.get(this.linkApi+'/getProgetto/'+this.idprogetto).then(response =>{
 //TODO PROBLEMA ALLEGATO
 /* LISTA CLIENTI */
@@ -947,6 +945,7 @@ if (response.data['listaUsersAssociatiAlProgetto'][0] != null){
 if (response.data['infoEdificioProgetto'][0]!= null){
 var dettagliEdificio=response.data['infoEdificioProgetto'][0];
 this.Progetto.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
+this.Progetto.nuovoProgetto=false;
 /* CONDOMINIO */
 this.Progetto.condominioNome=dettagliEdificio.cd_nome_condominio;
 this.Progetto.condominioIndirizzo=dettagliEdificio.cd_indirizzo;

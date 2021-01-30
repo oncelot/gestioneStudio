@@ -131,7 +131,7 @@ class ProgettoController extends Controller
             {
                 if ($i->AllegatoTitoloAutorizzativo != '')
                 {
-                    $nomefile = $this->generaNomeFile($i->AllegatoTitoloAutorizzativo);
+                    $nomefile = $i->AllegatoTitoloAutorizzativo;
                     $file =base64_decode($i->Base64AllegatoTitoloAutorizzativo);
                     mkdir($path."/".$idProgetto);
                     file_put_contents($path."/".$idProgetto."/".$nomefile, $file);
@@ -237,6 +237,7 @@ class ProgettoController extends Controller
                     'id_progetto'=>$idProgetto,
                     'tipo_edificio'=>$i->tipologiaEdificio,
                     'ef_tipo_edificio'=>$i->tipoEdificioEF,
+                    'ef_altroTipoEdificioFamiliare'=>$i->altroTipoEdificioFamiliare,
                     'ef_indirizzo'=>$i->indirizzoEF,
                     'ef_citta'=>$i->cittaEF,
                     'ef_provincia'=>$i->provinciaEF,
@@ -587,7 +588,8 @@ class ProgettoController extends Controller
                 
             ]);
             if ($i->AllegatoTitoloAutorizzativo != ''){
-                $nomefile = $this->generaNomeFile($i->AllegatoTitoloAutorizzativo);
+                //$nomefile = $this->generaNomeFile($i->AllegatoTitoloAutorizzativo);
+                $nomefile =$i->AllegatoTitoloAutorizzativo;
               
                 $file =base64_decode($i->Base64AllegatoTitoloAutorizzativo);
                 mkdir($path."/".$idProgetto);
@@ -694,6 +696,7 @@ class ProgettoController extends Controller
                $idTipoEdificioProgetto= DB::table('tipologia_edificio_progetto')->where('id_progetto',$idProgetto)->update([
                     'id_progetto'=>$idProgetto,
                     'tipo_edificio'=>$i->tipologiaEdificio,
+                    'ef_altroTipoEdificioFamiliare '=>$i->altroTipoEdificioFamiliare,
                     'ef_tipo_edificio'=>$i->tipoEdificioEF,
                     'ef_indirizzo'=>$i->indirizzoEF,
                     'ef_citta'=>$i->cittaEF,

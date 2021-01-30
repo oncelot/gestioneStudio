@@ -23,7 +23,7 @@
               <q-radio v-model="value.edificioUnifamiliareTipo" val="plurifimiliare" label="Unità immobiliare sita all’interno di edifici plurifamiliari" /> 
               <q-radio v-model="value.edificioUnifamiliareTipo" val="commeciale" label="Commerciale" /> 
               <q-radio v-model="value.edificioUnifamiliareTipo" val="altro" label="Altro" /> 
-              <q-input v-model="text" type="text" label="Altro" :dense="true" outlined  v-if="value.edificioUnifamiliareTipo == 'altro' "/>
+              <q-input v-model="value.altroTipoEdificioFamiliare" type="text" label="Altro" :dense="true" outlined  v-if="value.edificioUnifamiliareTipo == 'altro' "/>
 
             </div>
           </div>
