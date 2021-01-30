@@ -410,12 +410,12 @@ this.elencoAllegati.push({
         cercaAnagraficaClienti:'',
         elencoAnagraficaClienti:[],
 
-        cercaCollaboratoriInterni:'',
-        elencoCercaCollaboratoreInterno:'',
-        elencoCollaboratoriInterno:'',
+      /*  cercaCollaboratoriInterni:'',
+        elencoCercaCollaboratoreInterno:'',*/
+        elencoCollaboratoriInterno:[],
 
-        cercaCollaboratoriEsterni:'',
-        elencoCercaCollaboratoreEsterno:'',
+       /* cercaCollaboratoriEsterni:'',
+        elencoCercaCollaboratoreEsterno:'',*/
         elencoCollaboratoriEnterno:[],
         //step2
         tipologiaEdificio:'',
@@ -449,7 +449,7 @@ this.elencoAllegati.push({
         gradigiornoText:'',
         areavincolata42:'',
         areaVicnolata42TipoVincolo:'',
-        zonasismisca4:[],
+        zonasismisca4:'',
         zonasismisca4Interventiantisismici:'',
         zonasismisca4InterventiantisismiciAltriVincoli:'',
         TipoInterventoProposto:[],

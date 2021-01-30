@@ -65,8 +65,8 @@ class ProgettoController extends Controller
                 'areavincolata'=>$i->areavincolata42,
                 'tipo_vincolo'=>$i->tipoVincolo42,
                 'zonasismisca'=>$i->zonasismisca4,
-              'interventi_antisismici'=>$i->zonasismisca4Interventiantisismici,
-                  'interventi_sismici_altri_vincoli'=>$i->zonasismisca4InterventiantisismiciAltriVincoli,
+                'interventi_antisismici'=>$i->zonasismisca4Interventiantisismici,
+                'interventi_sismici_altri_vincoli'=>$i->zonasismisca4InterventiantisismiciAltriVincoli,
                 'TipoInterventoProposto'=>$TipoInterventoProposto,
                 'TipologiainterventoDPR3802001'=>$TipologiainterventoDPR3802001,
                 'tipologiaTitoloAutorizzativi'=>$i->tipologiaTitoloAutorizzativi,
@@ -123,7 +123,7 @@ class ProgettoController extends Controller
                 'centraletermicaprogetto_potenza_termica'=>$i->cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto ,
                 'centraletermicaprogetto_vettore_energetico'=>$i->centraleTermivaCentralizzatoVettoreImpianto ,
                 'quota_preventivo'=>$quotaPreventivo ,
-               
+              
                 
             ]);
 
@@ -217,7 +217,7 @@ class ProgettoController extends Controller
                     'cd_indirizzo'=>$i->indirizzoCD,
                     'cd_citta'=>$i->cittaCD,
                     'cd_provincia'=>$i->provinciaCD,
-                    'cd_unico_proprietario'=>$annoCostruzioneCD,
+                    'cd_annocostruzione'=>$annoCostruzioneCD,
                     'cd_piano_immobile'=>$pianoImmobileCD,
                     'cd_numero_ui_accatastate'=>$numeroUnitaAccatastateCD,
                     'cd_numero_ui_riscaldate'=>$numeroUnitaScaldateCD,
@@ -673,7 +673,7 @@ class ProgettoController extends Controller
                     'cd_indirizzo'=>$i->indirizzoCD,
                     'cd_citta'=>$i->cittaCD,
                     'cd_provincia'=>$i->provinciaCD,
-                    'cd_unico_proprietario'=>$annoCostruzioneCD,
+                    'cd_annocostruzione'=>$annoCostruzioneCD,
                     'cd_piano_immobile'=>$pianoImmobileCD,
                     'cd_numero_ui_accatastate'=>$numeroUnitaAccatastateCD,
                     'cd_numero_ui_riscaldate'=>$numeroUnitaScaldateCD,

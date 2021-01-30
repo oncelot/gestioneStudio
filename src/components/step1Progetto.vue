@@ -21,7 +21,7 @@
 
         <div class="row justify-center">
           <div class="col-12 col-md-7 bgAree">
-            <q-input v-model="value.cercaAnagraficaClienti" debounce="500"  outlined :dense=true  placeholder="Cerca Cliente da aggiungere - Inserire 4 caratteri per avviare la ricerca" @keypress=" elencoCercaAnagraficaClientiFunction()">
+            <q-input v-model="value.cercaAnagraficaClienti"  outlined :dense=true  placeholder="Cerca Cliente da aggiungere - Inserire 3 caratteri per avviare la ricerca" @keypress=" elencoCercaAnagraficaClientiFunction()">
               <div class="autocomplete-items" v-if="value.cercaAnagraficaClienti.length > 2">
                 <div class="row"  v-for="item in value.elencoCercaAnagraficaClienti" :key="item.message">
                   <div class="col">
@@ -67,9 +67,9 @@
     </div>
     <div class="row justify-center">
       <div class="col-12 col-md-7 bgAree">
-         <q-input v-model="value.cercaCollaboratoriInterni" debounce="500"  outlined :dense=true  placeholder="Inserire 4 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreInternoFunction()">
-          <div class="autocomplete-items" v-if="value.cercaCollaboratoriInterni.length > 2">
-            <div class="row"  v-for="item in value.elencoCercaCollaboratoreInterno" :key="item.message">
+         <q-input v-model="cercaCollaboratoriInterni"  outlined :dense=true  placeholder="Inserire 3 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreInternoFunction()">
+          <div class="autocomplete-items" v-if="cercaCollaboratoriInterni.length > 2">
+            <div class="row"  v-for="item in elencoCercaCollaboratoreInterno" :key="item.message">
               <div class="col">
                 <a href="#" @click="aggiungiElencoCollaboratoreInterno(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
 
@@ -112,9 +112,9 @@
     </div>
     <div class="row  justify-center">
       <div class="col-12 col-md-7 bgAree">
-       <q-input v-model="value.cercaCollaboratoriEsterni" debounce="500"  outlined :dense=true  placeholder="Inserire 4 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreEsternoFunction()">
-          <div class="autocomplete-items" v-if="value.cercaCollaboratoriEsterni.length > 2">
-            <div class="row"  v-for="item in value.elencoCercaCollaboratoreEsterno" :key="item.message">
+       <q-input v-model="cercaCollaboratoriEsterni" outlined :dense=true  placeholder="Inserire 3 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreEsternoFunction()">
+          <div class="autocomplete-items" v-if="cercaCollaboratoriEsterni.length > 2">
+            <div class="row"  v-for="item in elencoCercaCollaboratoreEsterno" :key="item.message">
               <div class="col">
                 <a href="#" @click="aggiungiElencoClientiCollaboratoreEsterno(item)">  {{ item.nome }} {{item.cognome}} {{item.denominazione}}</a></div>
 
@@ -182,6 +182,97 @@
 
 </div>
 </template>
+
+<script>
+import Axios from 'axios';
+
+export default {
+    data(){return { 
+      NuovoProprietarioImmobileNome:'',
+      NuovoProprietarioImmobileCognome:'',
+      NuovoProprietarioImmobileCodiceFiscale:'',
+      NuovoProprietarioImmobileTelefono:'',
+      modalNuovaAnagraficaClienti:false,
+      cercaCollaboratoriInterni:'',
+      elencoCercaCollaboratoreInterno:'',
+      cercaCollaboratoriEsterni:'',
+      elencoCercaCollaboratoreEsterno:'',
+      
+      } },
+    
+    props:["value"],
+    methods:{
+        aggiungiElencoClienti(datiUtente)
+        {
+            this.value.elencoAnagraficaClienti.push({
+                nome:datiUtente.nome,
+                cognome:datiUtente.cognome,
+                denominazione:datiUtente.denominazione,
+                codiceFiscale:datiUtente.codice_fiscale,
+                partitaIva:datiUtente.partita_iva,
+                id:datiUtente.id,
+            });
+            this.value.cercaAnagraficaClienti='';
+            this.value.elencoCercaAnagraficaClienti=null;
+        },
+        
+        elencoCercaAnagraficaClientiFunction()
+        {
+            if (this.value.cercaAnagraficaClienti.length > 1)
+            {
+                Axios.get(this.linkApi+'/getCercaAnagrafica/cliente/'+this.value.cercaAnagraficaClienti).then(Response=>{console.log(Response.data);this.value.elencoCercaAnagraficaClienti= Response.data})
+            }
+        },
+        
+        elencoCercaCollaboratoreInternoFunction()
+        {
+            if (this.cercaCollaboratoriInterni.length>1)
+            {
+                Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreInterno/'+this.cercaCollaboratoriInterni).then(Response=>{console.log(Response.data);this.elencoCercaCollaboratoreInterno= Response.data})
+            }
+        },
+         aggiungiElencoCollaboratoreInterno(datiUtente)
+         {
+             this.value.elencoCollaboratoriInterno.push({
+                 nome:datiUtente.nome,
+                 cognome:datiUtente.cognome,
+                 denominazione:datiUtente.denominazione,
+                 codiceFiscale:datiUtente.codice_fiscale,
+                 partitaIva:datiUtente.partita_iva,
+                 id:datiUtente.id});
+                 this.cercaCollaboratoriInterni='';
+                 this.elencoCercaCollaboratoreInterno=null;
+        },
+        
+        elencoCercaCollaboratoreEsternoFunction()
+        {
+            if (this.cercaCollaboratoriEsterni.length >1)
+            {
+                Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreEsterno/'+this.cercaCollaboratoriEsterni).then(Response=>{console.log(Response.data);this.elencoCercaCollaboratoreEsterno= Response.data})
+            }
+        },
+
+        aggiungiElencoClientiCollaboratoreEsterno(datiUtente)
+        {
+             this.value.elencoCollaboratoriEnterno.push({
+                 nome:datiUtente.nome,
+                 cognome:datiUtente.cognome,
+                 denominazione:datiUtente.denominazione,
+                 codiceFiscale:datiUtente.codice_fiscale,
+                 partitaIva:datiUtente.partita_iva,
+                 id:datiUtente.id});
+                 this.cercaCollaboratoriEsterni='';
+                 this.elencoCercaCollaboratoreEsterno=null;
+        },
+        
+        test(e)
+        {
+            this.$emit('input',e);
+        }
+    }
+
+}
+</script>
 <style scoped>
 .bgmargintop{
   background-color: white; margin-top:20px;
@@ -219,89 +310,3 @@
   color: #ffffff;
 }
 </style>
-<script>
-import Axios from 'axios';
-
-export default {
-    data(){return { 
-      NuovoProprietarioImmobileNome:'',
-      NuovoProprietarioImmobileCognome:'',
-      NuovoProprietarioImmobileCodiceFiscale:'',
-      NuovoProprietarioImmobileTelefono:'',
-      modalNuovaAnagraficaClienti:false,
-      
-      } },
-    
-    props:["value"],
-    methods:{
-        aggiungiElencoClienti(datiUtente)
-        {
-            this.elencoAnagraficaClienti.push({
-                nome:datiUtente.nome,
-                cognome:datiUtente.cognome,
-                denominazione:datiUtente.denominazione,
-                codiceFiscale:datiUtente.codice_fiscale,
-                partitaIva:datiUtente.partita_iva,
-                id:datiUtente.id,
-            });
-            this.value.cercaAnagraficaClienti='';
-            this.value.elencoCercaAnagraficaClienti=null;
-        },
-        
-        elencoCercaAnagraficaClientiFunction()
-        {
-            if (this.value.cercaAnagraficaClienti.length > 1)
-            {
-                Axios.get(this.linkApi+'/getCercaAnagrafica/cliente/'+this.value.cercaAnagraficaClienti).then(Response=>{console.log(Response.data);this.value.elencoCercaAnagraficaClienti= Response.data})
-            }
-        },
-        
-        elencoCercaCollaboratoreInternoFunction()
-        {
-            if (this.value.cercaCollaboratoriInterni.length>1)
-            {
-                Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreInterno/'+this.value.cercaCollaboratoriInterni).then(Response=>{console.log(Response.data);this.value.elencoCercaCollaboratoreInterno= Response.data})
-            }
-        },
-         aggiungiElencoCollaboratoreInterno(datiUtente)
-         {
-             this.value.elencoCollaboratoriInterno.push({
-                 nome:datiUtente.nome,
-                 cognome:datiUtente.cognome,
-                 denominazione:datiUtente.denominazione,
-                 codiceFiscale:datiUtente.codice_fiscale,
-                 partitaIva:datiUtente.partita_iva,
-                 id:datiUtente.id});
-                 this.cercaCollaboratoriInterni='';
-                 this.elencoCercaCollaboratoreInterno=null;
-        },
-        
-        elencoCercaCollaboratoreEsternoFunction()
-        {
-            if (this.value.cercaCollaboratoriEsterni.length >1)
-            {
-                Axios.get(this.linkApi+'/getCercaAnagrafica/collaboratoreEsterno/'+this.cercaCollaboratoriEsterni).then(Response=>{console.log(Response.data);this.elencoCercaCollaboratoreEsterno= Response.data})
-            }
-        },
-
-        aggiungiElencoClientiCollaboratoreEsterno(datiUtente)
-        {
-             this.elencoCollaboratoriEnterno.push({
-                 nome:datiUtente.nome,
-                 cognome:datiUtente.cognome,
-                 denominazione:datiUtente.denominazione,
-                 codiceFiscale:datiUtente.codice_fiscale,
-                 partitaIva:datiUtente.partita_iva,
-                 id:datiUtente.id});
-                 this.cercaCollaboratoriEsterni='';
-                 this.elencoCercaCollaboratoreEsterno=null;
-        },
-        
-        test(e)
-        {
-            this.$emit('input',e);
-        }
-    }
-
-}
-</script>
