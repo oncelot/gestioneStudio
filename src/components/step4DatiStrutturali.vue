@@ -109,7 +109,7 @@
 <div class="col-md-3 col-12 paddingInput">
   <label class="text-bold" >Tecnologia impianto esistente</label>
  
-  <q-select v-model="value.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente" :dense='true' outlined :options="tecnologieCentraliTermiche"  />
+  <q-select v-model="value.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente" :dense='true' outlined :options="tecnologieCentraliTermiche" value=''  label="Seleziona..." />
 
   <q-input v-show="value.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente.value == 'altro' " v-model="value.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro" outlined :dense="true" type="text" label="Specificare"  />
   
@@ -348,6 +348,11 @@ export default {
     data(){return {
         tecnologieCentraliTermiche:[
           {
+            label:'Seleziona..',
+            value:'',
+            
+          },
+          {
             label:'Caldaia a gas',
             value:'CaldaiaGas'
           },
@@ -420,3 +425,40 @@ this.NuovoImpiantoEsistenteAutonomosub='';
     }
 }
 </script>
+<style scoped>
+.bgmargintop{
+  background-color: white; margin-top:20px;
+}
+.bgAree{
+  background-color: white;padding:5px
+}
+.paddingInput{padding:10px;}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+  
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+</style>

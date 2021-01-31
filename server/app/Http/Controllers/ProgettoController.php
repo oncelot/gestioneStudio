@@ -696,7 +696,7 @@ class ProgettoController extends Controller
                $idTipoEdificioProgetto= DB::table('tipologia_edificio_progetto')->where('id_progetto',$idProgetto)->update([
                     'id_progetto'=>$idProgetto,
                     'tipo_edificio'=>$i->tipologiaEdificio,
-                    'ef_altroTipoEdificioFamiliare '=>$i->altroTipoEdificioFamiliare,
+                    'ef_altroTipoEdificioFamiliare'=>$i->altroTipoEdificioFamiliare,
                     'ef_tipo_edificio'=>$i->tipoEdificioEF,
                     'ef_indirizzo'=>$i->indirizzoEF,
                     'ef_citta'=>$i->cittaEF,

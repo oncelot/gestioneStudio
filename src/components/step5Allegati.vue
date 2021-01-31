@@ -10,12 +10,12 @@
             </div>
             <div class="col-6">  
                 <label class="text-bold"> Tipo Allegato</label>
-                <q-select v-model="value.tipoAllegatodiAllegati" :options="tipiDiAllegati" :dense="true" outlined label="Seleziona..."  />
-                <q-input v-if="value.tipoAllegatodiAllegati.value =='altro'" v-model="value.tipoAltroAllegato" type="text" label="Altro tipo allegato" :dense=true />
+                <q-select v-model="tipoAllegatodiAllegati" :options="tipiDiAllegati" :dense="true" outlined label="Seleziona..."  />
+                <q-input v-if="tipoAllegatodiAllegati.value =='altro'" v-model="value.tipoAltroAllegato" type="text" label="Altro tipo allegato" :dense=true />
             </div>
             <div class="col-12"> 
                 <label for="" class="text-bold"> Note</label>
-                <q-input v-model="value.noteallegatoDiallegati" outlined :dense="true" type="text"  />  
+                <q-input v-model="noteallegatoDiallegati" outlined :dense="true" type="text"  />  
             </div>
                 
             <div class="col-12" style="margin-top:10px;"><q-btn class="white" icon="add" label="Aggiungi" @click="addrowAllegati()" /></div>
@@ -30,12 +30,12 @@
         <div  v-for="(allegato,index) in value.elencoAllegati" :key="allegato.nomeFile">
             <div class="row" v-if="allegato.cancellare=='0'">
                 <div class="col">
-                    <span v-if="allegato.idprogetto != '0'"  @click="downloadFile(idprogetto+'/'+allegato.nomeFile, allegato.nomeFile)" style=" cursor: pointer; text-decoration:underline">{{allegato.nomeFile}}</span>
+                    <span v-if="allegato.idprogetto != '0'"  @click="downloadFile(value.idprogetto+'/'+allegato.nomeFile, allegato.nomeFile)" style=" cursor: pointer; text-decoration:underline">{{allegato.nomeFile}}</span>
                     <span v-if="allegato.idprogetto == '0'" >{{allegato.nomeFile}}</span>
                 </div>
             <div class="col">{{allegato.noteFile}}</div>
             <div class="col">{{allegato.tipoAllegato}}</div>
-            <div class="col"> <q-btn   size="sm" round icon="delete" @click="elencoAllegati[index].cancellare='1'" /></div>
+            <div class="col"> <q-btn   size="sm" round icon="delete" @click="value.elencoAllegati[index].cancellare='1'" /></div>
             </div>
         </div>
         
@@ -46,6 +46,12 @@ import Axios from 'axios';
 
 export default {
     data(){return {
+        nameAuxFile:'',
+        auxFile:'',
+        noteallegatoDiallegati:'',
+        tipoAllegatodiAllegati:{value:'',label:'Seleziona..'},
+
+
          tipiDiAllegati:[
         {
         value:'ModelloPrivacy',
@@ -171,8 +177,60 @@ export default {
                         }
                     });
                 },
+        addrowAllegati()
+        {
+            //TODO prevedere caricaemnto sul database diretto
+            this.value.elencoAllegati.push({
+                nomeFile:this.nameAuxFile,
+                fileBase64:this.auxFile,
+                noteFile:this.noteallegatoDiallegati,
+                tipoAllegato:this.tipoAllegatodiAllegati.value,
+                idprogetto:0,
+                new:1,
+                cancellare:0,
+                });
+
+    },
         },
 
     props:["value"]
 }
 </script>
+
+<style scoped>
+.bgmargintop{
+  background-color: white; margin-top:20px;
+}
+.bgAree{
+  background-color: white;padding:5px
+}
+.paddingInput{padding:10px;}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+  /*when hovering an item:*/
+  background-color: #e9e9e9;
+  
+}
+.autocomplete-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: DodgerBlue !important;
+  color: #ffffff;
+}
+</style>

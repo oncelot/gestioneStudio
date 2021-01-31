@@ -7,7 +7,7 @@
   <div class="col-2 col-md-2"> 
     <label for="" class="text-bold"> Allega Preventivo Firmato</label>
     <input type="file" @change="handleFilePreventivo">
-      <a href="#"  v-if="!value.nuovoProgetto" @click="downloadFile(idprogetto+'/'+quoteAllegatoPreventivo,quoteAllegatoPreventivo)" >{{quoteAllegatoPreventivo}}</a>
+      <a href="#"  v-if="!value.nuovoProgetto" @click="downloadFile(idprogetto+'/'+value.nameAuxFilePreventivo,value.nameAuxFilePreventivo)" >{{value.nameAuxFilePreventivo}}</a>
    
   <!--  <q-file
       v-model="quoteAllegatoPreventivo"
@@ -76,7 +76,7 @@
    <div class="col">{{quota.metodoPagamento}}</div>
   <div class="col">{{quota.chiFatturato}}</div>
   <div class="col"> 
-    <q-btn   size="sm" round icon="delete" @click="elencoQuote.splice(index, 1)" />
+    <q-btn   size="sm" round icon="delete" @click="value.elencoQuote.splice(index, 1)" />
   
   </div>
  
@@ -145,7 +145,7 @@
    <div class="col">{{quota.causale}}</div>
   <div class="col">{{quota.chiHapagato}}</div>
   <div class="col"> 
-    <q-btn   size="sm" round icon="delete" @click="elencoSpese.splice(index, 1)" />
+    <q-btn   size="sm" round icon="delete" @click="value.elencoSpese.splice(index, 1)" />
   
   </div>
 
@@ -169,6 +169,8 @@ export default {
         importoSpesaEffettuata:'',
         causaleSpesaEffettuata:'',
         chiHafattoSpesa:'',
+        nameAuxFilePreventivo:'',
+
 
 
 elencoMetodoPagamenti:[
@@ -203,9 +205,9 @@ elencoMetodoPagamenti:[
                 },
                 
     handleFilePreventivo(e){
-      this.nameAuxFilePreventivo=e.target.files[0].name;
+      this.value.nameAuxFilePreventivo=e.target.files[0].name;
       const selectImage= e.target.files[0];
-      this.createBase64(selectImage);
+      this.createBase64Preventivo(selectImage);
 
     },
 
@@ -214,9 +216,9 @@ elencoMetodoPagamenti:[
       reader.onload = (e)=>{
        var aux= e.target.result;
        var base64string = window.btoa(aux);
-       this.quoteAllegatoPreventivo=base64string;
+       this.value.base64AllegatoPreventivo=base64string;
       };
-      this.quoteAllegatoPreventivo= reader.readAsBinaryString(fileObject);
+      this.value.base64AllegatoPreventivo= reader.readAsBinaryString(fileObject);
 
 //return output;
     },

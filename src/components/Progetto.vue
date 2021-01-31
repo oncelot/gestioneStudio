@@ -233,7 +233,7 @@ export default {
           altroisolamentoEsistentechk:this.Progetto.altroisolamentoEsistentechk,
 
           tipologiaImpiantoEsistente:this.Progetto.tipologiaImpiantoEsistente,
-          cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente.value,
           cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro,
           cetraleTermicaCentralizzatoNumeroUnita:this.Progetto.cetraleTermicaCentralizzatoNumeroUnita,
           cetraleTermicaCentralizzatoAnnoInstallazione:this.Progetto.cetraleTermicaCentralizzatoAnnoInstallazione ,
@@ -246,7 +246,7 @@ export default {
           cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato:this.Progetto.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato ,
           cetraleTermicaCentralizzatoCertificatoCPI:this.Progetto.cetraleTermicaCentralizzatoCertificatoCPI ,
           cetraleTermicaCentralizzatoCertificatoCPIAllegato:this.Progetto.cetraleTermicaCentralizzatoCertificatoCPIAllegato ,
-          cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto ,
+          cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto.value ,
           cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro:this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro ,
           cetraleTermicaCentralizzatoNumeroUnitaProposte:this.Progetto.cetraleTermicaCentralizzatoNumeroUnitaProposte ,
           cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:this.Progetto.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto ,
@@ -254,7 +254,7 @@ export default {
           quotaPreventivo:this.Progetto.quotaPreventivo,
 
           quoteAllegatoPreventivo:this.Progetto.nameAuxFilePreventivo,
-          base64AllegatoPreventivo:this.Progetto.quoteAllegatoPreventivo,
+          base64AllegatoPreventivo:this.Progetto.base64AllegatoPreventivo,
           elencoAcconti:this.Progetto.elencoQuote,
           elencoSpese:this.Progetto.elencoSpese,
 
@@ -363,19 +363,7 @@ this.$router.push({ path:'lista-progetti'});
       this.modalAggiungiImpiantoEsistenteAutonomoStatoProgetto= false;
     },*/
    
-    addrowAllegati(){
-//TODO prevedere caricaemnto sul database diretto
-this.elencoAllegati.push({
-  nomeFile:this.nameAuxFile,
-  fileBase64:this.auxFile,
-  noteFile:this.noteallegatoDiallegati,
-  tipoAllegato:this.tipoAllegatodiAllegati.value,
-  idprogetto:0,
-  new:1,
-  cancellare:0,
-  });
 
-    },
 
     
     removeRow(index){
@@ -500,7 +488,7 @@ this.elencoAllegati.push({
         isolamentoEsistentechk:[],
         altroisolamentoEsistentechk:'',
         tipologiaImpiantoEsistente:'',
-        cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente:'',
+        cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente:{value:'',label:'Seleziona..'},
         cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro:'',
         cetraleTermicaCentralizzatoNumeroUnita:'',
         cetraleTermicaCentralizzatoAnnoInstallazione:'',
@@ -513,7 +501,7 @@ this.elencoAllegati.push({
         cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato:'',
         cetraleTermicaCentralizzatoCertificatoCPI:'',
         cetraleTermicaCentralizzatoCertificatoCPIAllegato:'',
-        cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:'',
+        cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:{value:'',label:'Seleziona..'},
         cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro:'',
         cetraleTermicaCentralizzatoNumeroUnitaProposte:'',
         cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:'',
@@ -528,7 +516,7 @@ this.elencoAllegati.push({
         auxFile:'',
         elencoAllegati:[],
         
-        quoteAllegatoPreventivo:'',
+        base64AllegatoPreventivo:'',
         quotaPreventivo:'',
         elencoQuote:[],
         elencoSpese:[],
@@ -898,7 +886,7 @@ if (response.data['allegatiProgetto'][0] != null){
      });
      if (element.tipo_allegato == this.staticTipoAllegato.preventivoFirmato){
      
-     this.Progetto.quoteAllegatoPreventivo=element.nome_file;
+     this.Progetto.nameAuxFilePreventivo=element.nome_file;
      }
    });
 }
@@ -921,9 +909,9 @@ if (response.data['quoteSpese'][0] != null){
    this.Progetto.elencoSpese.push({
      dataPagamento:element.data,
      importo:element.importo, 
-     causale:element.modalita_pagamento,
-     chiHapagato:element.chi_ha_fatturata,
-     tipo_quota:element.tipo_quota,
+     causale:element.causale,
+     chiHapagato:element.chi_ha_pagato,
+    tipo_quota:element.tipo_quota,
      
      });
    });
@@ -1080,7 +1068,7 @@ if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
   this.Progetto.tipologiaImpiantoEsistente = response.data['progetto'][0].centraletermicaesistente_tipo_impianto;
   /* centrale termina centralizzato */
 
-  this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente= response.data['progetto'][0].centraletermicaesistente_tecnologia_impianto;
+  this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente={value: response.data['progetto'][0].centraletermicaesistente_tecnologia_impianto};
   this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro= response.data['progetto'][0].cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro;
   this.Progetto.cetraleTermicaCentralizzatoNumeroUnita= response.data['progetto'][0].centraletermicaesistente_numero_unita_generazione;
   this.Progetto.cetraleTermicaCentralizzatoAnnoInstallazione= response.data['progetto'][0].centraletermicaesistente_anno_installazione;
@@ -1090,7 +1078,7 @@ if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
   this.Progetto.cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato=response.data['progetto'][0].centraletermicaesistente_libretto_impianto_aggiornato;
   this.Progetto.cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate= response.data['progetto'][0].centraletermicaesistente_provefumi;
   this.Progetto.cetraleTermicaCentralizzatoCertificatoCPI=response.data['progetto'][0].centraletermicaesistente_cpi;
-  this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto=response.data['progetto'][0].centraletermicaprogetto_tecnologia_esistente;
+  this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoProposto={value: response.data['progetto'][0].centraletermicaprogetto_tecnologia_esistente};
   this.Progetto.cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro=response.data['progetto'][0].centraletermicaprogetto_tecnologia_esistente_altro;
   this.Progetto.cetraleTermicaCentralizzatoNumeroUnitaProposte=response.data['progetto'][0].centraletermicaprogetto_numero_unita;
   this.Progetto.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto=response.data['progetto'][0].centraletermicaprogetto_potenza_termica;
