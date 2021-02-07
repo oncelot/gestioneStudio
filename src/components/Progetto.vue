@@ -11,7 +11,7 @@
       <q-tab name="datiStrutturali"  icon="build" label="Dati Strutturali" />
       <q-tab name="allegati"  icon="attach_file" label="Allegati" />
       <q-tab name="quote"  icon="euro_symbol" label="Quote" />
-      <q-tab name="associaUtenti"  icon="engineering" label="Permessi" />
+      <q-tab v-if="user.role=='admin'" name="associaUtenti"  icon="engineering" label="Permessi" />
      
     </q-tabs> 
 
@@ -147,7 +147,7 @@
 //import formNuovaanagrafica from '@/components/NuovaAnagrafica'
 //import message from '@/components/messaggio'
 import Axios from 'axios';
-
+import {mapGetters} from 'vuex'
 import step1 from '@/components/step1Progetto.vue';
 import step2 from '@/components/step2AnagraficaIntervento.vue';
 import step3 from '@/components/step3Screening.vue';
@@ -344,25 +344,7 @@ export default {
     redirectlistaprogetti(){
 this.$router.push({ path:'lista-progetti'});
     },
- 
-  
-  /*  addrowImpiantoAutonomoProposto(){
-      this.elencoImpiantoAutonomoProposto.push(
-        {
-            sub:this.NuovoImpiantoEsistenteAutonomosub,
-            tecnologiaImpianto:this.NuovoImpiantoEsistenteAutonomotecnologiaImpianto,
-            numeronUnitaGenerazione:this.NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione,
-            tipologiaSistemaTermoregolazione:this.NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione,
-            potenzaTermicaUtile:this.NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile,
-            annoInstallazione:this.NuovoImpiantoEsistenteAutonomoannoInstallazione,
-            GeneratoreOggettoDiSostituzione:this.NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione
-            }
-         
-         );
-        
-      this.modalAggiungiImpiantoEsistenteAutonomoStatoProgetto= false;
-    },*/
-   
+
 
 
     
@@ -379,7 +361,7 @@ this.$router.push({ path:'lista-progetti'});
   data () {
     return {
      nuovoProgetto:true,
-     tab:'',
+     tab:'progetto',
      visualizzamessaggio:false,
      messaggioDaVisualizzare:false,
       staticTipoAllegato:{
@@ -394,12 +376,9 @@ this.$router.push({ path:'lista-progetti'});
         cercaAnagraficaClienti:'',
         elencoAnagraficaClienti:[],
 
-      /*  cercaCollaboratoriInterni:'',
-        elencoCercaCollaboratoreInterno:'',*/
         elencoCollaboratoriInterno:[],
 
-       /* cercaCollaboratoriEsterni:'',
-        elencoCercaCollaboratoreEsterno:'',*/
+
         elencoCollaboratoriEnterno:[],
         //step2
         tipologiaEdificio:'',
@@ -528,219 +507,22 @@ this.$router.push({ path:'lista-progetti'});
 
 
       },
-    /*  pathAllegatoTitoloAutorizzativo:'',
-      listaUsers:[],
-        text:'',data:'',date:'',auxFile:null,nameAuxFile:'',nameAuxFilePreventivo:'',
-        
-        CercaUtentiDaAutorizzare:'',
-        cercaAnagraficaClienti:'',
-        cercaCollaboratoriInterni:'',
-        cercaCollaboratoriEsterni:'',
-         tab: "progetto",
-         modalNuovaAnagraficaClienti: false,
-         modalNuovoNome:'',modalNuovoCognome:'',modalNuovoCodiceFiscale:'',
-         
-         screeningCondominioPossiedonoMultiProprieta:'',
-         
-
-         modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione:false,
-         modalInterventiSuccessiviNuovoSub:'',
-         modalInterventiSuccessiviNuovaDecrizione:'',
-         modalInterventiSuccessiviNuovoAllegato:null,
-
-         modalDatiCatastaliTitoliAutorizzativi:false,
-         modalDatiCatastaliTitoliAutorizzativiNuovoParticella:'',
-         modalDatiCatastaliTitoliAutorizzativiNuovoSub:'',
-         modalDatiCatastaliTitoliAutorizzativiNuovoFoglio:'',
-        
-
-         titoloProgetto:'',search:'',tipologiaEdificio:'',
-         TipologiainterventoDPR3802001:[],
-         zonaClimatica:[],
-          
-         gradigiornoText:'',areavincolata42:'',
-         areaVicnolata42TipoVincolo:'',zonasismisca4:'',zonasismisca4Interventiantisismici:'',zonasismisca4InterventiantisismiciAltriVincoli:'',edificioUnifamiliareTipo:false,edificioUnifamiliareIndirizzo:'',
-         allegatoIntervento:null,annoIntervento:'',
-         edificioUnifamiliarecitta:'', edificioUnifamiliareProvincia:'', edificioUnifamiliareAnnocostruzione:'',
-         edificioUnifamiliarePianoImmobile:' di cui fuori terra n° ',edificioUnifamiliareTipologiaIntervento:false,
-         condominioNome:'',condominioIndirizzo:'',condominioCitta:'',condominioProvincia:'',
-         condominioAnnodicotruzione:'',condominioPianoimmboile:'',condominioPertinenzaC2C6C7:[],
-         condominioformalmenteCostituito:false,condominioFormalmenteCostituitoCodiceFsicale:'',condominioFormalmenteCostituitoRiferimentoAmministatore:'',
-         condominioNOformalmenteCostituitoReferente:'',condominioNOformalmenteCostituitoCodiceFiscaleReferente:'',
-         dateAutorizzativi:'',	riferimentiAutorizzativi:'',			tipologiaTitoloAutorizzativi:'',
-         AllegatoTitoloAutorizzativo:'', 
-         Base64AllegatoTitoloAutorizzativo:'',
-         
-         
-         TipoInterventoProposto:[],
-           
-         condominioNumeroUnitaAccatastate:'',condominioNumerounitariscaldate:'',cercaProgettista:'',screeningUnifamiliareIndipendente:'',screeningUnifamiliareIAcessoAutonomo:'',
-         screeningUnifamiliareRiqualificazioneBalconi:'',screeningUnifamiliareUsufruito110:'',
-         screeningCondominioUnicoProprietario:'',screeningCondominioSoggettiIRES:'',PossiedonoMultiProprieta:'',screeningCondominioUsufruito110:'',screeningCondominioA1A8A9:'', 
-          
-          files: null,
-          abusiEdilizi:false,TipologiaAbusiEdilizi:'',comuneStatoDiFatto:false,NCEUStatoDiFatto:false,difformitaUrbanistiche:false,difformitaCatastali:false,irregolaritaSanabili:false,
-          noteDifformitaUrbanistiche:'',noteDifformitaCatastali:'',noteIrregolaritaSanabili:'',
-
-          datistrutturalichk:[],altroDatiStrutturali:'',
-          tipologiaParetechk:[],altroTipologiaParetechk:'',
-          tipologia_doppia_parete:[],
-          SpessoreMuriEsterni:'',SpessoreCameraDaria:'',SpessoreIsolamento:'',TipologiaIsolamentoIncameraDaria:'',
-          isolamentoEsistentechk:[],altroisolamentoEsistentechk:'',
-
-          tipologiaImpiantoEsistente:'',
-
-          cetraleTermicaCentralizzatoNumeroUnita:'', cetraleTermicaCentralizzatoTecnologiaImpiantoEsistente:'', cetraleTermicaCentralizzatoTecnologiaImpiantoEsistenteAltro:'', cetraleTermicaCentralizzatoAnnoInstallazione:'',cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornatoAllegato:null,
-          cetraleTermicaCentralizzatoPotenzaTermicaImpiantoEsistente:'', cetraleTermicaCentralizzatoTipologiaDistribuzioneEsiste:'', cetraleTermicaCentralizzatoTipologiaTermoregolazioneEsistente:'',
-          cetraleTermicaCentralizzatoDisponibilitaLibrettoImpiantoAggiornato:'', cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornate:'', cetraleTermicaCentralizzatoCertificatoCPI:'',
-          cetraleTermicaCentralizzatoCertificatoCPIAllegato:null,cetraleTermicaCentralizzatoDisponbilitaProveFumiAggiornateAllegato:null,
-          
-          cetraleTermicaCentralizzatoTecnologiaImpiantoProposto:'',cetraleTermicaCentralizzatoTecnologiaImpiantoPropostonteAltro:'', cetraleTermicaCentralizzatoNumeroUnitaProposte:'', centraleTermivaCentralizzatoVettoreImpianto:'',cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto:'',
-
-
-          modalAggiungiImpiantoEsistenteAutonomo:false,  modalAggiungiImpiantoEsistenteAutonomoStatoProgetto:false,visualizzamessaggio:false,messaggioDaVisualizzare:'',
-          NuovoImpiantoEsistenteAutonomosub:'', NuovoImpiantoEsistenteAutonomotecnologiaImpianto:'',NuovoImpiantoEsistenteAutonomonumeronUnitaGenerazione:'',NuovoImpiantoEsistenteAutonomotipologiaSistemaTermoregolazione:'',
-          NuovoImpiantoEsistenteAutonomopotenzaTermicaUtile:'',NuovoImpiantoEsistenteAutonomoannoInstallazione:'',NuovoImpiantoEsistenteAutonomoGeneratoreOggettoDiSostituzione:'',
-          allegatoDiAllegati:null,tipoAllegatodiAllegati:'',noteallegatoDiallegati:'',
-
-          quotaPreventivo:'', quoteAllegatoPreventivo:null,
-          dataAcconto:'',quotaAccontoModalitaPagamento:'',quotaImportoAcconto:'',quoteChiFattura:'',
-
-          dataSpesaEffettuata:'',importoSpesaEffettuata:'', causaleSpesaEffettuata:'', chiHafattoSpesa:'',
-          elencoProprietariImmobile:[],NuovoProprietarioImmobileNome:'',NuovoProprietarioImmobileCognome:'',NuovoProprietarioImmobileCodiceFiscale:'',NuovoProprietarioImmobileTelefono:'',
-       tipoAltroAllegato:'',
-      columns: [
-        { name: 'id', align: 'center', label: 'ID', field: 'id', sortable: true },
-        { name: 'nome', required: true, label: 'Nome', align: 'left', field: row => row.nome, format: val => `${val}`,sortable: true},
-        { name: 'cognome', align: 'center', label: 'Cognome', field: 'cognome', sortable: true },
-        { name: 'codiceFiscale', label: 'Codice Fiscale', field: 'codiceFiscale', sortable: true },
-        { name: 'ragionesociale', label:'Ragione sociale', field:'ragionesociale'}
-       
-       
-           ],
-
-      elencoCercaUtentiDaAutorizzare: [],
-      elencoCercaAnagraficaClienti: [],
-      elencoCercaCollaboratoreEsterno: [],
-      elencoCercaCollaboratoreInterno: [],
-      elencoCercaAnagraficaProgettisti: [],
-
-      elencoUtentiDaAutorizzare: [],
-      elencoUtentiAutorizzati: [],
-      elencoAnagraficaClienti: [],
-      elencoCollaboratoriEnterno: [],
-      elencoCollaboratoriInterno: [],
-      elencoAnagraficaProgettisti: [],
-      elencoInterventiManutenzioneStraordinariaSCIACILAltro:[],
-      elencoTitoliAutorizzatiInterventiSuccessivi:[],
-      elencoTitoliAutorizzatiDatiCatastali:[],
-      elencoImpiantoAutonomoEsistente:[],
-      elencoImpiantoAutonomoEsistenteStatoDiProgetto:[],
-      elencoImpiantoAutonomoProposto:[],
-      
-      elencoAllegati:[],
-     
-     tipiDiAllegati:[
-        {
-        value:'ModelloPrivacy',
-        label:'Modello privacy',
-        },
-        {
-        value:'Visure',
-        label:'Visure',
-        },
-        {
-        value:'TitoloProvenienza',
-        label:'Titolo di provenienza',
-        },
-        {
-        value:'DocumentiIdentita',
-        label:'Documenti di identità',
-        },
-        {
-        value:'ConcessioneEdilizia',
-        label:'Concessione edilizia',
-        },
-        {
-        value:'Agibilita',
-        label:'Agibilità',
-        },
-        {
-        value:'PermessoCostruire',
-        label:'Permesso di Costruire',
-        },
-        {
-        value:'Cila',
-        label:'Cila',
-        },
-        {
-        value:'Cil',
-        label:'Cil',
-        },
-        {
-        value:'AgibilitaAbitabilita',
-        label:'Agibilità abitabilità',
-        },
-        {
-        value:'SCA',
-        label:'SCA',
-        },
-        {
-        value:'SCIA',
-        label:'SCIA',
-        },
-        {
-        value:'DIA',
-        label:'DIA',
-        },
-        {
-        value:'CertificazioniVarie',
-        label:'Certificazioni varie',
-        },
-        {
-        value:'DocumentiStrutture',
-        label:'Documenti Strutture',
-        },
-        {
-        value:'DocumentiImpianti',
-        label:'Documenti Impianti',
-        },
-        {
-        value:'PareriVariEnti',
-        label:'Pareri vari enti',
-        },
-        {
-        value:'APE',
-        label:'APE',
-        },
-        {
-        value:'Contratto',
-        label:'Contratto',
-        },
-        {
-        value:'altro',
-        label:'Altro',
-        },
-       
-        
-      ],
-      //deve essere uguale a quello di back-end
-      staticTipoAllegato:{
-        preventivoFirmato:'preventivoFirmato'
-
-      },
-      elencoQuote:[],
-      elencoSpese:[]*/
+   
     }
   },
 
   components: {
-    /*formNuovaanagrafica, message,*/
-    step1,step2,step3,step4,step5,step6,autorizzaUtenti,
+
+    step1,step2,step3,step4,step5,step6,autorizzaUtenti
   },
  
   props:['idprogetto'],
-
+computed:{
+    ...mapGetters({
+      isAuth:'GET_AUTH',
+      user:'GET_AUTH_USER',
+      })
+},
   beforeMount:function(){
 
 

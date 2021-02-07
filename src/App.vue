@@ -33,7 +33,7 @@
     
     >
       <q-list  style="background-color:#d4e2e9; " class="text-secondary"> 
-        <q-item clickable   to="/nuovo-progetto" exact>
+        <q-item v-if="user.role=='admin'" clickable   to="/nuovo-progetto" exact>
           <q-item-section avatar>
             <q-icon name="add_circle_outline" />
           </q-item-section>
@@ -51,7 +51,7 @@
             <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable  to="/anagrafica">
+        <q-item clickable v-if="user.role=='admin'"  to="/anagrafica">
           <q-item-section avatar>
             <q-icon name="people" />
           </q-item-section>
@@ -60,7 +60,7 @@
             <q-item-label caption></q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable  to="/utenti">
+        <q-item clickable v-if="user.role=='admin'"   to="/utenti">
           <q-item-section avatar>
             <q-icon name="account_box" />
           </q-item-section>

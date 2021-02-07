@@ -1,5 +1,7 @@
 <template>
+
     <div class="q-pa-md" style="color:grey">
+     
         <div class="row">
             <div class="col" style="text-align:center"> <h5 class="text-primary">Progetti</h5>
             </div>
@@ -17,12 +19,14 @@
             <div class="col-10">
             <span  style="font-weight:bold; cursor:pointer; text-decoration-line: underline;"  @click="redirectProgetto(item.id)" >
             {{item.titolo_progetto}}</span>
+            {{testo}}
             </div>
             
             
 
         </div>
     </div></div>
+   
       
 
 
@@ -30,16 +34,31 @@
 
 </template>
 <script>
+
 import Axios from 'axios'
+import {mapGetters} from 'vuex'
 export default {
     data(){
         return{
             elencoProgetti:[],
             cercaprogetto:'',
+            testo:'',
         }
     },
-    beforeMount: function() {
-        Axios.get(this.linkApi+'/getProgetti').then(Response =>(this.elencoProgetti=Response.data));
+    mounted: function() {
+       
+        Axios.get(this.linkApi+'/getProgetti',{params: {id: this.user.id} }
+        ).then(Response =>{
+            this.elencoProgetti=Response.data;
+
+              if (this.elencoProgetti.length==0){
+            this.testo='non hai progetti associati';
+        }else{this.testo='';}
+            
+            
+            
+        });
+      
   
   },
 methods:{
@@ -52,8 +71,13 @@ methods:{
             return this.elencoProgetti.filter(post=>{
                 return post.titolo_progetto.toLowerCase().includes(this.cercaprogetto.toLowerCase())
             })
-        }
+        },
+        ...mapGetters({
+      isAuth:'GET_AUTH',
+      user:'GET_AUTH_USER',
+      })
 
     }
+    
 }
 </script>

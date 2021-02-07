@@ -37,7 +37,7 @@ return async (to,from,next)=>{
 
     }
 
-    if(arrayRoles.indexOf(myRole)<-1){
+    if(arrayRoles.indexOf(myRole) == -1){
     alert('non hai accesso a questa pagina');
      return  next(false);
     }
@@ -61,8 +61,17 @@ const routes = [
         },
       beforeEnter:Middleware(),
       },
-  {path: '/lista-progetti', component:ListaProgetti},
-  {path: '/anagrafica', component:anagrafica},
+  {path: '/lista-progetti', component:ListaProgetti, meta:{
+    requiredAuth:true,
+    userRoles:['admin','collaboratoreInterno']
+  },
+beforeEnter:Middleware(),},
+  {path: '/anagrafica', component:anagrafica,
+  meta:{
+    requiredAuth:true,
+    userRoles:['admin']
+  },
+beforeEnter:Middleware(),},
   {path: '/dettaglio-progetto/:id', component:dettaglioProgetto},
   {path: '/login', component:login},
   {path: '/Registrazione-utente', component:RegistrazioneUtente},

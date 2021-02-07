@@ -619,8 +619,12 @@ $elencoanagrafica=DB::table('anagrafica')->select('*')->get();
             ->json($elencoanagrafica);
 });
 $router->get('/getProgetti',function (Request $request){
+    $out = new \Symfony\Component\Console\Output\ConsoleOutput();
+$out->writeln($request);
     try {
-        $elencoprogetti=DB::table('progetti')->select('*')->orderBy('id','desc')->get();
+        $elencoprogetti=DB::table('progetti')
+        ->join('user-associato-progetto','progetti.id','user-associato-progetto.id_progetto')->where('user-associato-progetto.id_user',$request->id)->select('progetti.id','progetti.titolo_progetto')
+        ->orderBy('progetti.id','desc')->get();
         return  response()
                  ->json($elencoprogetti);
     } catch (\Throwable $th) {
