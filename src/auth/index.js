@@ -53,7 +53,10 @@ export default ({
     Register(cred,redirect){
         baseApi().post(REG_URL,cred).then((response)=>{
             console.log(response);
-            if(response.data.error){alert('errore regsitrazione');}
+            if(response.data.error){  Notify.create({
+                type: 'negative',
+                message:response.data.message
+              });}
             else{
                 Notify.create({
                     type: 'positive',

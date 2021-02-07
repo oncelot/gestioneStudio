@@ -31,8 +31,15 @@ $utente = DB::table('users')->where('id',$request->id)->update(
 return response()->json(['message'=>'Utente Modificato con successo']);
 });
 
-$router->post('register',function(Request $request){
 
+
+$router->post('register',function(Request $request){
+    $utente = DB::table('users')->where('email',$request->email)->get();
+    if (count($utente) > 0){
+    
+    return  response()->json(['error'=>'errore','message'=>'email Già registrata']);
+    
+    }else{
 $user = new User;
 $user->name=$request->nome;
 $user->email=$request->email;
@@ -41,7 +48,7 @@ $user->role='guest';
 $user->save();
 
 return response()->json(['message'=>'Utente creato con successo']);
-
+}
 });
 
 $router->post('login',function(Request $request){
