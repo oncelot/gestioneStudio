@@ -47,11 +47,11 @@ export default {
     },
     mounted: function() {
        
-        Axios.get(this.linkApi+'/getProgetti',{params: {id: this.user.id} }
+        Axios.get(this.linkApi+'/getProgetti',{params: {id: this.user.id, role:this.user.role} }
         ).then(Response =>{
             this.elencoProgetti=Response.data;
 
-              if (this.elencoProgetti.length==0){
+              if (this.elencoProgetti.length==0){this.elencoProgetti=[];
             this.testo='non hai progetti associati';
         }else{this.testo='';}
             
