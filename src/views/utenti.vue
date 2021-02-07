@@ -4,7 +4,7 @@
   
   <q-tabs  v-model="menu" inline-label style="background-color:#fdfdfd"  >
       <q-tab name="listautenti"  icon="account_box" label="Lista Utenti"  />
-      <q-tab name="nuovoutente"  icon="person_add" label="Crea Utente"  /> 
+      <q-tab name="nuovoutente"  icon="person_add" label="Crea Utente"   /> 
      
      
     </q-tabs> 

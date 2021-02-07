@@ -3,19 +3,19 @@
 <div class="row  q-gutter-sm bgAree"><div class="col-8 col-md-3">
   <label for="" class="font-weigth:bold">Quota Preventivo €</label>
   <q-input v-model="value.quotaPreventivo" :dense="true" outlined type="number" /></div>
-
+ <!--
   <div class="col-2 col-md-2"> 
     <label for="" class="text-bold"> Allega Preventivo Firmato</label>
     <input type="file" @change="handleFilePreventivo">
       <a href="#"  v-if="!value.nuovoProgetto" @click="downloadFile(idprogetto+'/'+value.nameAuxFilePreventivo,value.nameAuxFilePreventivo)" >{{value.nameAuxFilePreventivo}}</a>
    
-  <!--  <q-file
+   <q-file
       v-model="quoteAllegatoPreventivo"
       label="Carica file"
       outlined
       :dense="true"
-      style="max-width: 300px" /> -->
-      </div>
+      style="max-width: 300px" /> 
+      </div>-->
   </div>
 
   <div class="bgAree" style="margin-top:20px" >

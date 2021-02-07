@@ -158,16 +158,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
 </div>
 
-
-
-  <div class="row">
-      <div class="col">
-         <b style="color:red">Riportare di seguito la % per ciascuna categoria catastale DA RIVEDERE</b>
-        
-      </div>
-    </div>
-
-      <!-- Titolo autorizzativi-->
+<!-- Titolo autorizzativi-->
 
  <div class=" bgmargintop q-pa-md q-gutter-sm row" >
    <div class="col-12"><span class="text-h6 text-secondary">Titoli autorizzativi</span></div>

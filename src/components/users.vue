@@ -1,15 +1,17 @@
 <template>
  <div class="q-gutter-sm row  justify-center">
        <q-form @submit="creautente"  >
-     
+     {{ !(modificaUtente  || nuovoutente) }}
+     {{ (modificaUtente  || nuovoutente) }}
+     {{nuovoutente}}
      <q-input
          class="col-md-7 col-sm-12" v-model="cred.nome" :dense='false' outlined label="Nome*" 
-         :disable="!modificaUtente"
+         :disable="disattiva"
          lazy-rules
          :rules="[ val => val && val.length > 0 || 'Valore obbligatorio']"
          />
          <q-input  class="col-md-7 col-sm-12" v-model="cred.email" :dense='false' outlined type="email" label="Email*"
-                :disable="!modificaUtente"
+                :disable=" disattiva"
                 lazy-rules
                   :rules="[ val => val && val.length > 0 || 'Valore obbligatorio']" />
 
@@ -67,6 +69,7 @@ export default {
              pass2:'',
            nuovoutente:true,
            modificaUtente:false,
+           disattiva:false,
           ruoliUtenti:[
             {value:'guest',label:'Ospite'},
             {value:'admin',label:'Admin'},
@@ -78,7 +81,13 @@ export default {
     }},
     methods:{
       modifiche(){
-if(this.modificaUtente){this.modificaUtente=false}else{this.modificaUtente=true}
+        if(this.modificaUtente){
+          this.modificaUtente=false;
+          this.disattiva=true;
+          }else{
+            this.modificaUtente=true
+            this.disattiva=false;
+            }
       },
         creautente(){
         
@@ -104,11 +113,13 @@ if(this.modificaUtente){this.modificaUtente=false}else{this.modificaUtente=true}
           this.pass2=null;
           this.nuovoutente=true;
           this.modificaUtente=false;
+          this.disattiva=false;
 
         }
         else{
         this.nuovoutente=false;
         this.modificaUtente=false;
+        this.disattiva=true;
         /**recupero dati */
          Axios.post(this.linkApi+'/lista-users/'+this.iduser).then(response=>{
           console.log(response.data[0]);

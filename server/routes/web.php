@@ -114,9 +114,6 @@ $router->get('/download',function(Request $request){
 });
 $router->post('/aggiorna-progetto','ProgettoController@aggiornaProgetto');
 $router->post('/SetAutorizzaUtenti','ProgettoController@SetAutorizzaUtenti');
-
-
-
 $router->post ('/aggiungi-progetto','ProgettoController@creaProgetto');
             
 //*****CANCELLARE */
@@ -650,6 +647,8 @@ $dettagliutente=DB::table('anagrafica')->select('nome','cognome','denominazione'
    return  response()
             ->json($dettagliutente);
 });
+
+
 $router->get('/getCercaUsersDaAutorizzare/{idprogetto}/{varie}',function (Request $request,$idprogetto,$varie){
 $listaNotIn=DB::table('user-associato-progetto')->where('id_progetto',$idprogetto)->select('id_user');
 
@@ -657,6 +656,8 @@ $listaUsers=DB::table('users')->select('name','email','role','id')->whereNotIn('
    return  response()
             ->json($listaUsers);
 });
+
+
 $router->delete('/cancellaAutorizzazione/{idriga}', function(Request $request,$idriga){
 $output='';
     try {

@@ -7,11 +7,11 @@
     </div>
     <div class="row justify-center">
       <div class="col-12 col-md-7 bgAree">
-        <q-input v-model="CercaUtentiDaAutorizzare" debounce="1"  outlined :dense=true  placeholder="Cerca Utente da Autorizzare - Inserire 4 caratteri per avviare la ricerca" @keypress=" elencoCercaUsersFunction()">
+        <q-input v-model="CercaUtentiDaAutorizzare" debounce="1"  outlined :dense=true  placeholder="Cerca Utente da Autorizzare - Inserire 3 caratteri per avviare la ricerca" @keypress=" elencoCercaUsersFunction()">
           <div class="autocomplete-items" v-if="CercaUtentiDaAutorizzare.length > 2">
             <div class="row"  v-for="item in elencoCercaUtentiDaAutorizzare" :key="item.message">
               <div class="col">
-                <a href="#" @click="autorizzaUtente(item)">  {{ item.nome }} {{item.email}} {{item.ruolo}}</a></div>
+                <a href="#" @click="autorizzaUtente(item)">  {{ item.name }} - {{item.email}} - {{item.role}}</a></div>
 
             </div>
           </div>
@@ -52,7 +52,13 @@
       <div class="col-12 col-md-7 bgAree"><b>Utenti Autorizzati</b></div>
       
     </div>
- 
+  <div  class="row justify-center " >
+    <div class="col-4 col-md-2 bgAree"><strong>Nome</strong></div>
+    <div class="col-4 col-md-2 bgAree"><strong>Email</strong></div>
+    <div class="col-4 col-md-2 bgAree"><strong>Ruolo</strong></div>
+    <div class="col-1 col-md-1 bgAree"> 
+   </div>
+    </div>
  <div  class="row justify-center " v-for="item in value.elencoUtentiAutorizzati" :key="item.message" >
     <div class="col-4 col-md-2 bgAree"> {{ item.nome }}</div>
     <div class="col-4 col-md-2 bgAree"> {{ item.email }}</div>
@@ -79,7 +85,9 @@ export default {
         {
             if (this.CercaUtentiDaAutorizzare.length > 1)
             {
-                Axios.get(this.linkApi+'/getCercaUsersDaAutorizzare/'+this.idprogetto+'/'+this.CercaUtentiDaAutorizzare).then(Response=>{console.log(Response.data);this.elencoCercaUtentiDaAutorizzare= Response.data})
+                Axios.get(this.linkApi+'/getCercaUsersDaAutorizzare/'+this.value.idprogetto+'/'+this.CercaUtentiDaAutorizzare).
+                then(Response=>{console.log(Response.data);
+                this.elencoCercaUtentiDaAutorizzare= Response.data})
             }
         },
         
@@ -97,8 +105,9 @@ export default {
         autorizzaUtenti()
         {
             const sendDaAutorizzare={
-                listaDaAutorizzare:this.valueelencoUtentiDaAutorizzare,
-                idprogetto:this.idprogetto};
+              
+                listaDaAutorizzare:this.value.elencoUtentiDaAutorizzare,
+                idprogetto:this.value.idprogetto};
                 
             Axios.post(this.linkApi+'/SetAutorizzaUtenti',sendDaAutorizzare).then(Response =>{
                 if(Response.data.response=='ok')
