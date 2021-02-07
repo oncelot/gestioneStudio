@@ -15,7 +15,7 @@
          Gestionale Cantiere
         </q-toolbar-title>
         <div v-if="!isAuth"><span style="font-weight:bold; cursor:pointer"  @click="paginaLogin()"> Login</span></div>
-        <div v-if="isAuth"><li>{{user.email}}</li> <span style="font-weight:bold" @click="logout()">logout</span></div>
+        <div v-if="isAuth"><li>{{user.email}}</li> <span style="font-weight:bold; cursor:pointer" @click="logout()" >logout</span></div>
       </q-toolbar>
     </q-header>
 
