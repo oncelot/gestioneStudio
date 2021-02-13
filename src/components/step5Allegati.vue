@@ -157,13 +157,10 @@ export default {
         },
         
         downloadFile(path,titoloFile){
-            Axios({
-                url: this.linkApi+'/download/?pp='+path,
-                method:'get',
-                responseType: 'arraybuffer',
-                }).then(response=>{
-                    console.log(response);
-                    if(response.data.byteLength >2){
+            Axios.post(this.linkApi+'/download/',{params:{pp:path}})
+          .then(response=>{
+                    console.log(response.data);
+                    if(response.data.length >2){
                         
                         const url = window.URL.createObjectURL(new Blob([response.data]))
                         const link = document.createElement('a')

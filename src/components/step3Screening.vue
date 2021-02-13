@@ -505,11 +505,7 @@ DatiCatastaliTitoliAutorizzativiNuovoFoglio:'',
 
         },   
          downloadFile(path,titoloFile){
-        Axios({
-          url: this.linkApi+'/download/?pp='+path,
-          method:'get',
-          responseType: 'arraybuffer',
-          }).then(response=>{
+       Axios.post(this.linkApi+'/download/',{params:{pp:path}}).then(response=>{
             console.log(response);
             if(response.data.byteLength >2){
             
