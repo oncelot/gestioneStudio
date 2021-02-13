@@ -3,16 +3,67 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use App\Classes\CommandCode;
+
 
 
 class ProgettoController extends Controller
 {
     //
+public function listaProgetti(Request $request){
+    $lista=[];
+    $dettaglio=[
+    "id"=>"",
+    "titolo_progetto"=>"",
+    "codice_commessa"=>"",
+    "elencoAutorizzati"=>[],
+    ];
+        try {
+            $request= $i->params;
+            if (str_contains($request["role"],'admin')){
+                
+                $elencoprogetti=DB::table('progetti')->select('progetti.id','progetti.titolo_progetto','progetti.codice_commessa')->orderBy('progetti.id','desc')->get(); 
+                foreach ($elencoprogetti as $key => $value) 
+                {
+                  $dettaglio["id"]=$value->id;
+                  $dettaglio["titolo_progetto"]=$value->titolo_progetto;
+                  $dettaglio["codice_commessa"]=$value->codice_commessa;
+                  
+                    $elencoAutorizzati=DB::table('user-associato-progetto')->join('users','id_user','users.id')->where("id_progetto",$value->id)->select("name")->get(); 
+                    $dettaglio["elencoAutorizzati"]=$elencoAutorizzati;
+    
+                    array_push($lista,$dettaglio);
+                }
+              
+                
+                return  response()
+                         ->json($lista);
+            }else{
+                $elencoprogetti=DB::table('progetti')
+                ->join('user-associato-progetto','progetti.id','user-associato-progetto.id_progetto')->where('user-associato-progetto.id_user',$request->id)->select('progetti.id','progetti.titolo_progetto')
+                ->orderBy('progetti.id','desc')->get();
+                foreach ($elencoprogetti as $key => $value) 
+                {
+    
+                    $dettaglio["id"]=$value->id;
+                    $dettaglio["titolo_progetto"]=$value->titolo_progetto;
+                    $dettaglio["codice_commessa"]=$value->codice_commessa;
+                    array_push($lista,$dettaglio);
+                }
+    
+    
+                return  response()
+                         ->json($lista);
+            }
+         
+        } catch (\Throwable $th) {
+            return response()->json($th);
+        }
+    
 
+}
     public function creaProgetto(Request $i){
         $path =  app()->basePath('public/');
-        $tipoAllegati= new CommandCode();
+      
           $zonaClimatica="";
           $datistrutturalichk="";
           $tipologiaParetechk="";
@@ -59,7 +110,8 @@ class ProgettoController extends Controller
             $idProgetto=DB::table('progetti')->insertGetId([
                 'titolo_progetto' =>$i->titoloProgetto,
                 'tipologia_edificio'=>$i->tipologiaEdificio,
-               
+                'codice_commessa'=>$i->numeroCommessa,
+                'tipo_commessa'=>$i->tipoCommessa,
                 'zona_climatica'=> $zonaClimatica,
                 'gradi_giorno'=>$i->gradigiornoText,
                 'areavincolata'=>$i->areavincolata42,
@@ -464,7 +516,7 @@ class ProgettoController extends Controller
     public function aggiornaProgetto(Request $i)
     {
         $path =  app()->basePath('public/');
-        $tipoAllegati= new CommandCode();
+       
           //  $path="C:\Users\Fausto\source\\repos\oncelot\gestionestudio\server\public";
          //  $out = new \Symfony\Component\Console\Output\ConsoleOutput();
          //   $out->writeln($i);

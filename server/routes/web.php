@@ -122,6 +122,7 @@ $router->get('/download',function(Request $request){
 $router->post('/aggiorna-progetto','ProgettoController@aggiornaProgetto');
 $router->post('/SetAutorizzaUtenti','ProgettoController@SetAutorizzaUtenti');
 $router->post ('/aggiungi-progetto','ProgettoController@creaProgetto');
+$router->post ('/getProgetti','ProgettoController@listaProgetti');
             
 //*****CANCELLARE */
 // $router->post('/aggiungi-progetto',function(Request $i)
@@ -625,27 +626,7 @@ $elencoanagrafica=DB::table('anagrafica')->select('*')->get();
    return  response()
             ->json($elencoanagrafica);
 });
-$router->get('/getProgetti',function (Request $request){
-  //  $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-//$out->writeln($request);
-    try {
-        if (str_contains($request->role,'admin')){
-            $elencoprogetti=DB::table('progetti')->select('progetti.id','progetti.titolo_progetto')->orderBy('progetti.id','desc')->get();
-            return  response()
-                     ->json($elencoprogetti);
-        }else{
-            $elencoprogetti=DB::table('progetti')
-            ->join('user-associato-progetto','progetti.id','user-associato-progetto.id_progetto')->where('user-associato-progetto.id_user',$request->id)->select('progetti.id','progetti.titolo_progetto')
-            ->orderBy('progetti.id','desc')->get();
-            return  response()
-                     ->json($elencoprogetti);
-        }
-     
-    } catch (\Throwable $th) {
-        return response()->json($th);
-    }
 
-});
 
 
 $router->get('/getAnagrafica/{idutente}',function (Request $request,$idutente){

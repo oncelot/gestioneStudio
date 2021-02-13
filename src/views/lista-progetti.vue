@@ -13,14 +13,26 @@
             </div>
         </div>
         
-<div class="row justify-center"><div class="col-3">
+<div class="row justify-center"><div class="col-5">
+    <div class="row">
+<div class="col-2">ID</div>
+            <div class="col-5">
+          TITOLO 
+            </div>
+            <div class="col-2"> COMMESSA</div>
+            <div class="col-2"> AUTORIZZATI</div>
+            
+
+    </div>
       <div class="row" v-for="item in progettiFilter" :key="item.message"  style="border-bottom:1px solid black">
            <div class="col-2">{{item.id}}</div>
-            <div class="col-10">
+            <div class="col-5">
             <span  style="font-weight:bold; cursor:pointer; text-decoration-line: underline;"  @click="redirectProgetto(item.id)" >
             {{item.titolo_progetto}}</span>
             {{testo}}
             </div>
+            <div class="col-2">{{item.codice_commessa}}</div>
+            <div class="col-2"><div v-for="item2 in item.elencoAutorizzati"  :key="item2.name" >{{item2.name}} </div></div>
             
             
 
@@ -46,9 +58,9 @@ export default {
         }
     },
     mounted: function() {
-       
-        Axios.get(this.linkApi+'/getProgetti',{params: {id: this.user.id, role:this.user.role} }
-        ).then(Response =>{
+        Axios.post(this.linkApi+'getProgetti',{params:{id:this.user.id,role:this.user.role}})
+        .then(Response =>{
+            console.log(Response.data);
             this.elencoProgetti=Response.data;
 
               if (this.elencoProgetti.length==0){this.elencoProgetti=[];

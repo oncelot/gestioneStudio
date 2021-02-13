@@ -5,7 +5,7 @@
      {{ (modificaUtente  || nuovoutente) }}
      {{nuovoutente}}
      <q-input
-         class="col-md-7 col-sm-12" v-model="cred.nome" :dense='false' outlined label="Nome*" 
+         class="col-md-7 col-sm-12" v-model="cred.nome" :dense='false' outlined label="Nome e Cognome" 
          :disable="disattiva"
          lazy-rules
          :rules="[ val => val && val.length > 0 || 'Valore obbligatorio']"

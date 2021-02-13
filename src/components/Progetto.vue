@@ -10,9 +10,10 @@
       <q-tab name="screening"  icon="movie" label="Screening" />
       <q-tab name="datiStrutturali"  icon="build" label="Dati Strutturali" />
       <q-tab name="allegati"  icon="attach_file" label="Allegati" />
-      <q-tab name="quote"  icon="euro_symbol" label="Quote" />
+      <q-tab  v-if="user.role=='admin'" name="quote"  icon="euro_symbol" label="Quote" />
       <q-tab v-if="user.role=='admin'" name="associaUtenti"  icon="engineering" label="Permessi" />
-     
+     <q-btn color="positive" v-if="!nuovoProgetto" icon="check" label="Aggiorna progetto" @click="aggiungiProgetto()" />
+     <q-btn color="primary" v-if="nuovoProgetto" icon="check" label="Crea progetto" @click="aggiungiProgetto()" />
     </q-tabs> 
 
  <div v-if="tab == 'progetto'">
@@ -36,11 +37,9 @@
   <div v-if="tab=='quote'" style="color:grey">
     <step6 v-model="Progetto" ></step6>
     
-<q-btn color="primary" v-if="nuovoProgetto" icon="check" label="Crea progetto" @click="aggiungiProgetto()" />
-<q-btn color="positive" v-if="!nuovoProgetto" icon="check" label="Aggiorna progetto" @click="aggiungiProgetto()" />
 
   </div>
-
+  
 
 <!-- #region Associa Utenti-->
 <div v-if="tab == 'associaUtenti'">
@@ -188,7 +187,10 @@ export default {
       },
     aggiungiProgetto(){
       const  sendForm={
+
         idprogetto:this.Progetto.idprogetto,
+        numeroCommessa:this.Progetto.numeroCommessa,
+        tipoCommessa:this.Progetto.tipoCommessa,
           titoloProgetto:this.Progetto.titoloProgetto,
          tipologiaEdificio:this.Progetto.tipologiaEdificio,
          zonaClimatica:this.Progetto.zonaClimatica,
@@ -345,9 +347,6 @@ export default {
 this.$router.push({ path:'lista-progetti'});
     },
 
-
-
-    
     removeRow(index){
    this.elencoAnagraficaClienti.splice(index, 1)
     },
@@ -372,7 +371,8 @@ this.$router.push({ path:'lista-progetti'});
       Progetto:{
         idprogetto:'',
         titoloProgetto:'',
-       
+        numeroCommessa:'',
+        tipoCommessa:'',
         cercaAnagraficaClienti:'',
         elencoAnagraficaClienti:[],
 
@@ -715,6 +715,7 @@ if (response.data['listaUsersAssociatiAlProgetto'][0] != null){
 if (response.data['infoEdificioProgetto'][0]!= null){
 var dettagliEdificio=response.data['infoEdificioProgetto'][0];
 this.Progetto.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
+
 this.Progetto.nuovoProgetto=false;
 /* CONDOMINIO */
 this.Progetto.condominioNome=dettagliEdificio.cd_nome_condominio;
@@ -782,6 +783,8 @@ this.Progetto.screeningUnifamiliareRiqualificazioneBalconi=dettagliEdificio.ef_r
 
 /*DATI GENERICI PROGETTO */
   this.Progetto.titoloProgetto=response.data['progetto'][0].titolo_progetto;
+  this.Progetto.numeroCommessa=response.data['progetto'][0].codice_commessa;
+  this.Progetto.tipoCommessa=response.data['progetto'][0].tipo_commessa;
  this.Progetto.tipologiaEdificio = response.data['progetto'][0].tipologia_edificio;
 
     outputsplit= response.data['progetto'][0].zona_climatica.split(";");

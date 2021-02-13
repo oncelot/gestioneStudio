@@ -7,6 +7,17 @@
       </div>
 
       <div class="row  justify-center"  >
+        <div class=" col-5 col-md-3 bgmargintop" style="margin-right:9%">
+            <q-input outlined v-model="value.numeroCommessa" label="Codice Commessa" />
+        </div>
+        <div class=" col-5 col-md-3 bgmargintop">
+          <q-select  outlined v-model="value.tipoCommessa" :options="ElencotipoCommessa" label="Tipo Commessa" />
+            
+        
+           
+        </div>
+      </div>
+      <div class="row  justify-center"  >
         <div class=" col-12 col-md-7 bgmargintop">
             <q-input outlined v-model="value.titoloProgetto" label="Titolo del progetto" />
         </div>
@@ -148,10 +159,11 @@
   </div>
   </div>
    <!-- FINE collaboratori esterni -->
+<!--
 <div class="">
 <div class="row"><div class="col"><div class="col-2"> <q-btn   label="Aggiungi Nuova Anagrafica" color="secondary"   icon="add_circle_outline" @click="modalNuovaAnagraficaClienti = true" :dense="true" /></div></div></div>
 
-</div>
+</div>-->
  <q-dialog v-model="modalNuovaAnagraficaClienti" persistent>
       <q-card>
          <q-bar>
@@ -197,7 +209,7 @@ export default {
       elencoCercaCollaboratoreInterno:'',
       cercaCollaboratoriEsterni:'',
       elencoCercaCollaboratoreEsterno:'',
-      
+      ElencotipoCommessa:['privato','pubblico','superbonus']
       } },
     
     props:["value"],
