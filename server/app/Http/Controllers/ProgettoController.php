@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ProgettoController extends Controller
 {
     //
-public function listaProgetti(Request $request){
+public function listaProgetti(Request $i){
     $lista=[];
     $dettaglio=[
     "id"=>"",
@@ -19,7 +19,8 @@ public function listaProgetti(Request $request){
     ];
         try {
             $request= $i->params;
-            if (str_contains($request["role"],'admin')){
+           
+            if (str_contains($request["role"],"admin")){
                 
                 $elencoprogetti=DB::table('progetti')->select('progetti.id','progetti.titolo_progetto','progetti.codice_commessa')->orderBy('progetti.id','desc')->get(); 
                 foreach ($elencoprogetti as $key => $value) 
@@ -56,7 +57,7 @@ public function listaProgetti(Request $request){
             }
          
         } catch (\Throwable $th) {
-            return response()->json($th);
+            return response()->json($th->getMessage());
         }
     
 

@@ -58,7 +58,7 @@ export default {
         }
     },
     mounted: function() {
-        Axios.post(this.linkApi+'getProgetti',{params:{id:this.user.id,role:this.user.role}})
+        Axios.post(this.linkApi+'/getProgetti',{params:{id:this.user.id,role:this.user.role}})
         .then(Response =>{
             console.log(Response.data);
             this.elencoProgetti=Response.data;

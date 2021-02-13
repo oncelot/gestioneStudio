@@ -10,7 +10,7 @@ import auth from './auth'
 auth.AuthCheck();
 
 Vue.config.productionTip = false
-Vue.prototype.linkApi = '';
+Vue.prototype.linkApi = 'http://localhost:8000';
 new Vue({
   
   router,axios,store,
