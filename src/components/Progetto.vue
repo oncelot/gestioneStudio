@@ -868,7 +868,7 @@ if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
   this.Progetto.cetraleTermicaCentralizzatoNumeroUnitaProposte=response.data['progetto'][0].centraletermicaprogetto_numero_unita;
   this.Progetto.cetraleTermicaCentralizzatoPotenzaTermicaImpiantoProposto=response.data['progetto'][0].centraletermicaprogetto_potenza_termica;
   this.Progetto.centraleTermivaCentralizzatoVettoreImpianto=response.data['progetto'][0].centraletermicaprogetto_vettore_energetico;
-  this.Progetto.quotaImportoAcconto= response.data['progetto'][0].quota_preventivo;
+  this.Progetto.quotaPreventivo= response.data['progetto'][0].quota_preventivo;
   
 })
 
