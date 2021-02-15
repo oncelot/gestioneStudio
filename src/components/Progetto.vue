@@ -12,6 +12,7 @@
       <q-tab name="allegati"  icon="attach_file" label="Allegati" />
       <q-tab  v-if="user.role=='admin'" name="quote"  icon="euro_symbol" label="Quote" />
       <q-tab v-if="user.role=='admin'" name="associaUtenti"  icon="engineering" label="Permessi" />
+      <q-tab v-if="user.role=='admin'" name="wbs"  icon="engineering" label="WBS" />
      <q-btn color="positive" v-if="!nuovoProgetto" icon="check" label="Aggiorna progetto" @click="aggiungiProgetto()" />
      <q-btn color="primary" v-if="nuovoProgetto" icon="check" label="Crea progetto" @click="aggiungiProgetto()" />
     </q-tabs> 
@@ -36,8 +37,10 @@
   </div>
   <div v-if="tab=='quote'" style="color:grey">
     <step6 v-model="Progetto" ></step6>
-    
+  </div>
 
+  <div v-if="tab=='wbs'" style="color:grey">
+    <wbs></wbs>
   </div>
   
 
@@ -154,6 +157,7 @@ import step4 from '@/components/step4DatiStrutturali.vue';
 import step5 from '@/components/step5Allegati.vue';
 import step6 from '@/components/step6Quote.vue';
 import autorizzaUtenti from '@/components/autorizzaUtenti.vue';
+import wbs from '@/components/wbs.vue';
 
 export default {
 
@@ -513,7 +517,7 @@ this.$router.push({ path:'lista-progetti'});
 
   components: {
 
-    step1,step2,step3,step4,step5,step6,autorizzaUtenti
+    step1,step2,step3,step4,step5,step6,autorizzaUtenti,wbs
   },
  
   props:['idprogetto'],
