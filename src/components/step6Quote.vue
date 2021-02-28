@@ -33,7 +33,7 @@
           :value="percentualeDaIncassare"
           size="50px"
           color="red"
-        />
+        >{{daIncassare}}</q-circular-progress>
       </div>
       <div class="col-2">
         Incassato<br />
@@ -43,7 +43,7 @@
           :value="percentualeIncassato"
           size="50px"
           color="green"
-        />
+        >{{incassato}}</q-circular-progress>
       </div>
       <div class="col-2">
         Speso<br />
@@ -53,7 +53,7 @@
           :value="percentualeSpeso"
           size="50px"
           color="orange"
-        />
+        >{{speso}}</q-circular-progress>
       </div>
     </div>
 
@@ -280,8 +280,10 @@ export default {
       causaleSpesaEffettuata: "",
       chiHafattoSpesa: "",
       nameAuxFilePreventivo: "",
+      
       totaleQuoteRicevute: 0,
       totaleSpeseEffettuate: 0,
+
       percentualeIncassato: 0,
       percentualeSpeso: 0,
       percentualeDaIncassare: 0,
@@ -377,7 +379,7 @@ export default {
         somma += parseInt(element.importo);
       });
 
-      return ( parseInt(this.value.quotaPreventivo) - somma);
+      return this.value.quotaPreventivo-somma;
     },
   },
   watch: {
@@ -395,8 +397,8 @@ export default {
       deep: true,
       handler: function () {
         if (parseInt(this.value.quotaPreventivo) > 0) {
-          this.percentualeSpeso =
-            (this.speso / parseInt(this.value.quotaPreventivo)) * 100;
+          this.percentualeSpeso =100-((this.incassato-this.speso)/this.incassatoo)*100;
+           
         }
       },
     },
@@ -404,7 +406,9 @@ export default {
       deep: true,
       handler: function () {
         if (parseInt(this.value.quotaPreventivo) > 0) {
-          this.percentualeDaIncassare = this.daIncassare;
+       var percentulaTotale=((this.value.quotaPreventivo-this.incassato)/this.value.quotaPreventivo)*100;
+        //var percentuale=100-(parseFloat(this.value.quotaPreventivo) *  incassato)/100 ;
+        this.percentualeDaIncassare= percentulaTotale;
         }
       },
     },
@@ -416,16 +420,19 @@ export default {
     var speso = 0;
     this.value.elencoQuote.forEach((element) => {
       incassato += parseInt(element.importo);
+      
     });
+    this.totaleQuoteRicevute =incassato;
     this.value.elencoSpese.forEach((element) => {
       speso += parseInt(element.importo);
     });
+    this.totaleSpeseEffettuate=speso;
     if (parseInt(this.value.quotaPreventivo) > 0) {
-      this.percentualeIncassato =
-        (incassato / parseInt(this.value.quotaPreventivo)) * 100;
-      this.percentualeSpeso =
-        (speso / parseInt(this.value.quotaPreventivo)) * 100;
-        this.percentualeDaIncassare=parseInt(this.value.quotaPreventivo) -  incassato ;
+      this.percentualeIncassato =100- ((this.value.quotaPreventivo-incassato)/this.value.quotaPreventivo)*100;
+
+      this.percentualeSpeso = 100-((this.incassato-this.speso)/this.incassato)*100;
+      
+      this.percentualeDaIncassare= ((this.value.quotaPreventivo-incassato)/this.value.quotaPreventivo)*100;
     }
   },
 };
