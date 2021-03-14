@@ -716,12 +716,17 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
        return  response()->json($progetto);
     });
 
-class tipologiaEdificio{
+
+$router->get("/getidwbs","wbsController@getidWbs");
+$router->post("/salvaIdWbs","wbsController@salvaIdWbs");
+
+    class tipologiaEdificio{
     public $condominio = "condominio";
     public $edificiioResidenziale = "edificioFamiliare";
     public $commerciale = "commerciale";
     public $altro = "altro";
 
+    
 }
  class elementiProgetto{
     

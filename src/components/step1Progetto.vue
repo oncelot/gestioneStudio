@@ -286,6 +286,9 @@ export default {
 }
 </script>
 <style scoped>
+.q-tab__label {
+   font-size: 8px !important; 
+}
 .bgmargintop{
   background-color: white; margin-top:20px;
 }

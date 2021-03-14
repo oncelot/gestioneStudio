@@ -1,66 +1,65 @@
 <template>
   <div>
-
-<div id="container"></div>
+    <div id="container"></div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        Acquisizione DOC <q-icon name="info" @click="alert = true" />
+        Acquisizione DOC <q-icon name="info" @click="getwbs(1); " />
       </div>
       <q-linear-progress :value="progress" color="warning" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        SOPRALLUOGHI <q-icon name="info" />
+        SOPRALLUOGHI <q-icon name="info" @click="getwbs(2); " />
       </div>
-      <q-linear-progress :value="progress"  color="secondary" />
+      <q-linear-progress :value="progress" color="secondary" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        RESTITUZIONE GRAFICA<q-icon name="info" />
+        RESTITUZIONE GRAFICA<q-icon name="info" @click="getwbs(3); "  />
       </div>
-      <q-linear-progress :value="progress"  color="accent"  />
+      <q-linear-progress :value="progress" color="accent" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-       MODELLAZIONE ENERGETICA <q-icon name="info" />
+        MODELLAZIONE ENERGETICA <q-icon name="info" @click="getwbs(4); " />
       </div>
       <q-linear-progress :value="progress" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        COMPUTO <q-icon name="info" @click="alert = true" />
+        COMPUTO <q-icon name="info" @click="getwbs(5); "/>
       </div>
-      <q-linear-progress :value="progress"  color="warning" />
+      <q-linear-progress :value="progress" color="warning" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        STUDIO FATTIBILITA' <q-icon name="info" />
+        STUDIO FATTIBILITA' <q-icon name="info"  @click="getwbs(6); " />
       </div>
-      <q-linear-progress :value="progress"  color="secondary" />
+      <q-linear-progress :value="progress" color="secondary" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        PROGETTO DEFINITIVO<q-icon name="info" />
+        PROGETTO DEFINITIVO<q-icon name="info"  @click="getwbs(7); " />
       </div>
-      <q-linear-progress :value="progress"  color="accent"  />
+      <q-linear-progress :value="progress" color="accent" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-      PROGETTO ESECUTIVO <q-icon name="info" />
+        PROGETTO ESECUTIVO <q-icon name="info"  @click="getwbs(8); " />
       </div>
-      <q-linear-progress :value="progress"  />
+      <q-linear-progress :value="progress" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-      ESECUZIONE OPERA<q-icon name="info" />
+        ESECUZIONE OPERA<q-icon name="info"  @click="getwbs(9); " />
       </div>
-      <q-linear-progress :value="progress"  color="accent"  />
+      <q-linear-progress :value="progress" color="accent" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-      COLLAUDI E ASSEVERAZIONI <q-icon name="info" />
+        COLLAUDI E ASSEVERAZIONI <q-icon name="info"  @click="getwbs(10); " />
       </div>
-      <q-linear-progress :value="progress"  />
+      <q-linear-progress :value="progress" />
     </div>
 
     <!-- 
@@ -223,37 +222,83 @@
         -->
 
     <q-dialog v-model="alert">
-      <q-card style="width: 50%;">
+      <q-card style="width: 50%">
         <q-card-section>
           <div class="text-h6">Acquisizione DOC</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-input v-model="text" type="textarea" label="Descrizione" />
-          <q-input v-model="text" type="text" label="Assegnato A:" :dense="true" outlined />
-          <q-select v-model="stato" type="checkbox" color="secondary" outlined :dense="true" label="Stato" :options="optionstatoWbs" style="width: 100%" />
-          <q-select v-model="priorita" type="checkbox" color="secondary" filled :dense="true" label="Priorita" :options="optionPriorita" style="width: 100%" />
-          <q-input v-model="text" type="text" label="Scadenza" />
-          <q-input v-model="text" type="text" outlined :dense="true" label="Inizio" />
-          <q-input v-model="text" type="text" outlined :dense="true" label="fine" />
-          <q-input v-model="text" type="text" outlined :dense="true" label="Durata" />
+          <q-input v-model="descrizione" type="textarea" label="Descrizione" />
+          <q-input
+            v-model="assegnatoA"
+            type="text"
+            label="Assegnato A:"
+            :dense="true"
+            outlined
+          />
+          <q-select
+            v-model="stato"
+            type="checkbox"
+            color="secondary"
+            outlined
+            :dense="true"
+            label="Stato"
+            :options="optionstatoWbs"
+            style="width: 100%"
+          />
+          <q-select
+            v-model="priorita"
+            type="checkbox"
+            color="secondary"
+            filled
+            :dense="true"
+            label="Priorita"
+            :options="optionPriorita"
+            style="width: 100%"
+          />
+          <q-input v-model="scadenza" type="text" label="Scadenza" />
+          <q-input
+            v-model="inizio"
+            type="text"
+            outlined
+            :dense="true"
+            label="Inizio"
+          />
+          <q-input
+            v-model="fine"
+            type="text"
+            outlined
+            :dense="true"
+            label="fine"
+          />
+          <q-input
+            v-model="durata"
+            type="text"
+            outlined
+            :dense="true"
+            label="Durata"
+          />
         </q-card-section>
 
         <q-card-actions align="right">
           <q-btn flat label="Chiudi" color="primary" v-close-popup />
-          <q-btn flat label="Salva" color="primary" v-close-popup />
+          <q-btn
+            flat
+            label="Salva"
+            color="primary"
+            
+            @click="saveWbs(idModalWbs,tipowbs)"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
-    
   </div>
 </template>
 
 <script>
-
+import Axios from "axios";
 export default {
   data() {
-
     return {
       optionstatoWbs: [
         { label: "Non Iniziato", value: "non iniziato" },
@@ -267,14 +312,74 @@ export default {
         { label: "Medio", value: "medio" },
         { label: "Basso", value: "basso" },
       ],
-      priorita: "",
-      stato: "",
+
       progress: 0.5,
       date: "",
       text: "",
+      descrizione: "",
+      assegnatoA: "",
+      stato: "",
+      priorita: "",
+      scadenza: "",
+      inizio: "",
+      fine: "",
+      durata: "",
       alert: false,
+      idModalWbs: "",
+      tipowbs:"",
     };
-  },
+  },  props:["value"],
+  methods: {
+    getwbs(tipowbs) {
+      this.tipowbs=tipowbs;
+      this.alert = true;
+      Axios.get(
+        this.linkApi + "/getidwbs/?id_progetto=221&tipo_wbs=" + tipowbs
+      ).then((Response) => {
+        var wbs = Response.data;
+        
+        this.descrizione="Vuoto";
+      if (wbs.response=="ok"){
+        this.descrizione = wbs.message[0].descrizione;
+        this.assegnatoA = wbs.message[0].persona_assegnata;
+        this.stato = wbs.message[0].stato;
+        this.priorita = wbs.message[0].priorita;
+        this.inizio = wbs.message[0].inizio;
+        this.fine = wbs.message[0].fine;
+        }
+      });
+    },
+    saveWbs(tipo) {
+      const updateWbs = {
+        descrizione: this.descrizione,
+        assegnato: this.assegnatoA,
+        stato: this.stato,
+        priorita: this.priorita,
+        inizio: this.inizio,
+        fine: this.fine,
 
+        id_progetto:this.value.idprogetto,
+        tipowbs:tipo
+      };
+      Axios.post(this.linkApi + "/salvaIdWbs", updateWbs).then((Response) => { 
+        var risposta = Response.data;
+        console.log(risposta.response)
+        if (risposta.response =="ok"){
+            this.$q.notify({
+                        type: 'positive',
+                        message:risposta.message,
+                        }); 
+        }
+        if (risposta.response =="Error"){
+           this.$q.notify({
+                        type: 'negative',
+                        message:risposta.message,
+                        }); 
+        }
+        
+       console.log(Response.data)});
+     
+    },
+  },
 };
 </script>

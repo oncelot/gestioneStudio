@@ -108,7 +108,7 @@ export default {
     auth.LogOut(this.cred,'/');
   },
   paginaLogin(){
-  this.$router.push({ path:'login'});
+  this.$router.push({ path:'/login'});
   }
 }
 }

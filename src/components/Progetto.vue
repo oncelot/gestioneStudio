@@ -2,10 +2,10 @@
 
 <template>
 <!--q-pa-md-->
-<div class=" " style="color:grey; background-color:#f2f4f8; width:100%">
+<div   class=" text-grey " style="background-color:#f2f4f8; " >
   
-  <q-tabs  v-model="tab" inline-label style="background-color:#fdfdfd"  >
-      <q-tab name="progetto"  icon="home_work" label="Progetto"  />
+  <q-tabs  v-model="tab" inline-label dense style="background-color:#fdfdfd; " class=" shadow-2 "  :breakpoint="200">
+      <q-tab name="progetto" icon="home_work"  label="Progetto"  />
       <q-tab name="anagraficaIntervento"  icon="alarm" label="Anagrafica intervento" /> 
       <q-tab name="screening"  icon="movie" label="Screening" />
       <q-tab name="datiStrutturali"  icon="build" label="Dati Strutturali" />
@@ -13,8 +13,8 @@
       <q-tab  v-if="user.role=='admin'" name="quote"  icon="euro_symbol" label="Quote" />
       <q-tab v-if="user.role=='admin'" name="associaUtenti"  icon="engineering" label="Permessi" />
       <q-tab v-if="user.role=='admin'" name="wbs"  icon="engineering" label="WBS" />
-     <q-btn color="positive" v-if="!nuovoProgetto" icon="check" label="Aggiorna progetto" @click="aggiungiProgetto()" />
-     <q-btn color="primary" v-if="nuovoProgetto" icon="check" label="Crea progetto" @click="aggiungiProgetto()" />
+     <q-btn color="positive" v-if="!nuovoProgetto"  label="Aggiorna progetto" @click="aggiungiProgetto()" />
+     <q-btn color="primary" v-if="nuovoProgetto" label="Crea progetto" @click="aggiungiProgetto()" />
     </q-tabs> 
 
  <div v-if="tab == 'progetto'">
@@ -40,7 +40,7 @@
   </div>
 
   <div v-if="tab=='wbs'" style="color:grey">
-    <wbs></wbs>
+    <wbs  v-model="Progetto"></wbs>
   </div>
   
 
@@ -108,6 +108,9 @@
 
 </template>
 <style scoped>
+.q-tab__label {
+   font-size: 8px !important; 
+}
 .bgmargintop{
   background-color: white; margin-top:20px;
 }
