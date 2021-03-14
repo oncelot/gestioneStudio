@@ -3,61 +3,61 @@
     <div id="container"></div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        Acquisizione DOC <q-icon name="info" @click="getwbs(1); " />
+        Acquisizione DOC <q-icon name="info" @click="getwbs(1)" />
       </div>
       <q-linear-progress :value="progress" color="warning" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        SOPRALLUOGHI <q-icon name="info" @click="getwbs(2); " />
+        SOPRALLUOGHI <q-icon name="info" @click="getwbs(2)" />
       </div>
       <q-linear-progress :value="progress" color="secondary" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        RESTITUZIONE GRAFICA<q-icon name="info" @click="getwbs(3); "  />
+        RESTITUZIONE GRAFICA<q-icon name="info" @click="getwbs(3)" />
       </div>
       <q-linear-progress :value="progress" color="accent" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        MODELLAZIONE ENERGETICA <q-icon name="info" @click="getwbs(4); " />
+        MODELLAZIONE ENERGETICA <q-icon name="info" @click="getwbs(4)" />
       </div>
       <q-linear-progress :value="progress" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        COMPUTO <q-icon name="info" @click="getwbs(5); "/>
+        COMPUTO <q-icon name="info" @click="getwbs(5)" />
       </div>
       <q-linear-progress :value="progress" color="warning" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        STUDIO FATTIBILITA' <q-icon name="info"  @click="getwbs(6); " />
+        STUDIO FATTIBILITA' <q-icon name="info" @click="getwbs(6)" />
       </div>
       <q-linear-progress :value="progress" color="secondary" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        PROGETTO DEFINITIVO<q-icon name="info"  @click="getwbs(7); " />
+        PROGETTO DEFINITIVO<q-icon name="info" @click="getwbs(7)" />
       </div>
       <q-linear-progress :value="progress" color="accent" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        PROGETTO ESECUTIVO <q-icon name="info"  @click="getwbs(8); " />
+        PROGETTO ESECUTIVO <q-icon name="info" @click="getwbs(8)" />
       </div>
       <q-linear-progress :value="progress" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        ESECUZIONE OPERA<q-icon name="info"  @click="getwbs(9); " />
+        ESECUZIONE OPERA<q-icon name="info" @click="getwbs(9)" />
       </div>
       <q-linear-progress :value="progress" color="accent" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
-        COLLAUDI E ASSEVERAZIONI <q-icon name="info"  @click="getwbs(10); " />
+        COLLAUDI E ASSEVERAZIONI <q-icon name="info" @click="getwbs(10)" />
       </div>
       <q-linear-progress :value="progress" />
     </div>
@@ -258,19 +258,52 @@
           />
           <q-input v-model="scadenza" type="text" label="Scadenza" />
           <q-input
+            outlined
+            :dense="true"
             v-model="inizio"
-            type="text"
-            outlined
-            :dense="true"
-            label="Inizio"
-          />
+            mask="date"
+            :rules="['date']"
+          >
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy
+                  ref="qDateProxy"
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date v-model="inizio">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
           <q-input
-            v-model="fine"
-            type="text"
             outlined
             :dense="true"
-            label="fine"
-          />
+            v-model="fine"
+            mask="date"
+            :rules="['date']"
+          >
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy
+                  ref="qDateProxy"
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-date v-model="fine">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+
           <q-input
             v-model="durata"
             type="text"
@@ -286,8 +319,7 @@
             flat
             label="Salva"
             color="primary"
-            
-            @click="saveWbs(idModalWbs,tipowbs)"
+            @click="saveWbs(idModalWbs, tipowbs)"
           />
         </q-card-actions>
       </q-card>
@@ -326,26 +358,27 @@ export default {
       durata: "",
       alert: false,
       idModalWbs: "",
-      tipowbs:"",
+      tipowbs: "",
     };
-  },  props:["value"],
+  },
+  props: ["value"],
   methods: {
     getwbs(tipowbs) {
-      this.tipowbs=tipowbs;
+      this.tipowbs = tipowbs;
       this.alert = true;
       Axios.get(
         this.linkApi + "/getidwbs/?id_progetto=221&tipo_wbs=" + tipowbs
       ).then((Response) => {
         var wbs = Response.data;
-        
-        this.descrizione="Vuoto";
-      if (wbs.response=="ok"){
-        this.descrizione = wbs.message[0].descrizione;
-        this.assegnatoA = wbs.message[0].persona_assegnata;
-        this.stato = wbs.message[0].stato;
-        this.priorita = wbs.message[0].priorita;
-        this.inizio = wbs.message[0].inizio;
-        this.fine = wbs.message[0].fine;
+
+        this.descrizione = "Vuoto";
+        if (wbs.response == "ok") {
+          this.descrizione = wbs.message[0].descrizione;
+          this.assegnatoA = wbs.message[0].persona_assegnata;
+          this.stato = wbs.message[0].stato;
+          this.priorita = wbs.message[0].priorita;
+          this.inizio = wbs.message[0].inizio;
+          this.fine = wbs.message[0].fine;
         }
       });
     },
@@ -357,28 +390,28 @@ export default {
         priorita: this.priorita,
         inizio: this.inizio,
         fine: this.fine,
-
-        id_progetto:this.value.idprogetto,
-        tipowbs:tipo
+        id_progetto: this.value.idprogetto,
+        tipowbs: tipo,
       };
-      Axios.post(this.linkApi + "/salvaIdWbs", updateWbs).then((Response) => { 
+
+      Axios.post(this.linkApi + "/salvaIdWbs", updateWbs).then((Response) => {
         var risposta = Response.data;
-        console.log(risposta.response)
-        if (risposta.response =="ok"){
-            this.$q.notify({
-                        type: 'positive',
-                        message:risposta.message,
-                        }); 
+        console.log(risposta.response);
+        if (risposta.response == "ok") {
+          this.$q.notify({
+            type: "positive",
+            message: risposta.message,
+          });
         }
-        if (risposta.response =="Error"){
-           this.$q.notify({
-                        type: 'negative',
-                        message:risposta.message,
-                        }); 
+        if (risposta.response == "Error") {
+          this.$q.notify({
+            type: "negative",
+            message: risposta.message,
+          });
         }
-        
-       console.log(Response.data)});
-     
+
+        console.log(Response.data);
+      });
     },
   },
 };
