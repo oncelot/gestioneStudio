@@ -7,6 +7,7 @@ import dettaglioProgetto from '@/views/dettaglioProgetto'
 import RegistrazioneUtente from '@/views/Registrazione-utente'
 import utenti from '@/views/utenti'
 import login from '@/views/login'
+import Home from '@/views/Home'
 import store from '@/store'
 import baseApi from '@/baseApi'
 
@@ -74,6 +75,7 @@ beforeEnter:Middleware(),},
 beforeEnter:Middleware(),},
   {path: '/dettaglio-progetto/:id', component:dettaglioProgetto},
   {path: '/login', component:login},
+  {path: '/', component:Home},
   {path: '/Registrazione-utente', component:RegistrazioneUtente},
 ]
 

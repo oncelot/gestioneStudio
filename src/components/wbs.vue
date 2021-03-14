@@ -1,5 +1,69 @@
 <template>
-    <div>
+  <div>
+
+<div id="container"></div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+        Acquisizione DOC <q-icon name="info" @click="alert = true" />
+      </div>
+      <q-linear-progress :value="progress" color="warning" />
+    </div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+        SOPRALLUOGHI <q-icon name="info" />
+      </div>
+      <q-linear-progress :value="progress"  color="secondary" />
+    </div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+        RESTITUZIONE GRAFICA<q-icon name="info" />
+      </div>
+      <q-linear-progress :value="progress"  color="accent"  />
+    </div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+       MODELLAZIONE ENERGETICA <q-icon name="info" />
+      </div>
+      <q-linear-progress :value="progress" />
+    </div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+        COMPUTO <q-icon name="info" @click="alert = true" />
+      </div>
+      <q-linear-progress :value="progress"  color="warning" />
+    </div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+        STUDIO FATTIBILITA' <q-icon name="info" />
+      </div>
+      <q-linear-progress :value="progress"  color="secondary" />
+    </div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+        PROGETTO DEFINITIVO<q-icon name="info" />
+      </div>
+      <q-linear-progress :value="progress"  color="accent"  />
+    </div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+      PROGETTO ESECUTIVO <q-icon name="info" />
+      </div>
+      <q-linear-progress :value="progress"  />
+    </div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+      ESECUZIONE OPERA<q-icon name="info" />
+      </div>
+      <q-linear-progress :value="progress"  color="accent"  />
+    </div>
+    <div class="row">
+      <div class="text-h6 q-mt-sm q-mb-xs">
+      COLLAUDI E ASSEVERAZIONI <q-icon name="info" />
+      </div>
+      <q-linear-progress :value="progress"  />
+    </div>
+
+    <!-- 
         <div class="row q-col-gutter-md">
             <div class="col-1">Attività</div>
             <div class="col-1">Descrizione</div>
@@ -156,25 +220,61 @@
     </q-card>
         </div>
         </div>
-        
-        </div>
-</template>
-<script>
-export default {
-    data(){return{
+        -->
 
-        optionstatoWbs:[ 
-            {label: 'Non Iniziato',value: 'non iniziato'},
-            {label: 'in corso',value: 'in corso'},
-            {label: 'completato',value: 'completato'},
-            {label: 'scaduto',value: 'scaduto'},
-            {label: 'in attesa',value: 'in attesa'},],
-        optionPriorita:[{label:'Alto',value:'alto'},{label:'Medio',value:'medio'},{label:'Basso',value:'basso'}],
-        priorita:'',
-        stato:'',
-        progress:0.5,
-        date:'',
-        text:''
-    }}
-}
+    <q-dialog v-model="alert">
+      <q-card style="width: 50%;">
+        <q-card-section>
+          <div class="text-h6">Acquisizione DOC</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input v-model="text" type="textarea" label="Descrizione" />
+          <q-input v-model="text" type="text" label="Assegnato A:" :dense="true" outlined />
+          <q-select v-model="stato" type="checkbox" color="secondary" outlined :dense="true" label="Stato" :options="optionstatoWbs" style="width: 100%" />
+          <q-select v-model="priorita" type="checkbox" color="secondary" filled :dense="true" label="Priorita" :options="optionPriorita" style="width: 100%" />
+          <q-input v-model="text" type="text" label="Scadenza" />
+          <q-input v-model="text" type="text" outlined :dense="true" label="Inizio" />
+          <q-input v-model="text" type="text" outlined :dense="true" label="fine" />
+          <q-input v-model="text" type="text" outlined :dense="true" label="Durata" />
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Chiudi" color="primary" v-close-popup />
+          <q-btn flat label="Salva" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    
+  </div>
+</template>
+
+<script>
+
+export default {
+  data() {
+
+    return {
+      optionstatoWbs: [
+        { label: "Non Iniziato", value: "non iniziato" },
+        { label: "in corso", value: "in corso" },
+        { label: "completato", value: "completato" },
+        { label: "scaduto", value: "scaduto" },
+        { label: "in attesa", value: "in attesa" },
+      ],
+      optionPriorita: [
+        { label: "Alto", value: "alto" },
+        { label: "Medio", value: "medio" },
+        { label: "Basso", value: "basso" },
+      ],
+      priorita: "",
+      stato: "",
+      progress: 0.5,
+      date: "",
+      text: "",
+      alert: false,
+    };
+  },
+
+};
 </script>
