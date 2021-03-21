@@ -1,11 +1,13 @@
 <template>
   <div>
-    <div id="container"></div>
+    <div id="container">
+      <button @click="calcoloProgessivoSingoloWbs()" >test</button>
+    </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
         Acquisizione DOC <q-icon name="info" @click="getwbs(1)" />
       </div>
-      <q-linear-progress :value="progress" color="warning" />
+      <q-linear-progress :value="progress1" color="warning" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
@@ -62,165 +64,7 @@
       <q-linear-progress :value="progress" />
     </div>
 
-    <!-- 
-        <div class="row q-col-gutter-md">
-            <div class="col-1">Attività</div>
-            <div class="col-1">Descrizione</div>
-            <div class="col-1">Assegnato A</div>
-            <div class="col-1">STATO</div>
-            <div class="col-1">PRIORITà</div>
-            <div class="col-1">SCADENZA</div>
-            <div class="col-1">COMPLETAMENTO</div>
-            <div class="col-1">INIZIO</div>
-            <div class="col-1">FINE</div>
-            <div class="col-1">DURATA</div>
-        </div>
-        <div class="row q-col-gutter-md">
-            <div class="col-1">Acquisizione DOC</div>
-            <div class="col-1">Descrizione</div>
-            <div class="col-1">Nome Cognome Assegnato</div>
-            <div class="col-1"><q-select 
-                v-model="stato"
-                type="checkbox"
-                color="secondary"
-                filled :dense='true' label="Seleziona..."
-                :options="optionstatoWbs"
-            /></div>
-            <div class="col-1"><q-select 
-                v-model="priorita"
-                type="checkbox"
-                color="secondary"
-                filled 
-                :dense='true' label="seleziona..."
-                :options="optionPriorita"
-            /></div>
-            <div class="col-1">
-               <q-input v-model="text" type="text" label="Scadenza" /></div>
-            <div class="col-1"> <q-input v-model="text" type="text" label="Completamento" /></div>
-            <div class="col-1"> <q-linear-progress :value="progress" class="q-mt-md" /></div>
-            <div class="col-1"> <q-input v-model="text" type="text" label="Inizio" /></div>
-            <div class="col-1"> <q-input v-model="text" type="text" label="Fine" /></div>
-            <div class="col-1"> <q-input v-model="text" type="text" label="Durata" /></div>
-        </div>
-        <div class="row q-col-gutter-md">
-            <div class="col-4">
-                 <q-card class="my-card" flat bordered>
-      <q-card-section horizontal>
-        <q-card-section class="q-pt-xs">
-            <div class="text-overline"> <q-linear-progress :value="progress" class="q-mt-md" /></div>
-           <div class="text-h5 q-mt-sm q-mb-xs">Acquisizione DOC</div>
-         
-          <div class="text-caption text-grey">
-              <q-input v-model="text" type="textarea" label="Descrizione"  />
-              </div>
-        </q-card-section>
-
-        <q-card-section class="col-5 flex flex-center">
-         <q-input v-model="text" type="text" label="Assegnato A:" :dense='true' outlined />
-         <q-select 
-                v-model="stato"
-                type="checkbox"
-                color="secondary"
-                outlined :dense='true' label="Stato"
-                :options="optionstatoWbs"
-                style="width:100%"
-            />
-            <q-select 
-                v-model="priorita"
-                type="checkbox"
-                color="secondary"
-                filled 
-                :dense='true' label="Priorita"
-                :options="optionPriorita"
-                style="width:100%"
-            />
-             <div >
-      <label>Scadenza</label>
-     <q-input  outlined :dense="true"  v-model="text" mask="date" :rules="['date']">
-      <template v-slot:append>
-        <q-icon name="event" class="cursor-pointer">
-          <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-            <q-date v-model="text">
-              <div class="row items-center justify-end">
-                <q-btn v-close-popup label="Close" color="primary" flat />
-              </div>
-            </q-date>
-          </q-popup-proxy>
-        </q-icon>
-      </template>
-    </q-input>
-    </div>
-      
-        </q-card-section>
-        
-      </q-card-section>
-
-      <q-separator />
-
-      <q-card-actions>
-      
-       
-      
-      </q-card-actions>
-      <q-card-actions>
-     <q-input v-model="text" type="text" outlined :dense="true" label="Inizio" />
-      <q-input v-model="text" type="text" outlined :dense="true"  label="fine" />
-       <q-input v-model="text" type="text" outlined :dense="true"  label="Durata" />
-      </q-card-actions>
-    </q-card>
-        </div>
-            <div class="col-4">
-                 <q-card class="my-card" flat bordered>
-      <q-card-section horizontal>
-        <q-card-section class="q-pt-xs">
-            <div class="text-overline"> <q-linear-progress :value="progress" class="q-mt-md" /></div>
-           <div class="text-h5 q-mt-sm q-mb-xs">SOPRALLUOGHI</div>
-         
-          <div class="text-caption text-grey">
-              <q-input v-model="text" type="textarea" label="Descrizione"  />
-              </div>
-        </q-card-section>
-
-        <q-card-section class="col-5 flex flex-center">
-         <q-input v-model="text" type="text" label="Assegnato A:" :dense='true' outlined />
-         <q-select 
-                v-model="stato"
-                type="checkbox"
-                color="secondary"
-                outlined :dense='true' label="Stato"
-                :options="optionstatoWbs"
-                style="width:100%"
-            />
-            <q-select 
-                v-model="priorita"
-                type="checkbox"
-                color="secondary"
-                filled 
-                :dense='true' label="Priorita"
-                :options="optionPriorita"
-                style="width:100%"
-            />
-        </q-card-section>
-        
-      </q-card-section>
-
-      <q-separator />
-
-      <q-card-actions>
-        <q-btn flat round icon="event" />
-       <q-input v-model="text" type="text" label="Scadenza" />
-      
-      </q-card-actions>
-      <q-card-actions>
-     <q-input v-model="text" type="text" outlined :dense="true" label="Inizio" />
-      <q-input v-model="text" type="text" outlined :dense="true"  label="fine" />
-       <q-input v-model="text" type="text" outlined :dense="true"  label="Durata" />
-      </q-card-actions>
-    </q-card>
-        </div>
-        </div>
-        -->
-
+    
     <q-dialog v-model="alert">
       <q-card style="width: 50%">
         <q-card-section>
@@ -345,7 +189,17 @@ export default {
         { label: "Basso", value: "basso" },
       ],
 
-      progress: 0.5,
+      progress: 0.9,
+      progress1:0.9,
+      progress2:'',
+      progress3:'',
+      progress4:'',
+      progress5:'',
+      progress6:'',
+      progress7:'',
+      progress8:'',
+      progress9:'',
+      progress10:'',
       date: "",
       text: "",
       descrizione: "",
@@ -362,12 +216,54 @@ export default {
     };
   },
   props: ["value"],
+  computed:{
+
+  },
+  mounted:function(){
+this.calcoloProgessivoSingoloWbs();
+
+  },
   methods: {
+        calcoloProgessivoSingoloWbs:function(){
+Axios.get(this.linkApi+"/getProgressivoWbs?idprogetto="+this.value.idprogetto+"").then(
+  response=>{var progressivi=response.data;
+  var differenzeTime=0;
+  var differenzaDay=0;
+  var differenzaDayOggi=0;
+  var percentuale=0;
+var today = new Date();
+  progressivi.forEach(element => {
+    console.log(element);
+    var date1 = new Date(element.inizio); 
+    var date2 = new Date(element.fine); 
+  //  alert(date1);
+   // alert(date2);
+
+      differenzeTime= date1.getTime() - date2.getTime();
+     // alert(differenzeTime);
+      differenzaDay=differenzeTime / (1000 * 3600 * 24); 
+      differenzeTime=date1.getTime() - today;
+      differenzaDayOggi=differenzeTime  / (1000 * 3600 * 24);
+      percentuale = differenzaDayOggi / differenzaDay;
+     
+    if(element.tipo=="1"){this.progress1=percentuale;  }
+    if(element.tipo=="2"){this.progress2=percentuale;  }
+    if(element.tipo=="3"){this.progress3=percentuale;  }
+    if(element.tipo=="4"){this.progress4=percentuale;  }
+    if(element.tipo=="5"){this.progress5=percentuale;  }
+    if(element.tipo=="6"){this.progress6=percentuale;  }
+    if(element.tipo=="7"){this.progress7=percentuale;  }
+    if(element.tipo=="8"){this.progress8=percentuale;  }
+    if(element.tipo=="9"){this.progress9=percentuale;  }
+    if(element.tipo=="10"){this.progress10=percentuale;  }
+  });  });
+  
+    },
     getwbs(tipowbs) {
       this.tipowbs = tipowbs;
       this.alert = true;
       Axios.get(
-        this.linkApi + "/getidwbs/?id_progetto=221&tipo_wbs=" + tipowbs
+        this.linkApi + "/getidwbs/?id_progetto="+this.value.idprogetto+"&tipo_wbs=" + tipowbs
       ).then((Response) => {
         var wbs = Response.data;
 
