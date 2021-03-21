@@ -53,4 +53,10 @@ class wbsController extends Controller
         }
         return response()->json($stringRitorno);
     }
+    public function getProgressivoWbs(Request $r){
+        $progressiviWbs=DB::table('wbs')->where('id_progetto',$r["idprogetto"])->select("inizio","fine","tipo")->get();
+        return response()->json($progressiviWbs);
+
+    
+    }
 }
