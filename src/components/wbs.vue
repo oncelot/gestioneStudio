@@ -225,7 +225,9 @@ this.calcoloProgessivoSingoloWbs();
   },
   methods: {
         calcoloProgessivoSingoloWbs:function(){
-Axios.get(this.linkApi+"/getProgressivoWbs?idprogetto="+this.value.idprogetto+"").then(
+           const updateWbs = {idprogetto: this.value.idprogetto };
+
+Axios.post(this.linkApi+"/getProgressivoWbs",updateWbs).then(
   response=>{var progressivi=response.data;
   var differenzeTime=0;
   var differenzaDay=0;
@@ -245,7 +247,7 @@ var today = new Date();
       differenzeTime=date1.getTime() - today;
       differenzaDayOggi=differenzeTime  / (1000 * 3600 * 24);
       percentuale = differenzaDayOggi / differenzaDay;
-     
+     console.log(percentuale);
     if(element.tipo=="1"){this.progress1=percentuale;  }
     if(element.tipo=="2"){this.progress2=percentuale;  }
     if(element.tipo=="3"){this.progress3=percentuale;  }
@@ -260,10 +262,16 @@ var today = new Date();
   
     },
     getwbs(tipowbs) {
+       const updateWbs = {
+     
+        id_progetto: this.value.idprogetto,
+        tipo_wbs: tipowbs,
+      };
+
       this.tipowbs = tipowbs;
       this.alert = true;
-      Axios.get(
-        this.linkApi + "/getidwbs/?id_progetto="+this.value.idprogetto+"&tipo_wbs=" + tipowbs
+      Axios.post(
+        this.linkApi + "/getidwbs",updateWbs
       ).then((Response) => {
         var wbs = Response.data;
 

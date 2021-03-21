@@ -717,8 +717,8 @@ $router->get('/getProgetto/{idprogetto}',function (Request $request,$idprogetto)
     });
 
 
-$router->get("/getidwbs","wbsController@getidWbs");
-$router->get("/getProgressivoWbs","wbsController@getProgressivoWbs");
+$router->post("/getidwbs","wbsController@getidWbs");
+$router->post("/getProgressivoWbs","wbsController@getProgressivoWbs");
 $router->post("/salvaIdWbs","wbsController@salvaIdWbs");
 
     class tipologiaEdificio{
