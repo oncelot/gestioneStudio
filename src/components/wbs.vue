@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="container">
-      <button @click="calcoloProgessivoSingoloWbs()" >test</button>
+     
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
@@ -13,55 +13,55 @@
       <div class="text-h6 q-mt-sm q-mb-xs">
         SOPRALLUOGHI <q-icon name="info" @click="getwbs(2)" />
       </div>
-      <q-linear-progress :value="progress" color="secondary" />
+      <q-linear-progress :value="progress2" color="secondary" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
         RESTITUZIONE GRAFICA<q-icon name="info" @click="getwbs(3)" />
       </div>
-      <q-linear-progress :value="progress" color="accent" />
+      <q-linear-progress :value="progress3" color="accent" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
         MODELLAZIONE ENERGETICA <q-icon name="info" @click="getwbs(4)" />
       </div>
-      <q-linear-progress :value="progress" />
+      <q-linear-progress :value="progress4" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
         COMPUTO <q-icon name="info" @click="getwbs(5)" />
       </div>
-      <q-linear-progress :value="progress" color="warning" />
+      <q-linear-progress :value="progress5" color="warning" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
         STUDIO FATTIBILITA' <q-icon name="info" @click="getwbs(6)" />
       </div>
-      <q-linear-progress :value="progress" color="secondary" />
+      <q-linear-progress :value="progress6" color="secondary" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
         PROGETTO DEFINITIVO<q-icon name="info" @click="getwbs(7)" />
       </div>
-      <q-linear-progress :value="progress" color="accent" />
+      <q-linear-progress :value="progress7" color="accent" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
         PROGETTO ESECUTIVO <q-icon name="info" @click="getwbs(8)" />
       </div>
-      <q-linear-progress :value="progress" />
+      <q-linear-progress :value="progress8" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
         ESECUZIONE OPERA<q-icon name="info" @click="getwbs(9)" />
       </div>
-      <q-linear-progress :value="progress" color="accent" />
+      <q-linear-progress :value="progress9" color="accent" />
     </div>
     <div class="row">
       <div class="text-h6 q-mt-sm q-mb-xs">
         COLLAUDI E ASSEVERAZIONI <q-icon name="info" @click="getwbs(10)" />
       </div>
-      <q-linear-progress :value="progress" />
+      <q-linear-progress :value="progress10" />
     </div>
 
     
@@ -163,7 +163,7 @@
             flat
             label="Salva"
             color="primary"
-            @click="saveWbs(idModalWbs, tipowbs)"
+            @click="saveWbs(tipowbs)"
           />
         </q-card-actions>
       </q-card>
@@ -189,17 +189,17 @@ export default {
         { label: "Basso", value: "basso" },
       ],
 
-      progress: 0.9,
-      progress1:0.9,
-      progress2:'',
-      progress3:'',
-      progress4:'',
-      progress5:'',
-      progress6:'',
-      progress7:'',
-      progress8:'',
-      progress9:'',
-      progress10:'',
+      
+      progress1:0,
+      progress2:0,
+      progress3:0,
+      progress4:0,
+      progress5:0,
+      progress6:0,
+      progress7:0,
+      progress8:0,
+      progress9:0,
+      progress10:0,
       date: "",
       text: "",
       descrizione: "",
@@ -308,6 +308,7 @@ var today = new Date();
 
         console.log(Response.data);
       });
+      this.calcoloProgessivoSingoloWbs();
     },
   },
 };
