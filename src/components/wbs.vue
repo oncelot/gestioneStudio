@@ -68,7 +68,7 @@
     <q-dialog v-model="alert">
       <q-card style="width: 50%">
         <q-card-section>
-          <div class="text-h6">Acquisizione DOC</div>
+          <div class="text-h6">{{titoloModel}}</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -200,6 +200,7 @@ export default {
       progress8:0,
       progress9:0,
       progress10:0,
+      titoloModel:"",
       date: "",
       text: "",
       descrizione: "",
@@ -262,6 +263,50 @@ var today = new Date();
   
     },
     getwbs(tipowbs) {
+      switch (tipowbs) {
+        case 1:
+          this.titoloModel=" Acquisizione DOC ";
+          break;
+      
+        case 2:
+          this.titoloModel="SOPRALLUOGHI";
+          break;
+      
+        case 3:
+          this.titoloModel=" RESTITUZIONE GRAFICA";
+          break;
+      
+        case 4:
+          this.titoloModel=" MODELLAZIONE ENERGETICA ";
+          break;
+      
+        case 5:
+          this.titoloModel="COMPUTO";
+          break;
+      
+        case 6:
+          this.titoloModel="STUDIO FATTIBILITA'";
+          break;
+      
+        case 7:
+          this.titoloModel="PROGETTO DEFINITIVO";
+          break;
+      
+        case 8:
+          this.titoloModel="PROGETTO ESECUTIVO ";
+          break;
+      
+        case 9:
+          this.titoloModel=" ESECUZIONE OPERA";
+          break;
+      
+        case 10:
+          this.titoloModel="COLLAUDI E ASSEVERAZIONI";
+          break;
+      
+        default:
+          break;
+      }
        const updateWbs = {
      
         id_progetto: this.value.idprogetto,
