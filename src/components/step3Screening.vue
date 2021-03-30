@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class=" q-pa-md">
           <div v-if="value.tipologiaEdificio == 'edificioFamiliare'" class="bgmargintop">
   <div class="row " >
     <div class="col-12">
@@ -160,7 +160,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
 <!-- Titolo autorizzativi-->
 
- <div class=" bgmargintop q-pa-md q-gutter-sm row" >
+ <div class=" bgmargintop q-gutter-sm row" >
    <div class="col-12"><span class="text-h6 text-secondary">Titoli autorizzativi</span></div>
    
     <div class="col-12">
@@ -226,7 +226,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     </div>
    
   </div>
-   <div class="row" style="background-color:white">
+   <div class="row" style="background-color:white" v-if="value.elencoInterventiManutenzioneStraordinariaSCIACILAltro.length>0">
     <div class="col"><b>Anno di intervento</b></div>
     <div class="col"><b>Allegato</b></div>
     
@@ -255,16 +255,16 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
 
 <div class="row"><hr></div>
 <!-- ALLEGATI INTERVENTI SUCCESSIVI ALLA COSTRUZIONE -->
-<div  style="background-color:white">
-  <div class="row " >
-    <div class="col-6"><label for=""><b>Titoli autorizzativi relativi ad interventi successivi alla costruzione – area allegato -</b></label></div>
+<div  style="background-color:white" class="q-gutter-sm ">
+  <div class="row  bgmargintop  q-gutter-sm" >
+    <div class="col-6"><label for=""><b>Titoli autorizzativi relativi ad interventi successivi alla costruzione</b></label></div>
     <div class="col-2">
       </div>
 
   </div>
-  <div class="row  q-gutter-sm" style="background-color:white">
-    <div class="col"><b><q-input v-model="InterventiSuccessiviNuovoSub" :dense="true"  type="text" label="Sub" /></b></div>
-    <div class="col"><b><q-input v-model="InterventiSuccessiviNuovaDecrizione" :dense="true"  type="text" label="Successivi interventi" /></b></div>
+  <div class="row  q-gutter-sm bgmargintop " style="background-color:white">
+    <div class="col"><b><q-input v-model="InterventiSuccessiviNuovoSub" :dense="true" outlined  type="text" label="Sub" /></b></div>
+    <div class="col"><b><q-input v-model="InterventiSuccessiviNuovaDecrizione" :dense="true" outlined  type="text" label="Successivi interventi" /></b></div>
     <div class="col">
       <label>Allegato</label><br>
       <input type="file" @change="handleFile">
@@ -281,7 +281,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
     </div>
     
     </div>
-  <div class="row" style="background-color:white">
+  <div class="row " style="background-color:white" v-if="value.elencoTitoliAutorizzatiInterventiSuccessivi.length > 0">
     <div class="col"><b>Sub</b></div>
     <div class="col"><b>Successivi interventi</b></div>
     <div class="col"><b>Allegato</b></div>
@@ -305,26 +305,17 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
   </div>
   </div>
 </div>
-<div  style="background-color:white">
+<div  style="background-color:white" class="q-gutter-sm ">
 <!-- DATI CATASTALI -->
   <div class="row " style="padding-top:10px" >
-    <div class="col-12"><label for="" class="text-h6">
-      <b>Dati catastali</b></label>  </div>
+    <div class="col-12"><label > <b>Dati catastali</b></label>  </div>
    
   </div>
- 
-   
-  <div class="row">
-    <div class="col"><b>foglio</b></div>
-    <div class="col"><b>Particella</b></div>
-    <div class="col"><b>Sub</b></div>
-    <div class="col"></div>
 
-    </div>
-      <div class="row  q-gutter-sm" style="background-color:white; border-bottom:1px solid black">
-    <div class="col"><b><q-input v-model="DatiCatastaliTitoliAutorizzativiNuovoFoglio" :dense="true" outlined  type="text" /></b></div>
-    <div class="col"><b><q-input v-model="DatiCatastaliTitoliAutorizzativiNuovoParticella" :dense="true" outlined  type="text"  /></b></div>
-    <div class="col"><b><q-input v-model="DatiCatastaliTitoliAutorizzativiNuovoSub" :dense="true" outlined  type="text" /></b></div>
+      <div class="row  q-gutter-sm " style="background-color:white; border-bottom:1px solid black">
+    <div class="col"><b><q-input v-model="DatiCatastaliTitoliAutorizzativiNuovoFoglio" label="foglio" :dense="true" outlined  type="text" /></b></div>
+    <div class="col"><b><q-input v-model="DatiCatastaliTitoliAutorizzativiNuovoParticella" label="particella" :dense="true" outlined  type="text"  /></b></div>
+    <div class="col"><b><q-input v-model="DatiCatastaliTitoliAutorizzativiNuovoSub" label="sub" :dense="true" outlined  type="text" /></b></div>
 
     <div class="col"> <q-btn icon="add"  color="primary" @click="addrowDatiCatastaliTitoliAutorizzativi(); " outline :dense="true" /></div>
     
@@ -341,7 +332,7 @@ Tale limitazione non si applica alle spese sostenute per interventi realizzati s
   </div>
   </div>
 
-<div class="bgmargintop">
+<div class="bgmargintop q-gutter-sm">
   <div class="row "  style="padding-top:10px" >
     <div class="col-12">
       <strong class="text-h6  text-secondary" >Verifica di conformità</strong>

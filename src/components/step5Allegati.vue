@@ -4,7 +4,7 @@
         <span class="text-h5">Allegati</span>
         
         <div class="row">
-            <div class="col-3">
+            <div class="col-5">
                 <label class="text-bold"> Allegato</label><br>
                 <input type="file" @change="handleFile"  >
             </div>

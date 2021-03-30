@@ -2,22 +2,30 @@
 
 <template>
 <!--q-pa-md-->
-<div   class=" text-grey " style="background-color:#f2f4f8; " >
+<div   class=" text-grey row" style="background-color:#f2f4f8; " >
   
-  <q-tabs  v-model="tab" inline-label dense style="background-color:#fdfdfd; " class=" shadow-2 "  :breakpoint="200">
-      <q-tab name="progetto" icon="home_work"  label="Progetto"  />
+  <q-tabs  v-model="tab" inline-label dense style="background-color:#fdfdfd; " class=" shadow-2 col-12"  :breakpoint="200">
+   <!--   <q-tab name="progetto" icon="home_work"  label="Progetto"  />
       <q-tab name="anagraficaIntervento"  icon="alarm" label="Anagrafica intervento" /> 
       <q-tab name="screening"  icon="movie" label="Screening" />
       <q-tab name="datiStrutturali"  icon="build" label="Dati Strutturali" />
       <q-tab name="allegati"  icon="attach_file" label="Allegati" />
       <q-tab  v-if="user.role=='admin'" name="quote"  icon="euro_symbol" label="Quote" />
       <q-tab v-if="user.role=='admin'" name="associaUtenti"  icon="engineering" label="Permessi" />
-      <q-tab v-if="user.role=='admin'" name="wbs"  icon="engineering" label="WBS" />
-     <q-btn color="positive" v-if="!nuovoProgetto"  label="Aggiorna progetto" @click="aggiungiProgetto()" />
+      <q-tab v-if="user.role=='admin'" name="wbs"  icon="engineering" label="WBS" /> -->
+       <q-tab name="progetto" label="Progetto"  />
+      <q-tab name="anagraficaIntervento"   label="Anagrafica intervento" /> 
+      <q-tab name="screening" label="Screening" />
+      <q-tab name="datiStrutturali" label="Dati Strutturali" />
+      <q-tab name="allegati"   label="Allegati" />
+      <q-tab  v-if="user.role=='admin'" name="quote"  label="Quote" />
+      <q-tab v-if="user.role=='admin'" name="associaUtenti"  label="Permessi" />
+      <q-tab v-if="user.role=='admin'" name="wbs"  label="WBS" /> 
+     <q-btn color="secondary" v-if="!nuovoProgetto" icon="save" label="Save" @click="aggiungiProgetto()" />
      <q-btn color="primary" v-if="nuovoProgetto" label="Crea progetto" @click="aggiungiProgetto()" />
     </q-tabs> 
 
- <div v-if="tab == 'progetto'">
+ <div v-if="tab == 'progetto'" class=" col-12" >
    <step1 v-model="Progetto" ></step1>
  </div>
  
@@ -32,20 +40,23 @@
     <step4 v-model="Progetto" ></step4>
   </div>
 
-  <div v-if="tab=='allegati'" style="color:grey">
+  <div v-if="tab=='allegati'" style="color:grey; background-color: white;" class=" col-12">
     <step5 v-model="Progetto" ></step5>
   </div>
-  <div v-if="tab=='quote'" style="color:grey">
+  <div v-if="tab=='quote'" style="color:grey; background-color: white;" class=" col-12">
     <step6 v-model="Progetto" ></step6>
   </div>
+<div v-if="tab == 'associaUtenti'" style="color:grey; background-color: white;" class=" col-12">
+<autorizzaUtenti v-model="Progetto"></autorizzaUtenti>
 
+</div>
   <div v-if="tab=='wbs'" style="color:grey">
     <wbs  v-model="Progetto"></wbs>
   </div>
   
 
 <!-- #region Associa Utenti-->
-<div v-if="tab == 'associaUtenti'">
+<div v-if="tab == 'associaUtenti'" style="color:grey; background-color: white;" class=" col-12">
 <autorizzaUtenti v-model="Progetto"></autorizzaUtenti>
 
 </div>
