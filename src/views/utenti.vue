@@ -20,7 +20,7 @@
     </div>
 
  <div class="row justify-center">
-  <div class="col-3">
+  <div class="col-8 col-md-3">
     <label for=""><strong>Cerca</strong></label>
     <q-input v-model="cercaUtenti" type="text" :dense="true" outlined placeholder="nome, email,ruolo" style="padding-bottom:10px"  />
     </div>

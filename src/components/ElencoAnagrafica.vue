@@ -8,7 +8,7 @@
     </div>
 
  <div class="row justify-center">
-  <div class="col-3">
+  <div class="col-10 col-md-3">
     <label for=""><strong>Cerca</strong></label>
     <q-input v-model="cercaAnagrafica" type="text" :dense="true" outlined placeholder="nome, cognome, codice fiscale, partita iva, ragione sociale" style="padding-bottom:10px"  />
     </div>
