@@ -1,7 +1,7 @@
 <template>
     <div>
 
-         <div class="row" style="background-color: white;">
+         <div  style="background-color: white;">
             <div class="col">
                 <b>Tipologia Edificio</b>
                 <div class="q-gutter-sm">
@@ -14,7 +14,7 @@
             </div>
         </div>
           <!--***** Edificio Familiare **** -->
-        <div v-if="value.tipologiaEdificio =='edificioFamiliare' || value.tipologiaEdificio =='commerciale'  || value.tipologiaEdificio =='altro' " class="bgmargintop"  >
+        <div v-if="value.tipologiaEdificio =='edificioFamiliare' || value.tipologiaEdificio =='commerciale'  || value.tipologiaEdificio =='altro' " class="bgmargintop "  >
           <span class="text-h6"><b>Edificio</b></span>
           <div class="row">
             <div class="col">
@@ -98,7 +98,7 @@
         </div>
 
                 <!--***** Edificio Condominio********-->
-        <div v-if="value.tipologiaEdificio == 'condominio'"   class="bgmargintop"  >
+        <div v-if="value.tipologiaEdificio == 'condominio'"   class="bgmargintop "  >
         <span class="text-h6"><b>Condominio</b></span>  
           <div class="row">
             <div class="col">
@@ -220,7 +220,7 @@
 
 
 
-        <div :v-if="value.tipologiaEdificio == 'condominio' || value.tipologiaEdificio=='edificioFamiliare'"  class="bgmargintop" >
+        <div :v-if="value.tipologiaEdificio == 'condominio' || value.tipologiaEdificio=='edificioFamiliare'"  class="bgmargintop " >
 
           <div class="row " style="padding-top:20px;">
               <div class="col-12">
@@ -323,7 +323,7 @@
 
 
         <!--*** Progettisti *** -->
-        <div class="bgAree">
+        <div class="bgAree ">
         <div class="row " >
           <div class="col">
             <div class="col-12"><b>Progettisti</b></div>

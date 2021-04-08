@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="q-gutter-sm">
 
 <div class="bgmargintop">
   <div class="row"><div class="col-12"><span class="text-h6 text-secondary">Dati strutturali</span></div></div>
@@ -8,10 +8,10 @@
     <strong>Tipologia struttura edificio:</strong>
     </div>
   
-    <div class="col-3"><q-checkbox right-label v-model="value.datistrutturalichk" val="EdificioinMuraturaPortante" label="Edificio in Muratura Portante" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.datistrutturalichk" val="EdificioTelaioCAinopera" label="Edificio con telaio in C.A. in opera" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.datistrutturalichk" val="EdificioElementiPrefabbricati" label="Edificio con elementi prefabbricati" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.datistrutturalichk" val="altro" label="Altro" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.datistrutturalichk" val="EdificioinMuraturaPortante" label="Edificio in Muratura Portante" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.datistrutturalichk" val="EdificioTelaioCAinopera" label="Edificio con telaio in C.A. in opera" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.datistrutturalichk" val="EdificioElementiPrefabbricati" label="Edificio con elementi prefabbricati" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.datistrutturalichk" val="altro" label="Altro" /></div>
 
 
   </div>
@@ -27,12 +27,12 @@
    
     </div>
    
-    <div class="col-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="Laterizio" label="Laterizio" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="MuraturaCassaVuota" label="Muratura a cassa vuota" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="MuraturaCassaIsolanteIntercapedine" label="Muratura a cassa con isolante in intercapedine" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="Tufo" label="Tufo" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="Gasbeton" label="Gasbeton" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="altro" label="Altro" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="Laterizio" label="Laterizio" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="MuraturaCassaVuota" label="Muratura a cassa vuota" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="MuraturaCassaIsolanteIntercapedine" label="Muratura a cassa con isolante in intercapedine" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="Tufo" label="Tufo" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="Gasbeton" label="Gasbeton" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.tipologiaParetechk" val="altro" label="Altro" /></div>
 
 
   </div>
@@ -45,9 +45,9 @@
     <strong>Tipologia FOTO COSA FARE:</strong>
     </div>
    
-    <div class="col-3"><q-checkbox right-label v-model="value.tipologia_doppia_parete" val="presenzaIntercapedite" label="Presenza intercapedine/camera d’aria" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.tipologia_doppia_parete" val="IsolamentoInCameraDaria" label="Isolante in camera d’aria (sughero, EPS, ecc…)" /></div>
-    <div class="col-3"><q-checkbox right-label v-model="value.tipologia_doppia_parete" val="idoneoInsuffiaggio" label=" Idoneo a insufflaggio" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.tipologia_doppia_parete" val="presenzaIntercapedite" label="Presenza intercapedine/camera d’aria" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.tipologia_doppia_parete" val="IsolamentoInCameraDaria" label="Isolante in camera d’aria (sughero, EPS, ecc…)" /></div>
+    <div class="col-5 col-md-3"><q-checkbox right-label v-model="value.tipologia_doppia_parete" val="idoneoInsuffiaggio" label=" Idoneo a insufflaggio" /></div>
     <div class="row">
     <div class="col-4 paddingInput">
     <label for="">Spessori muri esterni (cm)</label>

@@ -1,10 +1,10 @@
 <template>
-    <div>
-        
-        <span class="text-h5">Allegati</span>
-        
+    <div class="q-gutter-sm">
         <div class="row">
-            <div class="col-5">
+        <span class="text-h6 text-secondary">Allegati</span>
+        </div>
+        <div class="row">
+            <div class="col-12 col-md-5">
                 <label class="text-bold"> Allegato</label><br>
                 <input type="file" @change="handleFile"  >
             </div>
@@ -18,7 +18,7 @@
                 <q-input v-model="noteallegatoDiallegati" outlined :dense="true" type="text"  />  
             </div>
                 
-            <div class="col-12" style="margin-top:10px;"><q-btn class="white" icon="add" label="Aggiungi" @click="addrowAllegati()" /></div>
+            <q-btn class="white" icon="add" label="Aggiungi" @click="addrowAllegati()" />
         </div>
         <div class="row" style="margin-top:20px"> 
             <div class="col">File</div>

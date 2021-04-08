@@ -2,7 +2,7 @@
 
 <template>
 <!--q-pa-md-->
-<div   class=" text-grey row" style="background-color:#f2f4f8; " >
+<div   class=" text-grey col" style="background-color:#f2f4f8; " >
   
   <q-tabs  v-model="tab" inline-label dense style="background-color:#fdfdfd; " class=" shadow-2 col-12"  :breakpoint="200">
    <!--   <q-tab name="progetto" icon="home_work"  label="Progetto"  />
@@ -25,42 +25,38 @@
      <q-btn color="primary" v-if="nuovoProgetto" label="Crea progetto" @click="aggiungiProgetto()" />
     </q-tabs> 
 
- <div v-if="tab == 'progetto'" class=" col-12" >
-   <step1 v-model="Progetto" ></step1>
+ <div v-if="tab == 'progetto'" class="fit row wrap justify-center"  >
+   <step1 v-model="Progetto"  class="col-8"></step1>
  </div>
  
- <div v-if="tab == 'anagraficaIntervento'">
-   <step2 v-model="Progetto" ></step2>
+ <div v-if="tab == 'anagraficaIntervento'" class="fit row wrap justify-center"  >
+   <step2 v-model="Progetto" class="col-12 col-md-8" style="background-color:white;"></step2>
   </div>
 
-  <div v-if="tab=='screening'" style="color:grey">
-    <step3 v-model="Progetto" ></step3>
+  <div v-if="tab=='screening'" style="color:grey"  class="fit row wrap justify-center"> 
+    <step3 v-model="Progetto"  class="col-12 col-md-8" style="background-color:white;"></step3>
   </div>
-  <div v-if="tab=='datiStrutturali'" style="color:grey">
-    <step4 v-model="Progetto" ></step4>
+  <div v-if="tab=='datiStrutturali'" style="color:grey" class="fit row wrap justify-center">
+    <step4 v-model="Progetto"   class="col-12 col-md-8" style="background-color:white;"></step4>
   </div>
 
-  <div v-if="tab=='allegati'" style="color:grey; background-color: white;" class=" col-12">
-    <step5 v-model="Progetto" ></step5>
+  <div v-if="tab=='allegati'" style="color:grey; " class="fit row wrap justify-center">
+    <step5 v-model="Progetto"  class="col-12 col-md-8" style="background-color:white;"></step5>
   </div>
-  <div v-if="tab=='quote'" style="color:grey; background-color: white;" class=" col-12">
-    <step6 v-model="Progetto" ></step6>
+ 
+  <div v-if="tab=='quote'" style="color:grey; " class="fit row wrap justify-center">
+    <step6 v-model="Progetto"  class="col-12 col-md-8" style="background-color:white;"></step6>
   </div>
-<div v-if="tab == 'associaUtenti'" style="color:grey; background-color: white;" class=" col-12">
-<autorizzaUtenti v-model="Progetto"></autorizzaUtenti>
+  
+  <div v-if="tab == 'associaUtenti'" style="color:grey; background-color: white;" class="fit row wrap justify-center">
+    <autorizzaUtenti v-model="Progetto" class="col-12 col-md-8" style="background-color:white;"></autorizzaUtenti>
+  </div>
 
-</div>
-  <div v-if="tab=='wbs'" style="color:grey">
-    <wbs  v-model="Progetto"></wbs>
+  <div v-if="tab=='wbs'" style="color:grey"  class="fit row wrap justify-center">
+    <wbs  v-model="Progetto" class="col-12 col-md-8" style="background-color:white;"></wbs>
   </div>
   
 
-<!-- #region Associa Utenti-->
-<div v-if="tab == 'associaUtenti'" style="color:grey; background-color: white;" class=" col-12">
-<autorizzaUtenti v-model="Progetto"></autorizzaUtenti>
-
-</div>
-<!-- #endregion-->
 
 
 

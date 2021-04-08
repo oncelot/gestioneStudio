@@ -42,7 +42,7 @@
             <q-item-label caption>Crea  progetto</q-item-label>
           </q-item-section>
         </q-item>
-        <q-item clickable  to="/lista-progetti" exact>
+        <q-item clickable v-if="user.role!=''" to="/lista-progetti" exact>
           <q-item-section avatar>
             <q-icon name="view_list" />
           </q-item-section>

@@ -66,7 +66,7 @@
 
     
     <q-dialog v-model="alert">
-      <q-card style="width: 50%">
+      <q-card style="width: 700px; max-width: 80vw;">
         <q-card-section>
           <div class="text-h6">{{titoloModel}}</div>
         </q-card-section>
