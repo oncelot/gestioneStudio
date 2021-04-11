@@ -19,11 +19,13 @@
             v-model="value.screeningUnifamiliareIndipendente"
             val="SI"
             label="SI"
+            :disable="!value.modificaAttivo"
           />
           <q-radio
             v-model="value.screeningUnifamiliareIndipendente"
             val="NO"
             label="NO"
+            :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -46,11 +48,13 @@
             v-model="value.screeningUnifamiliareIAcessoAutonomo"
             val="SI"
             label="SI"
+            :disable="!value.modificaAttivo"
           />
           <q-radio
             v-model="value.screeningUnifamiliareIAcessoAutonomo"
             val="NO"
             label="NO"
+            :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -63,15 +67,9 @@
           >
         </div>
         <div class="col-12">
-          <q-radio
-            v-model="value.screeningUnifamiliareUsufruito110"
-            val="SI"
-            label="SI"
+          <q-radio v-model="value.screeningUnifamiliareUsufruito110" val="SI" label="SI" :disable="!value.modificaAttivo"
           />
-          <q-radio
-            v-model="value.screeningUnifamiliareUsufruito110"
-            val="NO"
-            label="NO"
+          <q-radio v-model="value.screeningUnifamiliareUsufruito110" val="NO" label="NO" :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -90,11 +88,13 @@
             v-model="value.screeningUnifamiliareRiqualificazioneBalconi"
             val="SI"
             label="SI"
+            :disable="!value.modificaAttivo"
           />
           <q-radio
             v-model="value.screeningUnifamiliareRiqualificazioneBalconi"
             val="NO"
             label="NO"
+            :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -118,11 +118,13 @@
             v-model="value.screeningCondominioUnicoProprietario"
             val="SI"
             label="SI"
+            :disable="!value.modificaAttivo"
           />
           <q-radio
             v-model="value.screeningCondominioUnicoProprietario"
             val="NO"
             label="NO"
+            :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -147,11 +149,13 @@
             v-model="value.screeningCondominioSoggettiIRES"
             val="SI"
             label="SI"
+            :disable="!value.modificaAttivo"
           />
           <q-radio
             v-model="value.screeningCondominioSoggettiIRES"
             val="NO"
             label="NO"
+            :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -177,11 +181,13 @@
             v-model="value.screeningCondominioPossiedonoMultiProprieta"
             val="SI"
             label="SI"
+            :disable="!value.modificaAttivo"
           />
           <q-radio
             v-model="value.screeningCondominioPossiedonoMultiProprieta"
             val="NO"
             label="NO"
+            :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -201,11 +207,13 @@
             v-model="value.screeningCondominioA1A8A9"
             val="SI"
             label="SI"
+            :disable="!value.modificaAttivo"
           />
           <q-radio
             v-model="value.screeningCondominioA1A8A9"
             val="NO"
             label="NO"
+            :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -223,11 +231,13 @@
             v-model="value.screeningCondominioUsufruito110"
             val="SI"
             label="SI"
+            :disable="!value.modificaAttivo"
           />
           <q-radio
             v-model="value.screeningCondominioUsufruito110"
             val="NO"
             label="NO"
+            :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -252,6 +262,7 @@
             type="text"
             outlined
             :dense="true"
+            :disable="!value.modificaAttivo"
           />
         </div>
         <div class="col-5 col-md-3">
@@ -260,7 +271,7 @@
             v-model="value.riferimentiAutorizzativi"
             type="text"
             outlined
-            :dense="true"
+            :dense="true" :disable="!value.modificaAttivo"
           />
         </div>
         <div class="col-5 col-md-3">
@@ -270,7 +281,7 @@
             :dense="true"
             v-model="value.dateAutorizzativi"
             mask="date"
-            :rules="['date']"
+            :rules="['date']" :disable="!value.modificaAttivo"
           >
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
@@ -327,7 +338,7 @@
                 outlined
                 :dense="true"
                 type="number"
-                maxlength="4"
+                maxlength="4" :disable="!value.modificaAttivo"
               />
             </div>
 
@@ -343,7 +354,7 @@
                 color="primary"
                 @click="addrowInterventiManutenzioneSuccessivi()"
                 outline
-                :dense="true"
+                :dense="true" :disable="!value.modificaAttivo"
               />
             </div>
           </div>
@@ -390,7 +401,7 @@
                   v-if="value.nuovoProgetto"
                   size="sm"
                   round
-                  icon="delete"
+                  icon="delete" :disable="!value.modificaAttivo"
                   @click="
                     value.elencoInterventiManutenzioneStraordinariaSCIACILAltro.splice(
                       index,
@@ -399,7 +410,7 @@
                   "
                 />
                 <q-btn
-                  v-if="!value.nuovoProgetto"
+                  v-if="!value.nuovoProgetto" :disable="!value.modificaAttivo"
                   size="sm"
                   round
                   icon="delete"
@@ -429,8 +440,8 @@
       <div class="row " style="background-color: white">
         <div class="col">
           <b><q-input
-              v-model="InterventiSuccessiviNuovoSub"
-              :dense="true"
+              v-model="InterventiSuccessiviNuovoSub" :disable="!value.modificaAttivo"
+              :dense="true" 
               outlined
               type="text"
               label="Sub"
@@ -479,7 +490,7 @@
           </div>
           <div class="col-1 col-md-1">
             <q-btn
-              v-if="value.nuovoProgetto"
+              v-if="value.nuovoProgetto" 
               size="sm"
               round
               icon="delete"
@@ -491,7 +502,7 @@
               "
             />
             <q-btn
-              v-if="!value.nuovoProgetto"
+              v-if="!value.nuovoProgetto" :disable="!value.modificaAttivo"
               size="sm"
               round
               icon="delete"
@@ -520,7 +531,7 @@
         <div class="col">
           <b
             ><q-input
-              v-model="DatiCatastaliTitoliAutorizzativiNuovoFoglio"
+              v-model="DatiCatastaliTitoliAutorizzativiNuovoFoglio" :disable="!value.modificaAttivo"
               label="foglio"
               :dense="true"
               outlined
@@ -530,7 +541,7 @@
         <div class="col">
           <b
             ><q-input
-              v-model="DatiCatastaliTitoliAutorizzativiNuovoParticella"
+              v-model="DatiCatastaliTitoliAutorizzativiNuovoParticella" :disable="!value.modificaAttivo"
               label="particella"
               :dense="true"
               outlined
@@ -540,7 +551,7 @@
         <div class="col">
           <b
             ><q-input
-              v-model="DatiCatastaliTitoliAutorizzativiNuovoSub"
+              v-model="DatiCatastaliTitoliAutorizzativiNuovoSub" :disable="!value.modificaAttivo"
               label="sub"
               :dense="true"
               outlined
@@ -554,7 +565,7 @@
             color="primary"
             @click="addrowDatiCatastaliTitoliAutorizzativi()"
             outline
-            :dense="true"
+            :dense="true" :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -571,7 +582,7 @@
             size="sm"
             round
             icon="delete"
-            @click="value.elencoTitoliAutorizzatiDatiCatastali.splice(index, 1)"
+            @click="value.elencoTitoliAutorizzatiDatiCatastali.splice(index, 1)" :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -590,8 +601,8 @@
         </div>
 
         <div class="col-12">
-          <q-radio v-model="value.abusiEdilizi" val="SI" label="SI" />
-          <q-radio v-model="value.abusiEdilizi" val="NO" label="NO" />
+          <q-radio v-model="value.abusiEdilizi" val="SI" label="SI" :disable="!value.modificaAttivo"/>
+          <q-radio v-model="value.abusiEdilizi" val="NO" label="NO" :disable="!value.modificaAttivo" />
         </div>
 
         <div class="col-12" v-if="value.abusiEdilizi == 'SI'">
@@ -613,8 +624,8 @@
         </div>
 
         <div class="col-12">
-          <q-radio v-model="value.comuneStatoDiFatto" val="SI" label="SI" />
-          <q-radio v-model="value.comuneStatoDiFatto" val="NO" label="NO" />
+          <q-radio v-model="value.comuneStatoDiFatto" val="SI" label="SI" :disable="!value.modificaAttivo"/>
+          <q-radio v-model="value.comuneStatoDiFatto" val="NO" label="NO" :disable="!value.modificaAttivo"/>
         </div>
       </div>
       <div class="row" style="padding-top: 10px">
@@ -626,8 +637,8 @@
         </div>
 
         <div class="col-12">
-          <q-radio v-model="value.NCEUStatoDiFatto" val="SI" label="SI" />
-          <q-radio v-model="value.NCEUStatoDiFatto" val="NO" label="NO" />
+          <q-radio v-model="value.NCEUStatoDiFatto" val="SI" label="SI" :disable="!value.modificaAttivo" />
+          <q-radio v-model="value.NCEUStatoDiFatto" val="NO" label="NO" :disable="!value.modificaAttivo"/>
         </div>
       </div>
       <div class="row" style="padding-top: 10px">
@@ -636,15 +647,15 @@
         </div>
 
         <div class="col-12">
-          <q-radio v-model="value.difformitaUrbanistiche" val="SI" label="SI" />
-          <q-radio v-model="value.difformitaUrbanistiche" val="NO" label="NO" />
+          <q-radio v-model="value.difformitaUrbanistiche" val="SI" label="SI" :disable="!value.modificaAttivo"/>
+          <q-radio v-model="value.difformitaUrbanistiche" val="NO" label="NO" :disable="!value.modificaAttivo"/>
         </div>
         <div class="col-12" v-if="value.difformitaUrbanistiche == 'SI'">
           <q-input
             v-model="value.noteDifformitaUrbanistiche"
             outlined
             type="textarea"
-            label="Note Difformità urbanistiche"
+            label="Note Difformità urbanistiche" :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -654,15 +665,15 @@
         </div>
 
         <div class="col-12">
-          <q-radio v-model="value.difformitaCatastali" val="SI" label="SI" />
-          <q-radio v-model="value.difformitaCatastali" val="NO" label="NO" />
+          <q-radio v-model="value.difformitaCatastali" val="SI" label="SI" :disable="!value.modificaAttivo"/>
+          <q-radio v-model="value.difformitaCatastali" val="NO" label="NO" :disable="!value.modificaAttivo"/>
         </div>
         <div class="col-12" v-if="value.difformitaCatastali == 'SI'">
           <q-input
             v-model="value.noteDifformitaCatastali"
             outlined
             type="textarea"
-            label="Note Difformità Catastali"
+            label="Note Difformità Catastali" :disable="!value.modificaAttivo"
           />
         </div>
       </div>
@@ -681,15 +692,15 @@
         </div>
 
         <div class="col-12">
-          <q-radio v-model="value.irregolaritaSanabili" val="SI" label="SI" />
-          <q-radio v-model="value.irregolaritaSanabili" val="NO" label="NO" />
+          <q-radio v-model="value.irregolaritaSanabili" val="SI" label="SI" :disable="!value.modificaAttivo"/>
+          <q-radio v-model="value.irregolaritaSanabili" val="NO" label="NO" :disable="!value.modificaAttivo"/>
         </div>
         <div class="col-12" v-if="value.irregolaritaSanabili == 'SI'">
           <q-input
             v-model="value.noteIrregolaritaSanabili"
             outlined
             type="textarea"
-            label="Note Irregolarità Sanabili"
+            label="Note Irregolarità Sanabili" :disable="!value.modificaAttivo"
           />
         </div>
       </div>

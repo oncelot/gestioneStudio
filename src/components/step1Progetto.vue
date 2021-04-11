@@ -8,10 +8,11 @@
 
       <div class="row  justify-center"  >
         <div class=" col-5 col-md-3 bgmargintop" style="margin-right:9%">
-            <q-input outlined v-model="value.numeroCommessa" label="Codice Commessa" />
+  
+            <q-input outlined v-model="value.numeroCommessa" label="Codice Commessa" :disable="!value.modificaAttivo"   />
         </div>
         <div class=" col-5 col-md-3 bgmargintop">
-          <q-select  outlined v-model="value.tipoCommessa" :options="ElencotipoCommessa" label="Tipo Commessa" />
+          <q-select  outlined v-model="value.tipoCommessa" :options="ElencotipoCommessa" label="Tipo Commessa"   :disable="!value.modificaAttivo"  />
             
         
            
@@ -19,7 +20,7 @@
       </div>
       <div class="row  justify-center"  >
         <div class=" col-12 col-md-7 bgmargintop">
-            <q-input outlined v-model="value.titoloProgetto" label="Titolo del progetto" />
+            <q-input outlined v-model="value.titoloProgetto" label="Titolo del progetto"  :disable="!value.modificaAttivo"   />
         </div>
       </div>
       <!-- #region ANAGRAFICA CLIENTI -->
@@ -32,7 +33,7 @@
 
         <div class="row justify-center">
           <div class="col-12 col-md-7 bgAree">
-            <q-input v-model="value.cercaAnagraficaClienti"  outlined :dense=true  placeholder="Cerca Cliente da aggiungere - Inserire 3 caratteri per avviare la ricerca" @keypress=" elencoCercaAnagraficaClientiFunction()">
+            <q-input v-model="value.cercaAnagraficaClienti"  :disable="!value.modificaAttivo"    outlined :dense=true  placeholder="Cerca Cliente da aggiungere - Inserire 3 caratteri per avviare la ricerca" @keypress=" elencoCercaAnagraficaClientiFunction()">
               <div class="autocomplete-items" v-if="value.cercaAnagraficaClienti.length > 2">
                 <div class="row"  v-for="item in value.elencoCercaAnagraficaClienti" :key="item.message">
                   <div class="col">
@@ -78,7 +79,7 @@
     </div>
     <div class="row justify-center">
       <div class="col-12 col-md-7 bgAree">
-         <q-input v-model="cercaCollaboratoriInterni"  outlined :dense=true  placeholder="Inserire 3 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreInternoFunction()">
+         <q-input v-model="cercaCollaboratoriInterni"  :disable="!value.modificaAttivo"   outlined :dense=true  placeholder="Inserire 3 caratteri per avviare la ricerca"  @keypress="elencoCercaCollaboratoreInternoFunction()">
           <div class="autocomplete-items" v-if="cercaCollaboratoriInterni.length > 2">
             <div class="row"  v-for="item in elencoCercaCollaboratoreInterno" :key="item.message">
               <div class="col">
@@ -281,7 +282,8 @@ export default {
         {
             this.$emit('input',e);
         }
-    }
+    },
+    
 
 }
 </script>

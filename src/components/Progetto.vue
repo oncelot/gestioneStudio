@@ -21,8 +21,9 @@
       <q-tab  v-if="user.role=='admin'" name="quote"  label="Quote" />
       <q-tab v-if="user.role=='admin'" name="associaUtenti"  label="Permessi" />
       <q-tab v-if="user.role=='admin'" name="wbs"  label="WBS" /> 
-     <q-btn color="secondary" v-if="!nuovoProgetto" icon="save" label="Save" @click="aggiungiProgetto()" />
-     <q-btn color="primary" v-if="nuovoProgetto" label="Crea progetto" @click="aggiungiProgetto()" />
+     <q-btn color="secondary" v-if="!Progetto.nuovoProgetto && Progetto.modifica" icon="save" label="Save" @click="aggiungiProgetto()" />
+     <q-btn color="grey" v-if=" !Progetto.modifica && !Progetto.nuovoProgetto " icon="edit"  @click="attivaModifica()" />
+     <q-btn color="primary" v-if="Progetto.nuovoProgetto" label="Crea progetto" @click="aggiungiProgetto()" />
     </q-tabs> 
 
  <div v-if="tab == 'progetto'" class="fit row wrap justify-center"  >
@@ -56,41 +57,6 @@
     <wbs  v-model="Progetto" class="col-12 col-md-8" style="background-color:white;"></wbs>
   </div>
   
-
-
-
-
-
-
-<!-- #region MODAL-->
-<!-- MODAL -->
-<!--
-<q-dialog v-model="modalAggiungiAllegatiInterventiSuccessiviAllaCostruzione" persistent>
-  <q-card>
-    <q-card-section class="row items-center">
-     
-      <span class="q-ml-md">Aggiungi</span>
-    </q-card-section>
-    <q-card-section class="row items-center">
-    
-      <span class="q-ml-md">
-        <q-input v-model="modalInterventiSuccessiviNuovoSub" type="text" label="sub" />
-        <q-input v-model="modalInterventiSuccessiviNuovaDecrizione" type="text" label="descrizione" />
-       <q-file
-      v-model="modalInterventiSuccessiviNuovoAllegato"
-      label="Carica file"
-      filled
-      style="max-width: 300px" />
-      
-        </span>
-    </q-card-section>
-    <q-card-actions align="right">
-      <q-btn flat label="Annulla" color="primary" v-close-popup />
-      <q-btn flat label="Conferma" color="primary" @click="addrowInterventiSuccessivi();"/>
-    </q-card-actions>
-  </q-card>
-</q-dialog>
--->
 
 
 
@@ -319,37 +285,30 @@ export default {
 
 
           };
-          if (this.nuovoProgetto){
+          if (this.Progetto.nuovoProgetto){
                Axios.post(this.linkApi+"/aggiungi-progetto",sendForm).then(Response=>{
-            
-            console.log(Response.data)
-            if(Response.data.response=='ok'){
-              this.messaggioDaVisualizzare='Progetto Caricato con successo';
-              this.visualizzamessaggio=true;
-            
-              }else{
-                 this.messaggioDaVisualizzare=Response.data.message;
-              this.visualizzamessaggio=true;
+                 if(Response.data.response=='ok'){
+                   this.messaggioDaVisualizzare='Progetto Caricato con successo';
+                   this.visualizzamessaggio=true;
+                   }else{
+                     this.messaggioDaVisualizzare=Response.data.message;
+                     this.visualizzamessaggio=true;
+                     }
+                });
               }
-            });
-          }
-          if (!this.nuovoProgetto){
+          if (!this.Progetto.nuovoProgetto){
                Axios.post(this.linkApi+"/aggiorna-progetto/",sendForm).then(Response=>{
-            
-            console.log(Response.data)
-            if(Response.data.response=='ok'){
-              this.messaggioDaVisualizzare='Progetto Aggiornato con successo';
-              this.visualizzamessaggio=true;
-            
-              }else{
-                 this.messaggioDaVisualizzare=Response.data.message;
-              this.visualizzamessaggio=true;
-              }
-            });
-          }
-       
-
-      },
+                 if(Response.data.response=='ok'){
+                   this.messaggioDaVisualizzare='Progetto Aggiornato con successo';
+                   this.visualizzamessaggio=true;
+                   this.Progetto.modifica=false;
+                   }else{
+                     this.messaggioDaVisualizzare=Response.data.message;
+                     this.visualizzamessaggio=true;
+                    }
+                  });
+                 }
+            },
     addRow(){
        this.elencoAnagraficaClienti.push(
          {nome:this.modalNuovoNome,
@@ -364,7 +323,7 @@ this.$router.push({ path:'lista-progetti'});
     removeRow(index){
    this.elencoAnagraficaClienti.splice(index, 1)
     },
-   
+   attivaModifica(){ this.Progetto.modifica=true;this.Progetto.modificaAttivo=true;},
   
 
  
@@ -373,7 +332,8 @@ this.$router.push({ path:'lista-progetti'});
      
   data () {
     return {
-     nuovoProgetto:true,
+  
+    
      tab:'progetto',
      visualizzamessaggio:false,
      messaggioDaVisualizzare:false,
@@ -515,6 +475,8 @@ this.$router.push({ path:'lista-progetti'});
         elencoSpese:[],
 
         nuovoProgetto:true,
+        modifica:false,
+        modificaAttivo:false,
         elencoUtentiDaAutorizzare:[],
         elencoUtentiAutorizzati:[],
 
@@ -532,22 +494,26 @@ this.$router.push({ path:'lista-progetti'});
  
   props:['idprogetto'],
 computed:{
+  
     ...mapGetters({
       isAuth:'GET_AUTH',
       user:'GET_AUTH_USER',
-      })
+      }),
+       
 },
+
   beforeMount:function(){
-
-
+   
    if (this.idprogetto >0){ 
 /********** DETTAGLI PROGETTO **********/
 
-    this.nuovoProgetto=false;
+    this.Progetto.nuovoProgetto=false;
     this.Progetto.idprogetto=this.idprogetto;
 Axios.get(this.linkApi+'/getProgetto/'+this.idprogetto).then(response =>{
 //TODO PROBLEMA ALLEGATO
 /* LISTA CLIENTI */
+
+/*
 if (response.data['clienti'][0] != null){
 
  response.data['clienti'].forEach(element => {
@@ -725,12 +691,11 @@ if (response.data['listaUsersAssociatiAlProgetto'][0] != null){
  
    });
 }
-
+*/
 if (response.data['infoEdificioProgetto'][0]!= null){
 var dettagliEdificio=response.data['infoEdificioProgetto'][0];
 this.Progetto.edificioUnifamiliareTipo=dettagliEdificio.ef_tipo_edificio;
 
-this.Progetto.nuovoProgetto=false;
 /* CONDOMINIO */
 this.Progetto.condominioNome=dettagliEdificio.cd_nome_condominio;
 this.Progetto.condominioIndirizzo=dettagliEdificio.cd_indirizzo;
@@ -887,8 +852,11 @@ if (response.data['progetto'][0].TipologiainterventoDPR3802001 != null){
 })
 
   }else{
-    this.nuovoProgetto=true;
+    this.Progetto.nuovoProgetto=true;
   }
+
+   if(this.Progetto.modifica || this.Progetto.nuovoProgetto){this.Progetto.modificaAttivo=true;}else{  this.Progetto.modificaAttivo=false; }
+
   }
 
 }
